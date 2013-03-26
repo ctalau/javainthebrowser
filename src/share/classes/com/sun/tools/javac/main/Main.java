@@ -404,6 +404,7 @@ public class Main {
 
             Log log = Log.instance(context);
 
+            // XXX: Create a file object from a string.
             if (!files.isEmpty()) {
                 // add filenames to fileObjects
                 comp = JavaCompiler.instance(context);

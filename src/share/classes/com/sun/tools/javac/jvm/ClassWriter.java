@@ -1501,6 +1501,7 @@ public class ClassWriter extends ClassFile {
     public JavaFileObject writeClass(ClassSymbol c)
         throws IOException, PoolOverflow, StringOverflow
     {
+        // XXX: Should write to a byte array instead.
         JavaFileObject outFile
             = fileManager.getJavaFileForOutput(CLASS_OUTPUT,
                                                c.flatname.toString(),
