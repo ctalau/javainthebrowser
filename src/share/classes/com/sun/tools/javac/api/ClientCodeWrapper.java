@@ -31,6 +31,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,24 +44,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.tools.Diagnostic;
+import javax.tools.DiagnosticListener;
 import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
-import javax.tools.JavaFileManager.Location;
 import javax.tools.JavaFileObject;
+import javax.tools.JavaFileObject.Kind;
 
 import com.sun.source.util.TaskEvent;
 import com.sun.source.util.TaskListener;
 import com.sun.tools.javac.util.ClientCodeException;
 import com.sun.tools.javac.util.Context;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import javax.lang.model.element.Modifier;
-import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject.Kind;
 
 /**
  *  Wrap objects to enable unchecked exceptions to be caught and handled.

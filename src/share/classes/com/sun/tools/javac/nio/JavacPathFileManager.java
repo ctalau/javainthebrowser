@@ -26,17 +26,25 @@
 package com.sun.tools.javac.nio;
 
 
+import static com.sun.tools.javac.main.OptionName.D;
+import static com.sun.tools.javac.main.OptionName.S;
+import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
+import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static javax.tools.StandardLocation.CLASS_PATH;
+import static javax.tools.StandardLocation.PLATFORM_CLASS_PATH;
+import static javax.tools.StandardLocation.SOURCE_OUTPUT;
+import static javax.tools.StandardLocation.SOURCE_PATH;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -50,6 +58,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.lang.model.SourceVersion;
 import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
@@ -57,16 +66,11 @@ import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 
-import static java.nio.file.FileVisitOption.*;
-import static javax.tools.StandardLocation.*;
-
 import com.sun.tools.javac.file.Paths;
 import com.sun.tools.javac.util.BaseFileManager;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.ListBuffer;
-
-import static com.sun.tools.javac.main.OptionName.*;
 
 
 // NOTE the imports carefully for this compilation unit.

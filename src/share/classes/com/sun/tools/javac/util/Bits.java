@@ -169,7 +169,6 @@ public class Bits {
      *  Delight" by Henry S. Warren Jr. (figure 5-13)
      */
     private static int trailingZeroBits(int x) {
-        Assert.check(wordlen == 32);
         if (x == 0) return 32;
         int n = 1;
         if ((x & 0xffff) == 0) { n += 16; x >>>= 16; }
@@ -212,7 +211,6 @@ public class Bits {
     public static void main(String[] args) {
         java.util.Random r = new java.util.Random();
         Bits bits = new Bits();
-        int dupCount = 0;
         for (int i=0; i<125; i++) {
             int k;
             do {

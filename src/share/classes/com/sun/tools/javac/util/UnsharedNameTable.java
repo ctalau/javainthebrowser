@@ -96,10 +96,6 @@ public class UnsharedNameTable extends Name.Table {
         HashEntry firstTableEntry = element;
 
         while (element != null) {
-            if (element == null) {
-                break;
-            }
-
             n = element.get();
 
             if (n == null) {

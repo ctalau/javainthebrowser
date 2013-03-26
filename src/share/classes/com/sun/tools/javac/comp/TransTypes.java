@@ -25,21 +25,86 @@
 
 package com.sun.tools.javac.comp;
 
-import java.util.*;
+import static com.sun.tools.javac.code.Flags.ABSTRACT;
+import static com.sun.tools.javac.code.Flags.AccessFlags;
+import static com.sun.tools.javac.code.Flags.BRIDGE;
+import static com.sun.tools.javac.code.Flags.FINAL;
+import static com.sun.tools.javac.code.Flags.HYPOTHETICAL;
+import static com.sun.tools.javac.code.Flags.INTERFACE;
+import static com.sun.tools.javac.code.Flags.IPROXY;
+import static com.sun.tools.javac.code.Flags.OVERRIDE_BRIDGE;
+import static com.sun.tools.javac.code.Flags.PRIVATE;
+import static com.sun.tools.javac.code.Flags.PUBLIC;
+import static com.sun.tools.javac.code.Flags.STATIC;
+import static com.sun.tools.javac.code.Flags.SYNTHETIC;
+import static com.sun.tools.javac.code.Kinds.MTH;
+import static com.sun.tools.javac.code.Kinds.TYP;
+import static com.sun.tools.javac.code.Kinds.VAR;
+import static com.sun.tools.javac.code.TypeTags.CLASS;
+import static com.sun.tools.javac.code.TypeTags.TYPEVAR;
+import static com.sun.tools.javac.code.TypeTags.VOID;
+import static com.sun.tools.javac.code.TypeTags.lastBaseTag;
 
-import javax.lang.model.element.ElementKind;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.sun.tools.javac.code.*;
-import com.sun.tools.javac.code.Symbol.*;
-import com.sun.tools.javac.tree.*;
-import com.sun.tools.javac.tree.JCTree.*;
-import com.sun.tools.javac.util.*;
+import com.sun.tools.javac.code.Scope;
+import com.sun.tools.javac.code.Source;
+import com.sun.tools.javac.code.Symbol;
+import com.sun.tools.javac.code.Symbol.ClassSymbol;
+import com.sun.tools.javac.code.Symbol.MethodSymbol;
+import com.sun.tools.javac.code.Symbol.TypeSymbol;
+import com.sun.tools.javac.code.Symtab;
+import com.sun.tools.javac.code.Type;
+import com.sun.tools.javac.code.Types;
+import com.sun.tools.javac.tree.JCTree;
+import com.sun.tools.javac.tree.JCTree.JCAnnotation;
+import com.sun.tools.javac.tree.JCTree.JCArrayAccess;
+import com.sun.tools.javac.tree.JCTree.JCArrayTypeTree;
+import com.sun.tools.javac.tree.JCTree.JCAssert;
+import com.sun.tools.javac.tree.JCTree.JCAssign;
+import com.sun.tools.javac.tree.JCTree.JCAssignOp;
+import com.sun.tools.javac.tree.JCTree.JCBinary;
+import com.sun.tools.javac.tree.JCTree.JCCase;
+import com.sun.tools.javac.tree.JCTree.JCClassDecl;
+import com.sun.tools.javac.tree.JCTree.JCConditional;
+import com.sun.tools.javac.tree.JCTree.JCDoWhileLoop;
+import com.sun.tools.javac.tree.JCTree.JCEnhancedForLoop;
+import com.sun.tools.javac.tree.JCTree.JCExpression;
+import com.sun.tools.javac.tree.JCTree.JCExpressionStatement;
+import com.sun.tools.javac.tree.JCTree.JCFieldAccess;
+import com.sun.tools.javac.tree.JCTree.JCForLoop;
+import com.sun.tools.javac.tree.JCTree.JCIdent;
+import com.sun.tools.javac.tree.JCTree.JCIf;
+import com.sun.tools.javac.tree.JCTree.JCInstanceOf;
+import com.sun.tools.javac.tree.JCTree.JCMethodDecl;
+import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
+import com.sun.tools.javac.tree.JCTree.JCNewArray;
+import com.sun.tools.javac.tree.JCTree.JCNewClass;
+import com.sun.tools.javac.tree.JCTree.JCParens;
+import com.sun.tools.javac.tree.JCTree.JCReturn;
+import com.sun.tools.javac.tree.JCTree.JCStatement;
+import com.sun.tools.javac.tree.JCTree.JCSwitch;
+import com.sun.tools.javac.tree.JCTree.JCSynchronized;
+import com.sun.tools.javac.tree.JCTree.JCThrow;
+import com.sun.tools.javac.tree.JCTree.JCTry;
+import com.sun.tools.javac.tree.JCTree.JCTypeApply;
+import com.sun.tools.javac.tree.JCTree.JCTypeCast;
+import com.sun.tools.javac.tree.JCTree.JCUnary;
+import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
+import com.sun.tools.javac.tree.JCTree.JCWhileLoop;
+import com.sun.tools.javac.tree.TreeInfo;
+import com.sun.tools.javac.tree.TreeMaker;
+import com.sun.tools.javac.tree.TreeTranslator;
+import com.sun.tools.javac.util.Assert;
+import com.sun.tools.javac.util.Context;
+import com.sun.tools.javac.util.Filter;
 import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
 import com.sun.tools.javac.util.List;
-
-import static com.sun.tools.javac.code.Flags.*;
-import static com.sun.tools.javac.code.Kinds.*;
-import static com.sun.tools.javac.code.TypeTags.*;
+import com.sun.tools.javac.util.ListBuffer;
+import com.sun.tools.javac.util.Log;
+import com.sun.tools.javac.util.Names;
+import com.sun.tools.javac.util.Warner;
 
 /** This pass translates Generic Java to conventional Java.
  *
@@ -756,48 +821,6 @@ public class TransTypes extends TreeTranslator {
         return types.erasure(t);
     }
 
-    private boolean boundsRestricted(ClassSymbol c) {
-        Type st = types.supertype(c.type);
-        if (st.isParameterized()) {
-            List<Type> actuals = st.allparams();
-            List<Type> formals = st.tsym.type.allparams();
-            while (!actuals.isEmpty() && !formals.isEmpty()) {
-                Type actual = actuals.head;
-                Type formal = formals.head;
-
-                if (!types.isSameType(types.erasure(actual),
-                        types.erasure(formal)))
-                    return true;
-
-                actuals = actuals.tail;
-                formals = formals.tail;
-            }
-        }
-        return false;
-    }
-
-    private List<JCTree> addOverrideBridgesIfNeeded(DiagnosticPosition pos,
-                                    final ClassSymbol c) {
-        ListBuffer<JCTree> buf = ListBuffer.lb();
-        if (c.isInterface() || !boundsRestricted(c))
-            return buf.toList();
-        Type t = types.supertype(c.type);
-            Scope s = t.tsym.members();
-            if (s.elems != null) {
-                for (Symbol sym : s.getElements(new NeedsOverridBridgeFilter(c))) {
-
-                    MethodSymbol m = (MethodSymbol)sym;
-                    MethodSymbol member = (MethodSymbol)m.asMemberOf(c.type, types);
-                    MethodSymbol impl = m.implementation(c, types, false);
-
-                    if ((impl == null || impl.owner != c) &&
-                            !types.isSameType(member.erasure(types), m.erasure(types))) {
-                        addOverrideBridges(pos, m, member, c, buf);
-                    }
-                }
-            }
-        return buf.toList();
-    }
     // where
         class NeedsOverridBridgeFilter implements Filter<Symbol> {
 
@@ -815,32 +838,7 @@ public class TransTypes extends TreeTranslator {
             }
         }
 
-    private void addOverrideBridges(DiagnosticPosition pos,
-                                    MethodSymbol impl,
-                                    MethodSymbol member,
-                                    ClassSymbol c,
-                                    ListBuffer<JCTree> bridges) {
-        Type implErasure = impl.erasure(types);
-        long flags = (impl.flags() & AccessFlags) | SYNTHETIC | BRIDGE | OVERRIDE_BRIDGE;
-        member = new MethodSymbol(flags, member.name, member.type, c);
-        JCMethodDecl md = make.MethodDef(member, null);
-        JCExpression receiver = make.Super(types.supertype(c.type).tsym.erasure(types), c);
-        Type calltype = erasure(impl.type.getReturnType());
-        JCExpression call =
-            make.Apply(null,
-                       make.Select(receiver, impl).setType(calltype),
-                       translateArgs(make.Idents(md.params),
-                                     implErasure.getParameterTypes(), null))
-            .setType(calltype);
-        JCStatement stat = (member.getReturnType().tag == VOID)
-            ? make.Exec(call)
-            : make.Return(coerce(call, member.erasure(types).getReturnType()));
-        md.body = make.Block(0, List.of(stat));
-        c.members().enter(member);
-        bridges.append(md);
-    }
-
-/**************************************************************************
+    /**************************************************************************
  * main method
  *************************************************************************/
 
@@ -872,8 +870,6 @@ public class TransTypes extends TreeTranslator {
                 make.at(tree.pos);
                 if (addBridges) {
                     ListBuffer<JCTree> bridges = new ListBuffer<JCTree>();
-                    if (false) //see CR: 6996415
-                        bridges.appendList(addOverrideBridgesIfNeeded(tree, c));
                     if ((tree.sym.flags() & INTERFACE) == 0)
                         addBridges(tree.pos(), tree.sym, bridges);
                     tree.defs = bridges.toList().prependList(tree.defs);

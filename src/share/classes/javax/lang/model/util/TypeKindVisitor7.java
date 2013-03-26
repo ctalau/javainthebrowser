@@ -25,11 +25,13 @@
 
 package javax.lang.model.util;
 
-import javax.lang.model.type.*;
+import static javax.lang.model.SourceVersion.RELEASE_7;
+
 import javax.annotation.processing.SupportedSourceVersion;
-import static javax.lang.model.element.ElementKind.*;
-import static javax.lang.model.SourceVersion.*;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.UnionType;
 
 /**
  * A visitor of types based on their {@linkplain TypeKind kind} with

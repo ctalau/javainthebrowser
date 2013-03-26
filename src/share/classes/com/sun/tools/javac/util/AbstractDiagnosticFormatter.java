@@ -24,6 +24,8 @@
  */
 package com.sun.tools.javac.util;
 
+import static com.sun.tools.javac.util.JCDiagnostic.DiagnosticType.FRAGMENT;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -31,21 +33,19 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import javax.tools.JavaFileObject;
 
 import com.sun.tools.javac.api.DiagnosticFormatter;
 import com.sun.tools.javac.api.DiagnosticFormatter.Configuration.DiagnosticPart;
 import com.sun.tools.javac.api.DiagnosticFormatter.Configuration.MultilineLimit;
-import com.sun.tools.javac.api.DiagnosticFormatter.PositionKind;
 import com.sun.tools.javac.api.Formattable;
 import com.sun.tools.javac.code.Lint.LintCategory;
 import com.sun.tools.javac.code.Printer;
 import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.code.Type.CapturedType;
-
 import com.sun.tools.javac.file.BaseFileObject;
-import static com.sun.tools.javac.util.JCDiagnostic.DiagnosticType.*;
 
 /**
  * This abstract class provides a basic implementation of the functionalities that should be provided

@@ -25,11 +25,9 @@
 
 package javax.lang.model.util;
 
-import javax.lang.model.element.*;
+import static javax.lang.model.SourceVersion.RELEASE_7;
+
 import javax.annotation.processing.SupportedSourceVersion;
-import javax.lang.model.element.*;
-import static javax.lang.model.element.ElementKind.*;
-import static javax.lang.model.SourceVersion.*;
 import javax.lang.model.SourceVersion;
 
 

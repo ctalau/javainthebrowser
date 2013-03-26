@@ -27,6 +27,7 @@ package com.sun.tools.javac.util;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.tools.JavaFileObject;
 
 import com.sun.tools.javac.code.Lint.LintCategory;

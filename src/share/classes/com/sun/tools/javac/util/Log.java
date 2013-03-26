@@ -25,13 +25,21 @@
 
 package com.sun.tools.javac.util;
 
-import java.io.*;
+import static com.sun.tools.javac.main.OptionName.DOE;
+import static com.sun.tools.javac.main.OptionName.PROMPT;
+import static com.sun.tools.javac.main.OptionName.XLINT_CUSTOM;
+import static com.sun.tools.javac.main.OptionName.XMAXERRS;
+import static com.sun.tools.javac.main.OptionName.XMAXWARNS;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
 
@@ -40,8 +48,6 @@ import com.sun.tools.javac.main.OptionName;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
 import com.sun.tools.javac.util.JCDiagnostic.DiagnosticType;
-
-import static com.sun.tools.javac.main.OptionName.*;
 
 /** A class for error logs. Reports errors and warnings, and
  *  keeps track of error numbers and positions.
@@ -275,7 +281,6 @@ public class Log extends AbstractLog {
     public void prompt() {
         if (promptOnError) {
             System.err.println(localize("resume.abort"));
-            char ch;
             try {
                 while (true) {
                     switch (System.in.read()) {

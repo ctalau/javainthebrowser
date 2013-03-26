@@ -24,17 +24,18 @@
  */
 package com.sun.tools.javac.util;
 
+import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.COLUMN;
+import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.LINE;
+
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Locale;
+
 import javax.tools.JavaFileObject;
 
-import com.sun.tools.javac.api.DiagnosticFormatter.Configuration.*;
+import com.sun.tools.javac.api.DiagnosticFormatter.Configuration.DiagnosticPart;
 import com.sun.tools.javac.api.Formattable;
 import com.sun.tools.javac.file.BaseFileObject;
-import com.sun.tools.javac.util.AbstractDiagnosticFormatter.SimpleConfiguration;
-
-import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.*;
 
 /**
  * A raw formatter for diagnostic messages.

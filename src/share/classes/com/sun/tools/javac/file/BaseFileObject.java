@@ -32,12 +32,11 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.CharsetDecoder;
+
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
-
-import static javax.tools.JavaFileObject.Kind.*;
 
 import com.sun.tools.javac.util.BaseFileManager;
 

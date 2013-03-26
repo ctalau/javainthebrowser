@@ -25,13 +25,10 @@
 
 package javax.lang.model.util;
 
-import java.util.List;
-import javax.lang.model.element.*;
+import static javax.lang.model.SourceVersion.RELEASE_7;
 
-import javax.lang.model.type.TypeMirror;
-import static javax.lang.model.SourceVersion.*;
-import javax.lang.model.SourceVersion;
 import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 
 /**
  * A skeletal visitor for annotation values with default behavior

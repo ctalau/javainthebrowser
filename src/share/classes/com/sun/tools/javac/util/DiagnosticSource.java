@@ -25,16 +25,19 @@
 
 package com.sun.tools.javac.util;
 
+import static com.sun.tools.javac.util.LayoutCharacters.CR;
+import static com.sun.tools.javac.util.LayoutCharacters.LF;
+import static com.sun.tools.javac.util.LayoutCharacters.TabInc;
+
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.nio.CharBuffer;
 import java.util.Map;
+
 import javax.tools.JavaFileObject;
 
 import com.sun.tools.javac.file.JavacFileManager;
 import com.sun.tools.javac.tree.JCTree;
-
-import static com.sun.tools.javac.util.LayoutCharacters.*;
 
 /**
  * A simple abstraction of a source file, as needed for use in a diagnostic message.

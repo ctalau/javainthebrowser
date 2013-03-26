@@ -25,9 +25,9 @@
 
 package javax.lang.model.type;
 
-import java.io.ObjectInputStream;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
+import java.io.ObjectInputStream;
+
 import javax.lang.model.element.Element;
 
 

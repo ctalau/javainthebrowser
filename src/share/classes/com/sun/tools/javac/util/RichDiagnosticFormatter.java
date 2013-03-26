@@ -24,6 +24,14 @@
  */
 package com.sun.tools.javac.util;
 
+import static com.sun.tools.javac.code.Flags.BLOCK;
+import static com.sun.tools.javac.code.Flags.VARARGS;
+import static com.sun.tools.javac.code.TypeTags.CLASS;
+import static com.sun.tools.javac.code.TypeTags.ERROR;
+import static com.sun.tools.javac.code.TypeTags.FORALL;
+import static com.sun.tools.javac.code.TypeTags.NONE;
+import static com.sun.tools.javac.util.LayoutCharacters.DetailsInc;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -33,16 +41,20 @@ import java.util.Map;
 import com.sun.tools.javac.code.Kinds;
 import com.sun.tools.javac.code.Printer;
 import com.sun.tools.javac.code.Symbol;
-import com.sun.tools.javac.code.Symbol.*;
+import com.sun.tools.javac.code.Symbol.ClassSymbol;
+import com.sun.tools.javac.code.Symbol.MethodSymbol;
 import com.sun.tools.javac.code.Symtab;
 import com.sun.tools.javac.code.Type;
-import com.sun.tools.javac.code.Type.*;
+import com.sun.tools.javac.code.Type.ArrayType;
+import com.sun.tools.javac.code.Type.CapturedType;
+import com.sun.tools.javac.code.Type.ClassType;
+import com.sun.tools.javac.code.Type.ErrorType;
+import com.sun.tools.javac.code.Type.ForAll;
+import com.sun.tools.javac.code.Type.MethodType;
+import com.sun.tools.javac.code.Type.TypeVar;
+import com.sun.tools.javac.code.Type.WildcardType;
 import com.sun.tools.javac.code.Types;
-
-import static com.sun.tools.javac.code.TypeTags.*;
-import static com.sun.tools.javac.code.Flags.*;
-import static com.sun.tools.javac.util.LayoutCharacters.*;
-import static com.sun.tools.javac.util.RichDiagnosticFormatter.RichConfiguration.*;
+import com.sun.tools.javac.util.RichDiagnosticFormatter.RichConfiguration.RichFormatterFeature;
 
 /**
  * A rich diagnostic formatter is a formatter that provides better integration

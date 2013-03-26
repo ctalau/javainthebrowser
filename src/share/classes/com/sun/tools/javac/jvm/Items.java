@@ -124,14 +124,6 @@ public class Items {
         return new LocalItem(v.erasure(types), v.adr);
     }
 
-    /** Make an item representing a local anonymous variable.
-     *  @param type  The represented variable's type.
-     *  @param reg   The represented variable's register.
-     */
-    private LocalItem makeLocalItem(Type type, int reg) {
-        return new LocalItem(type, reg);
-    }
-
     /** Make an item representing a static variable or method.
      *  @param member   The represented symbol.
      */

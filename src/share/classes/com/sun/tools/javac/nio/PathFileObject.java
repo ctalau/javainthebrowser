@@ -39,7 +39,7 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
+
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.tools.JavaFileObject;
@@ -291,14 +291,6 @@ abstract class PathFileObject implements JavaFileObject {
         Path parent = path.getParent();
         if (parent != null)
             Files.createDirectories(parent);
-    }
-
-    private long size() {
-        try {
-            return Files.size(path);
-        } catch (IOException e) {
-            return -1;
-        }
     }
 
     protected static String toBinaryName(Path relativePath) {

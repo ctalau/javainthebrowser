@@ -25,9 +25,13 @@
 
 package com.sun.tools.javac.util;
 
-import java.util.*;
+import static com.sun.tools.javac.main.OptionName.XLINT;
+import static com.sun.tools.javac.main.OptionName.XLINT_CUSTOM;
+
+import java.util.LinkedHashMap;
+import java.util.Set;
+
 import com.sun.tools.javac.main.OptionName;
-import static com.sun.tools.javac.main.OptionName.*;
 
 /** A table of all command-line options.
  *  If an option has an argument, the option name is mapped to the argument.
@@ -39,8 +43,6 @@ import static com.sun.tools.javac.main.OptionName.*;
  *  deletion without notice.</b>
  */
 public class Options {
-    private static final long serialVersionUID = 0;
-
     /** The context key for the options. */
     public static final Context.Key<Options> optionsKey =
         new Context.Key<Options>();

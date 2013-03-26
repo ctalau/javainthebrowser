@@ -25,6 +25,14 @@
 
 package com.sun.tools.javac.util;
 
+import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.COLUMN;
+import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.END;
+import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.LINE;
+import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.OFFSET;
+import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.START;
+import static com.sun.tools.javac.util.LayoutCharacters.DetailsInc;
+import static com.sun.tools.javac.util.LayoutCharacters.DiagInc;
+
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -32,14 +40,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
+
 import javax.tools.JavaFileObject;
 
-import com.sun.tools.javac.util.AbstractDiagnosticFormatter.SimpleConfiguration;
-import com.sun.tools.javac.util.BasicDiagnosticFormatter.BasicConfiguration;
-
-import static com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.*;
-import static com.sun.tools.javac.util.BasicDiagnosticFormatter.BasicConfiguration.*;
-import static com.sun.tools.javac.util.LayoutCharacters.*;
+import com.sun.tools.javac.api.DiagnosticFormatter.Configuration.DiagnosticPart;
+import com.sun.tools.javac.util.BasicDiagnosticFormatter.BasicConfiguration.BasicFormatKind;
+import com.sun.tools.javac.util.BasicDiagnosticFormatter.BasicConfiguration.SourcePosition;
 
 /**
  * A basic formatter for diagnostic messages.

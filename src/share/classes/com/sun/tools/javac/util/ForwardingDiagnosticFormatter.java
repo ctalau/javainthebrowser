@@ -24,15 +24,12 @@
  */
 package com.sun.tools.javac.util;
 
-import java.util.Set;
 import java.util.Locale;
+import java.util.Set;
+
 import javax.tools.Diagnostic;
 
 import com.sun.tools.javac.api.DiagnosticFormatter;
-import com.sun.tools.javac.api.DiagnosticFormatter.Configuration;
-import com.sun.tools.javac.api.DiagnosticFormatter.Configuration.DiagnosticPart;
-import com.sun.tools.javac.api.DiagnosticFormatter.Configuration.MultilineLimit;
-import com.sun.tools.javac.api.DiagnosticFormatter.PositionKind;
 
 /**
  * A delegated diagnostic formatter delegates all formatting

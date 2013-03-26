@@ -25,12 +25,14 @@
 
 package com.sun.tools.javac.file;
 
-import java.util.Comparator;
-import java.io.ByteArrayOutputStream;
+import static com.sun.tools.javac.main.OptionName.D;
+import static com.sun.tools.javac.main.OptionName.S;
+import static javax.tools.StandardLocation.CLASS_OUTPUT;
+import static javax.tools.StandardLocation.SOURCE_OUTPUT;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,16 +57,13 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 
-import com.sun.tools.javac.file.RelativePath.RelativeFile;
 import com.sun.tools.javac.file.RelativePath.RelativeDirectory;
+import com.sun.tools.javac.file.RelativePath.RelativeFile;
 import com.sun.tools.javac.main.OptionName;
 import com.sun.tools.javac.util.BaseFileManager;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.ListBuffer;
-
-import static javax.tools.StandardLocation.*;
-import static com.sun.tools.javac.main.OptionName.*;
 
 /**
  * This class provides access to the source, class and other files
@@ -596,15 +596,6 @@ public class JavacFileManager extends BaseFileManager implements StandardJavaFil
             } catch (IOException e) {
             }
         }
-    }
-
-    private String defaultEncodingName;
-    private String getDefaultEncodingName() {
-        if (defaultEncodingName == null) {
-            defaultEncodingName =
-                new OutputStreamWriter(new ByteArrayOutputStream()).getEncoding();
-        }
-        return defaultEncodingName;
     }
 
     public ClassLoader getClassLoader(Location location) {

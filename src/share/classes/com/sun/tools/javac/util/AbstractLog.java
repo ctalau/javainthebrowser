@@ -27,6 +27,7 @@ package com.sun.tools.javac.util;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.tools.JavaFileObject;
 
 import com.sun.tools.javac.code.Lint.LintCategory;

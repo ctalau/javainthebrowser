@@ -25,18 +25,41 @@
 
 package com.sun.tools.javac.comp;
 
+import static com.sun.tools.javac.code.TypeTags.BOT;
+import static com.sun.tools.javac.code.TypeTags.ERROR;
+import static com.sun.tools.javac.code.TypeTags.FORALL;
+import static com.sun.tools.javac.code.TypeTags.METHOD;
+import static com.sun.tools.javac.code.TypeTags.NONE;
+import static com.sun.tools.javac.code.TypeTags.TYPEVAR;
+import static com.sun.tools.javac.code.TypeTags.UNDETVAR;
+import static com.sun.tools.javac.code.TypeTags.UNKNOWN;
+
+import com.sun.tools.javac.code.BoundKind;
+import com.sun.tools.javac.code.Symbol;
+import com.sun.tools.javac.code.Symbol.MethodSymbol;
+import com.sun.tools.javac.code.Symtab;
+import com.sun.tools.javac.code.Type;
+import com.sun.tools.javac.code.Type.CapturedType;
+import com.sun.tools.javac.code.Type.ClassType;
+import com.sun.tools.javac.code.Type.DelegatedType;
+import com.sun.tools.javac.code.Type.ForAll;
+import com.sun.tools.javac.code.Type.ForAll.ConstraintKind;
+import com.sun.tools.javac.code.Type.Mapping;
+import com.sun.tools.javac.code.Type.MethodType;
+import com.sun.tools.javac.code.Type.TypeVar;
+import com.sun.tools.javac.code.Type.UndetVar;
+import com.sun.tools.javac.code.Type.WildcardType;
+import com.sun.tools.javac.code.Types;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCTypeCast;
 import com.sun.tools.javac.tree.TreeInfo;
-import com.sun.tools.javac.util.*;
-import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.code.*;
-import com.sun.tools.javac.code.Type.*;
-import com.sun.tools.javac.code.Type.ForAll.ConstraintKind;
-import com.sun.tools.javac.code.Symbol.*;
+import com.sun.tools.javac.util.Context;
+import com.sun.tools.javac.util.Filter;
 import com.sun.tools.javac.util.JCDiagnostic;
-
-import static com.sun.tools.javac.code.TypeTags.*;
+import com.sun.tools.javac.util.List;
+import com.sun.tools.javac.util.ListBuffer;
+import com.sun.tools.javac.util.Name;
+import com.sun.tools.javac.util.Warner;
 
 /** Helper class for type parameter inference, used by the attribution phase.
  *
@@ -576,7 +599,6 @@ public class Infer {
                                 Type to,
                                 List<Type> tvars,
                                 Warner warn) throws InferenceException {
-        List<Type> targs;
         try {
             return instantiateExpr(that, to, warn);
         } catch (NoInstanceException ex) {

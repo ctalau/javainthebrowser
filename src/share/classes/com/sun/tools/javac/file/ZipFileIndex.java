@@ -700,7 +700,6 @@ public class ZipFileIndex {
     static class DirectoryEntry {
         private boolean filesInited;
         private boolean directoriesInited;
-        private boolean zipFileEntriesInited;
         private boolean entriesInited;
 
         private long writtenOffsetOffset = 0;
@@ -709,8 +708,6 @@ public class ZipFileIndex {
 
         private com.sun.tools.javac.util.List<String> zipFileEntriesFiles = com.sun.tools.javac.util.List.<String>nil();
         private com.sun.tools.javac.util.List<String> zipFileEntriesDirectories = com.sun.tools.javac.util.List.<String>nil();
-        private com.sun.tools.javac.util.List<Entry>  zipFileEntries = com.sun.tools.javac.util.List.<Entry>nil();
-
         private List<Entry> entries = new ArrayList<Entry>();
 
         private ZipFileIndex zipFileIndex;
@@ -750,18 +747,6 @@ public class ZipFileIndex {
                 directoriesInited = true;
             }
             return zipFileEntriesDirectories;
-        }
-
-        private com.sun.tools.javac.util.List<Entry> getEntries() {
-            if (!zipFileEntriesInited) {
-                initEntries();
-                zipFileEntries = com.sun.tools.javac.util.List.nil();
-                for (Entry zfie : entries) {
-                    zipFileEntries = zipFileEntries.append(zfie);
-                }
-                zipFileEntriesInited = true;
-            }
-            return zipFileEntries;
         }
 
         private Entry getEntry(String rootName) {

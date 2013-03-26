@@ -25,20 +25,7 @@
 
 package com.sun.tools.javac.sym;
 
-import com.sun.tools.javac.api.JavacTaskImpl;
-import com.sun.tools.javac.code.Kinds;
-import com.sun.tools.javac.code.Scope;
-import com.sun.tools.javac.code.Symbol.*;
-import com.sun.tools.javac.code.Symbol;
-import com.sun.tools.javac.code.Attribute;
-import com.sun.tools.javac.code.Symtab;
-import com.sun.tools.javac.code.Type;
-import com.sun.tools.javac.jvm.ClassReader;
-import com.sun.tools.javac.jvm.ClassWriter;
-import com.sun.tools.javac.jvm.Pool;
-import com.sun.tools.javac.processing.JavacProcessingEnvironment;
-import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Pair;
+import static javax.tools.JavaFileObject.Kind.CLASS;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,10 +47,25 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager.Location;
 import javax.tools.JavaFileObject;
-import static javax.tools.JavaFileObject.Kind.CLASS;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
+
+import com.sun.tools.javac.api.JavacTaskImpl;
+import com.sun.tools.javac.code.Attribute;
+import com.sun.tools.javac.code.Kinds;
+import com.sun.tools.javac.code.Scope;
+import com.sun.tools.javac.code.Symbol;
+import com.sun.tools.javac.code.Symbol.ClassSymbol;
+import com.sun.tools.javac.code.Symbol.PackageSymbol;
+import com.sun.tools.javac.code.Symbol.TypeSymbol;
+import com.sun.tools.javac.code.Symtab;
+import com.sun.tools.javac.code.Type;
+import com.sun.tools.javac.jvm.ClassWriter;
+import com.sun.tools.javac.jvm.Pool;
+import com.sun.tools.javac.processing.JavacProcessingEnvironment;
+import com.sun.tools.javac.util.List;
+import com.sun.tools.javac.util.Pair;
 
 /**
  * Used to generate a "symbol file" representing rt.jar that only
@@ -165,7 +167,6 @@ public class CreateSymbols extends AbstractProcessor {
             tool.getTask(null, fm, null, options, null, null);
         com.sun.tools.javac.main.JavaCompiler compiler =
             com.sun.tools.javac.main.JavaCompiler.instance(task.getContext());
-        ClassReader reader = ClassReader.instance(task.getContext());
         ClassWriter writer = ClassWriter.instance(task.getContext());
         Symtab syms = Symtab.instance(task.getContext());
         Attribute.Compound proprietary =
@@ -211,17 +212,6 @@ public class CreateSymbols extends AbstractProcessor {
                     : cs.attributes_field.prepend(proprietary);
             }
             writeClass(pool, cs, writer);
-        }
-
-        if (false) {
-            for (String pckName : crisp)
-                System.out.println("Crisp: " + pckName);
-            for (String pckName : hiddenPackages)
-                System.out.println("Hidden: " + pckName);
-            for (String pckName : legacyProprietary)
-                System.out.println("Legacy proprietary: " + pckName);
-            for (String pckName : documented)
-                System.out.println("Documented: " + pckName);
         }
     }
 

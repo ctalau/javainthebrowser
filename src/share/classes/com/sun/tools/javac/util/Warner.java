@@ -25,9 +25,10 @@
 
 package com.sun.tools.javac.util;
 
+import java.util.EnumSet;
+
 import com.sun.tools.javac.code.Lint.LintCategory;
 import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
-import java.util.EnumSet;
 
 /**
  * An interface to support optional warnings, needed for support of
