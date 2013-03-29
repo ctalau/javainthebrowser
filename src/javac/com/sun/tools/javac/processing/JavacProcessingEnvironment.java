@@ -55,10 +55,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import gwtjava.util.Locale;
+import gwtjava.util.regex.Pattern;
+
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import javac.javax.annotation.processing.Filer;
 import javac.javax.annotation.processing.Messager;

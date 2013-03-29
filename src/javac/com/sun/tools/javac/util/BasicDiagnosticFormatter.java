@@ -39,7 +39,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import gwtjava.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
+import gwtjava.util.regex.Matcher;
 
 import javac.javax.tools.JavaFileObject;
 

@@ -25,7 +25,9 @@
 
 package javac.com.sun.tools.javac.comp;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import javac.javax.tools.JavaFileObject;
 import javac.javax.tools.JavaFileManager;
 
@@ -39,7 +41,6 @@ import javac.com.sun.tools.javac.tree.*;
 import javac.com.sun.tools.javac.tree.JCTree.*;
 import javac.com.sun.tools.javac.util.*;
 import javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
-import javac.com.sun.tools.javac.util.List;
 
 
 import static javac.com.sun.tools.javac.code.Flags.*;

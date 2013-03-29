@@ -25,7 +25,9 @@
 
 package javac.com.sun.tools.javac.code;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import javac.javax.lang.model.SourceVersion;
 import static javac.javax.lang.model.SourceVersion.*;
 

@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.comp;
 
-import java.util.*;
+import java.util.HashSet;
 import java.util.Set;
 import javac.javax.tools.JavaFileObject;
 
@@ -33,7 +33,6 @@ import javac.com.sun.tools.javac.code.*;
 import javac.com.sun.tools.javac.jvm.*;
 import javac.com.sun.tools.javac.tree.*;
 import javac.com.sun.tools.javac.util.*;
-import javac.com.sun.tools.javac.util.List;
 
 import javac.com.sun.tools.javac.code.Type.*;
 import javac.com.sun.tools.javac.code.Symbol.*;

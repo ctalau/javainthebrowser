@@ -25,7 +25,9 @@
 
 package javac.com.sun.tools.javac.jvm;
 
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javac.com.sun.tools.javac.code.Symbol.*;
 
