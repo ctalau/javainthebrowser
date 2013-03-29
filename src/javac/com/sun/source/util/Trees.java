@@ -25,7 +25,7 @@
 
 package javac.com.sun.source.util;
 
-import gwtjava.lang.reflect.Method;
+import java.lang.reflect.Method;
 import javac.javax.annotation.processing.ProcessingEnvironment;
 import javac.javax.lang.model.element.AnnotationMirror;
 import javac.javax.lang.model.element.AnnotationValue;
