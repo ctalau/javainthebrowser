@@ -1,0 +1,15 @@
+      [ERROR] Line 65: No source code is available for type java.io.PrintWriter; did you forget to inherit a required module?
+      [ERROR] Line 109: No source code is available for type java.io.File; did you forget to inherit a required module?
+      [ERROR] Line 379: No source code is available for type java.io.FileNotFoundException; did you forget to inherit a required module?
+      [ERROR] Line 396: The method getProperty(String, String) in the type System is not applicable for the arguments (String)
+      [ERROR] Line 437: No source code is available for type java.lang.OutOfMemoryError; did you forget to inherit a required module?
+      [ERROR] Line 440: No source code is available for type java.lang.StackOverflowError; did you forget to inherit a required module?
+      [ERROR] Line 484: The method printStackTrace(PrintStream) in the type Throwable is not applicable for the arguments (PrintWriter)
+      [ERROR] Line 492: The method printStackTrace(PrintStream) in the type Throwable is not applicable for the arguments (PrintWriter)
+      [ERROR] Line 500: The method printStackTrace(PrintStream) in the type Throwable is not applicable for the arguments (PrintWriter)
+      [ERROR] Line 508: The method printStackTrace(PrintStream) in the type Throwable is not applicable for the arguments (PrintWriter)
+      [ERROR] Line 517: The method printStackTrace(PrintStream) in the type Throwable is not applicable for the arguments (PrintWriter)
+      [ERROR] Line 523: No source code is available for type java.net.URL; did you forget to inherit a required module?
+      [ERROR] Line 523: The method getResource(String) is undefined for the type Class<capture#3-of ? extends Main>
+      [ERROR] Line 532: No source code is available for type java.security.DigestInputStream; did you forget to inherit a required module?
+      [ERROR] Line 543: The method format(String, byte) is undefined for the type String
