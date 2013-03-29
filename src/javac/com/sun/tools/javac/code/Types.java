@@ -63,7 +63,7 @@ import java.util.HashSet;
 import gwtjava.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
+import gwtjava.util.WeakHashMap;
 
 import javac.com.sun.tools.javac.code.Attribute.RetentionPolicy;
 import javac.com.sun.tools.javac.code.Lint.LintCategory;
