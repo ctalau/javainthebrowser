@@ -40,6 +40,8 @@ import static javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticFlag.RECOVER
 import static javac.com.sun.tools.javac.util.ListBuffer.lb;
 import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 
+import gwtjava.util.ResourceBundle;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.lang.System;
@@ -50,7 +52,6 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Queue;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
