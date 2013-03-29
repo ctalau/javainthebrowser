@@ -11,4 +11,6 @@
 
   <!-- Specify the paths for translatable code                    -->
   <source path='lang'/>
+  <source path='util'/>
+  <source path='io'/>
 </module>

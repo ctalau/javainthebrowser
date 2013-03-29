@@ -12,5 +12,4 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='com'/>
   <source path='javax'/>
-  <source path='java'/>
 </module>

@@ -69,7 +69,7 @@ public enum Modifier {
      */
     public String toString() {
         if (lowercase == null) {
-           lowercase = name().toLowerCase(java.util.Locale.US);
+           lowercase = name().toLowerCase();
         }
         return lowercase;
     }

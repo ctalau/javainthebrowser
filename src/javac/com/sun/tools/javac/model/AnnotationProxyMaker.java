@@ -25,22 +25,33 @@
 
 package javac.com.sun.tools.javac.model;
 
-import javac.com.sun.tools.javac.util.*;
-import java.io.ObjectInputStream;
 import java.io.IOException;
-import java.lang.annotation.*;
+import java.io.ObjectInputStream;
+import java.lang.annotation.Annotation;
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import sun.reflect.annotation.*;
 
-import javac.javax.lang.model.type.TypeMirror;
+import javac.com.sun.tools.javac.code.Attribute;
+import javac.com.sun.tools.javac.code.Kinds;
+import javac.com.sun.tools.javac.code.Scope;
+import javac.com.sun.tools.javac.code.Symbol.ClassSymbol;
+import javac.com.sun.tools.javac.code.Symbol.MethodSymbol;
+import javac.com.sun.tools.javac.code.Type;
+import javac.com.sun.tools.javac.code.Type.ArrayType;
+import javac.com.sun.tools.javac.util.List;
+import javac.com.sun.tools.javac.util.ListBuffer;
+import javac.com.sun.tools.javac.util.Name;
+import javac.com.sun.tools.javac.util.Pair;
 import javac.javax.lang.model.type.MirroredTypeException;
 import javac.javax.lang.model.type.MirroredTypesException;
-import javac.com.sun.tools.javac.code.*;
-import javac.com.sun.tools.javac.code.Symbol.*;
-import javac.com.sun.tools.javac.code.Type.ArrayType;
+import javac.javax.lang.model.type.TypeMirror;
+import sun.reflect.annotation.AnnotationParser;
+import sun.reflect.annotation.AnnotationType;
+import sun.reflect.annotation.EnumConstantNotPresentExceptionProxy;
+import sun.reflect.annotation.ExceptionProxy;
 
 
 /**
