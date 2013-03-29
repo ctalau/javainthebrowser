@@ -27,7 +27,7 @@ package javac.com.sun.tools.javac.util;
 
 import static javac.com.sun.tools.javac.util.LayoutCharacters.TabInc;
 
-import java.util.BitSet;
+import gwtjava.util.BitSet;
 
 /** A class that defines source code positions as simple character
  *  offsets from the beginning of the file. The first character
