@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.util;
 
-import java.lang.System;
+import gwtjava.lang.System;
 
 /** A class for extensible, mutable bit sets.
  *

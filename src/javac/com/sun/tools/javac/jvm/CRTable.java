@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.jvm;
 
-import java.lang.System;
+import gwtjava.lang.System;
 import java.util.HashMap;
 import java.util.Map;
 

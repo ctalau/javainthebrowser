@@ -40,7 +40,7 @@ import gwtjava.security.MessageDigest;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.System;
+import gwtjava.lang.System;
 import java.net.URL;
 import java.util.MissingResourceException;
 

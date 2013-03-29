@@ -44,7 +44,7 @@ import gwtjava.util.ResourceBundle;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.lang.System;
+import gwtjava.lang.System;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;

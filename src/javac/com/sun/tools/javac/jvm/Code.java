@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.jvm;
 
-import java.lang.System;
+import gwtjava.lang.System;
 
 import javac.com.sun.tools.javac.code.*;
 import javac.com.sun.tools.javac.code.Symbol.*;

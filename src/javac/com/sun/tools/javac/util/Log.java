@@ -33,7 +33,7 @@ import static javac.com.sun.tools.javac.main.OptionName.XMAXWARNS;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.System;
+import gwtjava.lang.System;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
