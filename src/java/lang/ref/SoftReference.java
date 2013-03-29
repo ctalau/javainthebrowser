@@ -1,4 +1,4 @@
-package port.java.lang.ref;
+package java.lang.ref;
 
 /**
  * Port of the java.lang.ref.SoftReference class.

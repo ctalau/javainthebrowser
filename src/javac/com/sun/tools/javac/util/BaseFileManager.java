@@ -30,7 +30,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -47,14 +46,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javac.javax.tools.JavaFileObject;
-import javac.javax.tools.JavaFileObject.Kind;
-
 import javac.com.sun.tools.javac.code.Source;
 import javac.com.sun.tools.javac.main.JavacOption;
 import javac.com.sun.tools.javac.main.OptionName;
 import javac.com.sun.tools.javac.main.RecognizedOptions;
 import javac.com.sun.tools.javac.util.JCDiagnostic.SimpleDiagnosticPosition;
+import javac.javax.tools.JavaFileObject;
+import javac.javax.tools.JavaFileObject.Kind;
+import java.lang.ref.SoftReference;
 
 /**
  * Utility methods for building a filemanager.

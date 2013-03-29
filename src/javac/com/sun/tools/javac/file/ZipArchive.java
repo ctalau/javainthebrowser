@@ -41,12 +41,11 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javac.javax.tools.JavaFileObject;
-
 import javac.com.sun.tools.javac.file.JavacFileManager.Archive;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
 import javac.com.sun.tools.javac.util.List;
+import javac.javax.tools.JavaFileObject;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 

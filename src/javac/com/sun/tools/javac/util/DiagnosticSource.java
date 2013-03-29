@@ -30,14 +30,13 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.LF;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.TabInc;
 
 import java.io.IOException;
-import java.lang.ref.SoftReference;
 import java.nio.CharBuffer;
 import java.util.Map;
 
-import javac.javax.tools.JavaFileObject;
-
 import javac.com.sun.tools.javac.file.JavacFileManager;
 import javac.com.sun.tools.javac.tree.JCTree;
+import javac.javax.tools.JavaFileObject;
+import java.lang.ref.SoftReference;
 
 /**
  * A simple abstraction of a source file, as needed for use in a diagnostic message.

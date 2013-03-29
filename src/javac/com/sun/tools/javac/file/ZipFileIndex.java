@@ -30,8 +30,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -47,6 +45,8 @@ import java.util.zip.ZipException;
 
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 
 /**
  * This class implements the building of index of a zip archive and access to

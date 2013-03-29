@@ -33,13 +33,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
+
 import javac.javax.tools.JavaFileObject;
+import java.lang.ref.SoftReference;
+import java.lang.ref.Reference;
 
 /**
  * A subclass of JavaFileObject representing regular files.

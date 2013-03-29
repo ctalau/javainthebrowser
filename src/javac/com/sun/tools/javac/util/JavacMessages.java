@@ -25,7 +25,6 @@
 
 package javac.com.sun.tools.javac.util;
 
-import java.lang.ref.SoftReference;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -34,6 +33,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javac.com.sun.tools.javac.api.Messages;
+import java.lang.ref.SoftReference;
 
 /**
  *  Support for formatted localized messages.

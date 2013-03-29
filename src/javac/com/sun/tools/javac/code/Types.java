@@ -58,7 +58,6 @@ import static javac.com.sun.tools.javac.code.TypeTags.firstPartialTag;
 import static javac.com.sun.tools.javac.code.TypeTags.lastBaseTag;
 import static javac.com.sun.tools.javac.util.ListBuffer.lb;
 
-import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -98,6 +97,7 @@ import javac.com.sun.tools.javac.util.ListBuffer;
 import javac.com.sun.tools.javac.util.Name;
 import javac.com.sun.tools.javac.util.Names;
 import javac.com.sun.tools.javac.util.Warner;
+import java.lang.ref.SoftReference;
 
 /**
  * Utility class containing various operations on types.
