@@ -27,7 +27,7 @@ package javac.javax.tools;
 
 import javac.javax.tools.JavaFileManager.Location;
 
-import java.util.concurrent.*;
+import gwtjava.util.concurrent.*;
 
 /**
  * Standard locations of file objects.

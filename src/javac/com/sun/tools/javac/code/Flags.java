@@ -298,7 +298,7 @@ public class Flags {
 
     // Cache of modifier sets.
     private static Map<Long, Set<Modifier>> modifierSets =
-        new java.util.concurrent.ConcurrentHashMap<Long, Set<Modifier>>(64);
+        new gwtjava.util.concurrent.ConcurrentHashMap<Long, Set<Modifier>>(64);
 
     public static boolean isStatic(Symbol symbol) {
         return (symbol.flags() & STATIC) != 0;

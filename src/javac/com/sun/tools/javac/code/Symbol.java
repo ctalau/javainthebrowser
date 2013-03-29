@@ -26,7 +26,7 @@
 package javac.com.sun.tools.javac.code;
 
 import java.util.Set;
-import java.util.concurrent.Callable;
+import gwtjava.util.concurrent.Callable;
 import javac.javax.lang.model.element.*;
 import javac.javax.tools.JavaFileObject;
 

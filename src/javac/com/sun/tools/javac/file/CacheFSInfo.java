@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import gwtjava.util.concurrent.ConcurrentHashMap;
 
 import javac.com.sun.tools.javac.util.Context;
 
