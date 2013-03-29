@@ -34,13 +34,14 @@ import static javac.com.sun.tools.javac.main.OptionName.TARGET;
 import static javac.com.sun.tools.javac.main.OptionName.VERSION;
 import static javac.com.sun.tools.javac.main.OptionName.X;
 
+import gwtjava.security.DigestInputStream;
+import gwtjava.security.MessageDigest;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.System;
 import java.net.URL;
-import java.security.DigestInputStream;
-import java.security.MessageDigest;
 import java.util.MissingResourceException;
 
 import javac.com.sun.tools.javac.code.Source;
