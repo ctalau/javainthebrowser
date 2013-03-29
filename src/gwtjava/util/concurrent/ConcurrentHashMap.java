@@ -1,4 +1,4 @@
-package java.util.concurrent;
+package gwtjava.util.concurrent;
 
 import java.util.HashMap;
 

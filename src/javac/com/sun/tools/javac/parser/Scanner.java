@@ -51,6 +51,7 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.EOI;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.FF;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.LF;
 
+import java.lang.System;
 import java.nio.CharBuffer;
 
 import javac.com.sun.tools.javac.code.Source;

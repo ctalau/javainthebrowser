@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.parser;
 
-import java.util.Locale;
+import gwtjava.util.Locale;
 
 import javac.com.sun.tools.javac.api.Formattable;
 import javac.com.sun.tools.javac.api.Messages;

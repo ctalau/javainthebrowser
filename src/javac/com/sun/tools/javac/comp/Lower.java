@@ -58,6 +58,7 @@ import static javac.com.sun.tools.javac.jvm.ByteCodes.iadd;
 import static javac.com.sun.tools.javac.jvm.ByteCodes.ishll;
 import static javac.com.sun.tools.javac.jvm.ByteCodes.string_add;
 
+import gwtjava.lang.System;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;

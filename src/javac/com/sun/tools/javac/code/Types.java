@@ -60,7 +60,7 @@ import static javac.com.sun.tools.javac.util.ListBuffer.lb;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;

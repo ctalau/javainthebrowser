@@ -29,7 +29,7 @@ import static javac.com.sun.tools.javac.api.DiagnosticFormatter.PositionKind.LIN
 
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Locale;
+import gwtjava.util.Locale;
 
 import javac.javax.tools.JavaFileObject;
 

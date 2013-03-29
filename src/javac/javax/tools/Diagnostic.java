@@ -25,7 +25,7 @@
 
 package javac.javax.tools;
 
-import java.util.Locale;
+import gwtjava.util.Locale;
 
 /**
  * Interface for diagnostics from tools.  A diagnostic usually reports

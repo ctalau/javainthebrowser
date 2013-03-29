@@ -1,4 +1,4 @@
-package java.lang.ref;
+package gwtjava.lang.ref;
 
 /**
  * Port of the java.lang.ref.SoftReference class.
@@ -7,9 +7,9 @@ package java.lang.ref;
  *
  * @author ctalau
  */
-public class SoftReference<T> extends Reference<T> {
+public class WeakReference<T> extends Reference<T> {
     final private T object;
-    public SoftReference(T object) {
+    public WeakReference(T object) {
         this.object = object;
     }
 

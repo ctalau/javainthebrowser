@@ -33,6 +33,7 @@ import static javac.com.sun.tools.javac.main.OptionName.XMAXWARNS;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.System;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -40,14 +41,13 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import javac.javax.tools.DiagnosticListener;
-import javac.javax.tools.JavaFileObject;
-
 import javac.com.sun.tools.javac.api.DiagnosticFormatter;
 import javac.com.sun.tools.javac.main.OptionName;
 import javac.com.sun.tools.javac.tree.JCTree;
 import javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
 import javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticType;
+import javac.javax.tools.DiagnosticListener;
+import javac.javax.tools.JavaFileObject;
 
 /** A class for error logs. Reports errors and warnings, and
  *  keeps track of error numbers and positions.
@@ -535,7 +535,7 @@ public class Log extends AbstractLog {
     }
 
     public static String format(String fmt, Object... args) {
-        return String.format((java.util.Locale)null, fmt, args);
+        return String.format(fmt, args);
     }
 
 }

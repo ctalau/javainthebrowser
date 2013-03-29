@@ -25,6 +25,8 @@
 
 package javac.com.sun.tools.javac.util;
 
+import java.lang.System;
+
 /** A class for extensible, mutable bit sets.
  *
  *  <p><b>This is NOT part of any supported API.

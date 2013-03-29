@@ -1,4 +1,4 @@
-package java.util.concurrent;
+package gwtjava.util.concurrent;
 
 public interface Callable<T> {
     public T call();

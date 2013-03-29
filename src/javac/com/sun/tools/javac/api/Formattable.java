@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.api;
 
-import java.util.Locale;
+import gwtjava.util.Locale;
 
 /**
  * This interface must be implemented by any javac class that has non-trivial
@@ -62,7 +62,7 @@ public interface Formattable {
             this.key = key;
         }
 
-        public String toString(java.util.Locale l, Messages messages) {
+        public String toString(gwtjava.util.Locale l, Messages messages) {
             return messages.getLocalizedString(l, key);
         }
         public String getKind() {

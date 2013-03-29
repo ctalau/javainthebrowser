@@ -54,7 +54,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;

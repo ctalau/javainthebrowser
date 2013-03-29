@@ -1,4 +1,4 @@
-package java.lang.ref;
+package gwtjava.lang.ref;
 
 
 public abstract class Reference<T> {

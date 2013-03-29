@@ -43,7 +43,7 @@ import javac.javax.tools.Diagnostic;
  *
  * <p>Note that the messages &quot;printed&quot; by methods in this
  * interface may or may not appear as textual output to a location
- * like {@link System#out} or {@link System#err}.  Implementations may
+ * like {@link System.out} or {@link GwtSystem.err}.  Implementations may
  * choose to present this information in a different fashion, such as
  * messages in a window.
  *

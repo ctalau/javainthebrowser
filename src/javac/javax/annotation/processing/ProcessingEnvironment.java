@@ -25,7 +25,7 @@
 
 package javac.javax.annotation.processing;
 
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.Map;
 
 import javac.javax.lang.model.SourceVersion;

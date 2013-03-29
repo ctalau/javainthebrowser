@@ -94,6 +94,7 @@ import static javac.com.sun.tools.javac.main.OptionName.G;
 import static javac.com.sun.tools.javac.main.OptionName.G_CUSTOM;
 import static javac.com.sun.tools.javac.main.OptionName.XJCOV;
 
+import java.lang.System;
 import java.util.HashMap;
 import java.util.Map;
 

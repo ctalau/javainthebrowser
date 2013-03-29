@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.code;
 
-import java.util.Locale;
+import gwtjava.util.Locale;
 
 import javac.com.sun.tools.javac.api.Messages;
 import javac.com.sun.tools.javac.code.Type.*;

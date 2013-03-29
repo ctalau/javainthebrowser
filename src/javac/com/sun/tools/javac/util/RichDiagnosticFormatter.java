@@ -35,7 +35,7 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.DetailsInc;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.Map;
 
 import javac.com.sun.tools.javac.code.Kinds;

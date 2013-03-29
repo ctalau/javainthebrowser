@@ -37,6 +37,7 @@ import static javac.javax.lang.model.element.NestingKind.TOP_LEVEL;
 
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;

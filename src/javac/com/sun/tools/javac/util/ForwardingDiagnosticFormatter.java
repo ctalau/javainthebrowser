@@ -24,7 +24,7 @@
  */
 package javac.com.sun.tools.javac.util;
 
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.Set;
 
 import javac.javax.tools.Diagnostic;

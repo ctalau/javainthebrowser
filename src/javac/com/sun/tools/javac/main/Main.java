@@ -25,16 +25,23 @@
 
 package javac.com.sun.tools.javac.main;
 
+import static javac.com.sun.tools.javac.main.OptionName.D;
+import static javac.com.sun.tools.javac.main.OptionName.FULLVERSION;
+import static javac.com.sun.tools.javac.main.OptionName.HELP;
+import static javac.com.sun.tools.javac.main.OptionName.S;
+import static javac.com.sun.tools.javac.main.OptionName.SOURCE;
+import static javac.com.sun.tools.javac.main.OptionName.TARGET;
+import static javac.com.sun.tools.javac.main.OptionName.VERSION;
+import static javac.com.sun.tools.javac.main.OptionName.X;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.System;
 import java.net.URL;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.util.MissingResourceException;
-import javac.javax.tools.JavaFileManager;
-import javac.javax.tools.JavaFileObject;
-import javac.javax.annotation.processing.Processor;
 
 import javac.com.sun.tools.javac.code.Source;
 import javac.com.sun.tools.javac.file.CacheFSInfo;
@@ -42,10 +49,19 @@ import javac.com.sun.tools.javac.file.JavacFileManager;
 import javac.com.sun.tools.javac.jvm.Target;
 import javac.com.sun.tools.javac.main.JavacOption.Option;
 import javac.com.sun.tools.javac.main.RecognizedOptions.OptionHelper;
-import javac.com.sun.tools.javac.util.*;
 import javac.com.sun.tools.javac.processing.AnnotationProcessingError;
-
-import static javac.com.sun.tools.javac.main.OptionName.*;
+import javac.com.sun.tools.javac.util.ClientCodeException;
+import javac.com.sun.tools.javac.util.Context;
+import javac.com.sun.tools.javac.util.FatalError;
+import javac.com.sun.tools.javac.util.JavacMessages;
+import javac.com.sun.tools.javac.util.List;
+import javac.com.sun.tools.javac.util.ListBuffer;
+import javac.com.sun.tools.javac.util.Log;
+import javac.com.sun.tools.javac.util.Options;
+import javac.com.sun.tools.javac.util.PropagatedException;
+import javac.javax.annotation.processing.Processor;
+import javac.javax.tools.JavaFileManager;
+import javac.javax.tools.JavaFileObject;
 
 /** This class provides a commandline interface to the GJC compiler.
  *
@@ -77,7 +93,7 @@ public class Main {
         EXIT_OK = 0,        // Compilation completed with no errors.
         EXIT_ERROR = 1,     // Completed but reported errors.
         EXIT_CMDERR = 2,    // Bad command-line arguments
-        EXIT_SYSERR = 3,    // System error or resource exhaustion.
+        EXIT_SYSERR = 3,    // System.error or resource exhaustion.
         EXIT_ABNORMAL = 4;  // Compiler terminated abnormally
 
     private Option[] recognizedOptions = RecognizedOptions.getJavaCompilerOptions(new OptionHelper() {

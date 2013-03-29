@@ -33,6 +33,7 @@ import static javac.javax.tools.StandardLocation.SOURCE_OUTPUT;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import gwtjava.lang.System;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,12 +52,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipFile;
 
-import javac.javax.lang.model.SourceVersion;
-import javac.javax.tools.FileObject;
-import javac.javax.tools.JavaFileManager;
-import javac.javax.tools.JavaFileObject;
-import javac.javax.tools.StandardJavaFileManager;
-
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
 import javac.com.sun.tools.javac.main.OptionName;
@@ -64,6 +59,11 @@ import javac.com.sun.tools.javac.util.BaseFileManager;
 import javac.com.sun.tools.javac.util.Context;
 import javac.com.sun.tools.javac.util.List;
 import javac.com.sun.tools.javac.util.ListBuffer;
+import javac.javax.lang.model.SourceVersion;
+import javac.javax.tools.FileObject;
+import javac.javax.tools.JavaFileManager;
+import javac.javax.tools.JavaFileObject;
+import javac.javax.tools.StandardJavaFileManager;
 
 /**
  * This class provides access to the source, class and other files

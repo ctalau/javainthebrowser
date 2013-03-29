@@ -31,7 +31,7 @@ import static javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticType.NOTE;
 import static javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticType.WARNING;
 
 import java.util.EnumSet;
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.Map;
 import java.util.Set;
 

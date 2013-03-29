@@ -1,4 +1,4 @@
-package java.io;
+package gwtjava.io;
 
 public abstract class Writer implements Closeable, Flushable {
     public Writer append(char c) throws IOException {
@@ -38,5 +38,7 @@ public abstract class Writer implements Closeable, Flushable {
 
     public abstract void write(char[] cbuf, int off, int len) throws IOException;
 
-    public abstract String getContent();
+    public String getContent() {
+        return null;
+    }
 }

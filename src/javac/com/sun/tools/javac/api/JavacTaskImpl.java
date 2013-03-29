@@ -25,33 +25,50 @@
 
 package javac.com.sun.tools.javac.api;
 
+import gwtjava.util.Locale;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javac.com.sun.source.tree.CompilationUnitTree;
+import javac.com.sun.source.tree.Tree;
+import javac.com.sun.source.util.JavacTask;
+import javac.com.sun.source.util.TaskListener;
+import javac.com.sun.tools.javac.code.Symbol;
+import javac.com.sun.tools.javac.code.Symbol.ClassSymbol;
+import javac.com.sun.tools.javac.code.Type;
+import javac.com.sun.tools.javac.comp.Attr;
+import javac.com.sun.tools.javac.comp.AttrContext;
+import javac.com.sun.tools.javac.comp.Env;
+import javac.com.sun.tools.javac.file.JavacFileManager;
+import javac.com.sun.tools.javac.main.CommandLine;
+import javac.com.sun.tools.javac.main.JavaCompiler;
+import javac.com.sun.tools.javac.main.Main;
+import javac.com.sun.tools.javac.model.JavacElements;
+import javac.com.sun.tools.javac.model.JavacTypes;
+import javac.com.sun.tools.javac.parser.Parser;
+import javac.com.sun.tools.javac.parser.ParserFactory;
+import javac.com.sun.tools.javac.tree.JCTree;
+import javac.com.sun.tools.javac.tree.JCTree.JCClassDecl;
+import javac.com.sun.tools.javac.tree.JCTree.JCCompilationUnit;
+import javac.com.sun.tools.javac.tree.TreeInfo;
+import javac.com.sun.tools.javac.util.Context;
+import javac.com.sun.tools.javac.util.List;
+import javac.com.sun.tools.javac.util.ListBuffer;
+import javac.com.sun.tools.javac.util.Options;
 import javac.javax.annotation.processing.Processor;
 import javac.javax.lang.model.element.Element;
 import javac.javax.lang.model.element.TypeElement;
 import javac.javax.lang.model.type.TypeMirror;
-import javac.javax.tools.*;
-
-import javac.com.sun.source.tree.*;
-import javac.com.sun.source.util.*;
-import javac.com.sun.tools.javac.code.*;
-import javac.com.sun.tools.javac.code.Symbol.*;
-import javac.com.sun.tools.javac.comp.*;
-import javac.com.sun.tools.javac.file.JavacFileManager;
-import javac.com.sun.tools.javac.main.*;
-import javac.com.sun.tools.javac.model.*;
-import javac.com.sun.tools.javac.parser.Parser;
-import javac.com.sun.tools.javac.parser.ParserFactory;
-import javac.com.sun.tools.javac.tree.*;
-import javac.com.sun.tools.javac.tree.JCTree.*;
-import javac.com.sun.tools.javac.util.*;
-import javac.com.sun.tools.javac.util.List;
-import javac.com.sun.tools.javac.main.JavaCompiler;
+import javac.javax.tools.JavaFileManager;
+import javac.javax.tools.JavaFileObject;
 
 /**
  * Provides access to functionality specific to the JDK Java Compiler, javac.

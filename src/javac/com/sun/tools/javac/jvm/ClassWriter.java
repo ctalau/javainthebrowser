@@ -75,12 +75,9 @@ import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.System;
 import java.util.HashSet;
 import java.util.Set;
-
-import javac.javax.tools.FileObject;
-import javac.javax.tools.JavaFileManager;
-import javac.javax.tools.JavaFileObject;
 
 import javac.com.sun.tools.javac.code.Attribute;
 import javac.com.sun.tools.javac.code.Attribute.RetentionPolicy;
@@ -112,6 +109,9 @@ import javac.com.sun.tools.javac.util.Name;
 import javac.com.sun.tools.javac.util.Names;
 import javac.com.sun.tools.javac.util.Options;
 import javac.com.sun.tools.javac.util.Pair;
+import javac.javax.tools.FileObject;
+import javac.javax.tools.JavaFileManager;
+import javac.javax.tools.JavaFileObject;
 
 
 /** This class provides operations to map an internal symbol table graph

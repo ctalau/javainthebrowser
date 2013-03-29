@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.api;
 
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.MissingResourceException;
 
 /**

@@ -1,4 +1,4 @@
-package java.util;
+package gwtjava.util;
 
 public class Locale {
 

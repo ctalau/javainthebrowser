@@ -1,4 +1,4 @@
-package java.util.concurrent.atomic;
+package gwtjava.util.concurrent.atomic;
 
 public class AtomicBoolean {
     boolean wrapped = false;

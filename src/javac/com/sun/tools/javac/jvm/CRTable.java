@@ -25,12 +25,59 @@
 
 package javac.com.sun.tools.javac.jvm;
 
-import java.util.*;
+import java.lang.System;
+import java.util.HashMap;
+import java.util.Map;
 
-import javac.com.sun.tools.javac.tree.*;
-import javac.com.sun.tools.javac.util.*;
+import javac.com.sun.tools.javac.tree.JCTree;
+import javac.com.sun.tools.javac.tree.JCTree.JCArrayAccess;
+import javac.com.sun.tools.javac.tree.JCTree.JCArrayTypeTree;
+import javac.com.sun.tools.javac.tree.JCTree.JCAssert;
+import javac.com.sun.tools.javac.tree.JCTree.JCAssign;
+import javac.com.sun.tools.javac.tree.JCTree.JCAssignOp;
+import javac.com.sun.tools.javac.tree.JCTree.JCBinary;
+import javac.com.sun.tools.javac.tree.JCTree.JCBlock;
+import javac.com.sun.tools.javac.tree.JCTree.JCBreak;
+import javac.com.sun.tools.javac.tree.JCTree.JCCase;
+import javac.com.sun.tools.javac.tree.JCTree.JCCatch;
+import javac.com.sun.tools.javac.tree.JCTree.JCConditional;
+import javac.com.sun.tools.javac.tree.JCTree.JCContinue;
+import javac.com.sun.tools.javac.tree.JCTree.JCDoWhileLoop;
+import javac.com.sun.tools.javac.tree.JCTree.JCEnhancedForLoop;
+import javac.com.sun.tools.javac.tree.JCTree.JCErroneous;
+import javac.com.sun.tools.javac.tree.JCTree.JCExpressionStatement;
+import javac.com.sun.tools.javac.tree.JCTree.JCFieldAccess;
+import javac.com.sun.tools.javac.tree.JCTree.JCForLoop;
+import javac.com.sun.tools.javac.tree.JCTree.JCIdent;
+import javac.com.sun.tools.javac.tree.JCTree.JCIf;
+import javac.com.sun.tools.javac.tree.JCTree.JCInstanceOf;
+import javac.com.sun.tools.javac.tree.JCTree.JCLabeledStatement;
+import javac.com.sun.tools.javac.tree.JCTree.JCLiteral;
+import javac.com.sun.tools.javac.tree.JCTree.JCMethodDecl;
+import javac.com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
+import javac.com.sun.tools.javac.tree.JCTree.JCNewArray;
+import javac.com.sun.tools.javac.tree.JCTree.JCNewClass;
+import javac.com.sun.tools.javac.tree.JCTree.JCParens;
+import javac.com.sun.tools.javac.tree.JCTree.JCPrimitiveTypeTree;
+import javac.com.sun.tools.javac.tree.JCTree.JCReturn;
+import javac.com.sun.tools.javac.tree.JCTree.JCSkip;
+import javac.com.sun.tools.javac.tree.JCTree.JCSwitch;
+import javac.com.sun.tools.javac.tree.JCTree.JCSynchronized;
+import javac.com.sun.tools.javac.tree.JCTree.JCThrow;
+import javac.com.sun.tools.javac.tree.JCTree.JCTry;
+import javac.com.sun.tools.javac.tree.JCTree.JCTypeApply;
+import javac.com.sun.tools.javac.tree.JCTree.JCTypeCast;
+import javac.com.sun.tools.javac.tree.JCTree.JCTypeParameter;
+import javac.com.sun.tools.javac.tree.JCTree.JCUnary;
+import javac.com.sun.tools.javac.tree.JCTree.JCVariableDecl;
+import javac.com.sun.tools.javac.tree.JCTree.JCWhileLoop;
+import javac.com.sun.tools.javac.tree.JCTree.JCWildcard;
+import javac.com.sun.tools.javac.util.Assert;
+import javac.com.sun.tools.javac.util.ByteBuffer;
 import javac.com.sun.tools.javac.util.List;
-import javac.com.sun.tools.javac.tree.JCTree.*;
+import javac.com.sun.tools.javac.util.ListBuffer;
+import javac.com.sun.tools.javac.util.Log;
+import javac.com.sun.tools.javac.util.Position;
 
 /** This class contains the CharacterRangeTable for some method
  *  and the hashtable for mapping trees or lists of trees to their

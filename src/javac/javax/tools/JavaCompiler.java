@@ -27,7 +27,7 @@ package javac.javax.tools;
 
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.Locale;
+import gwtjava.util.Locale;
 import java.util.concurrent.Callable;
 
 import javac.javax.annotation.processing.Processor;

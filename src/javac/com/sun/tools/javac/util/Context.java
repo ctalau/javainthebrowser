@@ -25,6 +25,7 @@
 
 package javac.com.sun.tools.javac.util;
 
+import java.lang.System;
 import java.util.HashMap;
 import java.util.Map;
 
