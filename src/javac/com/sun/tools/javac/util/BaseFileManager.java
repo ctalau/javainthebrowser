@@ -53,7 +53,7 @@ import javac.com.sun.tools.javac.main.RecognizedOptions;
 import javac.com.sun.tools.javac.util.JCDiagnostic.SimpleDiagnosticPosition;
 import javac.javax.tools.JavaFileObject;
 import javac.javax.tools.JavaFileObject.Kind;
-import java.lang.ref.SoftReference;
+import gwtjava.lang.ref.SoftReference;
 
 /**
  * Utility methods for building a filemanager.

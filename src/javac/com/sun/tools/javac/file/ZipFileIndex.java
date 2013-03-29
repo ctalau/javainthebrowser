@@ -45,8 +45,8 @@ import java.util.zip.ZipException;
 
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
+import gwtjava.lang.ref.Reference;
+import gwtjava.lang.ref.SoftReference;
 
 /**
  * This class implements the building of index of a zip archive and access to

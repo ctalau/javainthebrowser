@@ -97,7 +97,7 @@ import javac.com.sun.tools.javac.util.ListBuffer;
 import javac.com.sun.tools.javac.util.Name;
 import javac.com.sun.tools.javac.util.Names;
 import javac.com.sun.tools.javac.util.Warner;
-import java.lang.ref.SoftReference;
+import gwtjava.lang.ref.SoftReference;
 
 /**
  * Utility class containing various operations on types.

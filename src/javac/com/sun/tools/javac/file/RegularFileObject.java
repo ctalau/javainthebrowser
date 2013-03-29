@@ -39,8 +39,8 @@ import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 
 import javac.javax.tools.JavaFileObject;
-import java.lang.ref.SoftReference;
-import java.lang.ref.Reference;
+import gwtjava.lang.ref.SoftReference;
+import gwtjava.lang.ref.Reference;
 
 /**
  * A subclass of JavaFileObject representing regular files.

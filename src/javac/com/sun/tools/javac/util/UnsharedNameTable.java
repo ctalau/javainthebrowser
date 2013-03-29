@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.util;
 
-import java.lang.ref.WeakReference;
+import gwtjava.lang.ref.WeakReference;
 
 /**
  * Implementation of Name.Table that stores names in individual arrays

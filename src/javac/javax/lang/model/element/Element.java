@@ -140,7 +140,7 @@ public interface Element {
      *         type if present on this element, else {@code null}
      *
      * @see #getAnnotationMirrors()
-     * @see java.lang.reflect.AnnotatedElement#getAnnotation
+     * @see gwtjava.lang.reflect.AnnotatedElement#getAnnotation
      * @see EnumConstantNotPresentException
      * @see AnnotationTypeMismatchException
      * @see IncompleteAnnotationException

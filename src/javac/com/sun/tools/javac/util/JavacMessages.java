@@ -28,7 +28,7 @@ package javac.com.sun.tools.javac.util;
 import gwtjava.util.Locale;
 import gwtjava.util.ResourceBundle;
 
-import java.lang.ref.SoftReference;
+import gwtjava.lang.ref.SoftReference;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;

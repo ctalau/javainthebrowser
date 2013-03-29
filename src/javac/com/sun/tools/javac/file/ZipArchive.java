@@ -46,8 +46,8 @@ import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
 import javac.com.sun.tools.javac.util.List;
 import javac.javax.tools.JavaFileObject;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
+import gwtjava.lang.ref.Reference;
+import gwtjava.lang.ref.SoftReference;
 
 /**
  * <p><b>This is NOT part of any supported API.

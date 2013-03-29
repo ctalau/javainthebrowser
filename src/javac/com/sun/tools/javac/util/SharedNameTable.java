@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.util;
 
-import java.lang.ref.SoftReference;
+import gwtjava.lang.ref.SoftReference;
 
 /**
  * Implementation of Name.Table that stores all names in a single shared

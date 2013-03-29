@@ -1,7 +1,7 @@
 package gwtjava.lang.ref;
 
 /**
- * Port of the java.lang.ref.SoftReference class.
+ * Port of the gwtjava.lang.ref.SoftReference class.
  *
  * It is just a regular reference.
  *

@@ -36,7 +36,7 @@ import java.util.Map;
 import javac.com.sun.tools.javac.file.JavacFileManager;
 import javac.com.sun.tools.javac.tree.JCTree;
 import javac.javax.tools.JavaFileObject;
-import java.lang.ref.SoftReference;
+import gwtjava.lang.ref.SoftReference;
 
 /**
  * A simple abstraction of a source file, as needed for use in a diagnostic message.
