@@ -26,7 +26,7 @@
 package javac.com.sun.tools.javac.processing;
 
 import java.lang.annotation.Annotation;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

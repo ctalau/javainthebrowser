@@ -533,7 +533,7 @@ public class Symtab {
                                             List.<Type>nil(), methodClass),
                              enumSym);
         listType = enterClass("java.util.List");
-        collectionsType = enterClass("java.util.Collections");
+        collectionsType = enterClass("gwtjava.util.Collections");
         comparableType = enterClass("java.lang.Comparable");
         arraysType = enterClass("java.util.Arrays");
         iterableType = target.hasIterable()

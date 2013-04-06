@@ -25,7 +25,7 @@
 
 package javac.javax.lang.model;
 
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
 

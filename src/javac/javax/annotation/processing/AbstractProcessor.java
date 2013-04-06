@@ -27,7 +27,7 @@ package javac.javax.annotation.processing;
 
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import javac.javax.lang.model.element.*;
 import javac.javax.lang.model.SourceVersion;
 import javac.javax.tools.Diagnostic;

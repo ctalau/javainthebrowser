@@ -26,7 +26,7 @@
 package javac.javax.lang.model.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.List;

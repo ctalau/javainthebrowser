@@ -26,8 +26,8 @@
 package javac.com.sun.tools.javac.processing;
 
 import static javac.com.sun.tools.javac.code.Lint.LintCategory.PROCESSING;
-import static java.util.Collections.synchronizedMap;
-import static java.util.Collections.synchronizedSet;
+import static gwtjava.util.Collections.synchronizedMap;
+import static gwtjava.util.Collections.synchronizedSet;
 import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javac.javax.tools.StandardLocation.SOURCE_OUTPUT;
 

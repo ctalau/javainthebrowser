@@ -28,7 +28,7 @@ package javac.com.sun.tools.javac.api;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.List;
 import java.util.Set;
 import javac.javax.tools.JavaFileObject.Kind;

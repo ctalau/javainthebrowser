@@ -4,7 +4,7 @@ package javac.com.sun.tools.javac.file;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.jar.Attributes;

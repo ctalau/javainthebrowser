@@ -33,7 +33,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

@@ -28,7 +28,7 @@ package javac.javax.lang.model.type;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.List;
 
 import javac.javax.lang.model.element.Element;

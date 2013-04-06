@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.StringTokenizer;
 import java.util.zip.ZipFile;

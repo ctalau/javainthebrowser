@@ -26,7 +26,7 @@
 package javac.com.sun.tools.javac.code;
 
 import java.util.EnumSet;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import javac.javax.lang.model.element.Modifier;

@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.code;
 
-import java.util.Collections;
+import gwtjava.util.Collections;
 
 import javac.com.sun.tools.javac.util.*;
 import javac.com.sun.tools.javac.code.Symbol.*;

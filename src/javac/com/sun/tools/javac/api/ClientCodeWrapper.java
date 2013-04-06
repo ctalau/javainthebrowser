@@ -37,7 +37,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;

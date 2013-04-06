@@ -26,7 +26,7 @@
 package javac.javax.tools;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import gwtjava.util.Collections;
 import java.util.List;
 
 /**
