@@ -22,7 +22,8 @@ public class CharsetDecoder {
 
     public CoderResult decode(ByteBuffer inbuf, CharBuffer dest, boolean b) {
         // TODO Auto-generated method stub
-        return new CoderResult(decoder.decode(inbuf.buffer, dest.buffer, b));
+        return new CoderResult(decoder.decode(
+                java.nio.ByteBuffer.wrap(inbuf.array(), inbuf.position(), inbuf.remaining()), dest.buffer, b));
     }
 
     public CharsetDecoder onMalformedInput(CodingErrorAction action) {
