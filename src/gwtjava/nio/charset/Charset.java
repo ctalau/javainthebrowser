@@ -2,24 +2,20 @@ package gwtjava.nio.charset;
 
 
 public class Charset {
-    java.nio.charset.Charset charset;
-    public Charset(java.nio.charset.Charset charset) {
-        this.charset = charset;
+    private Charset() {
     }
 
     public String name() {
-        // TODO Auto-generated method stub
-        return charset.name();
+        return "UTF8";
     }
 
     public static Charset forName(String encodingName) {
-        // TODO Auto-generated method stub
-        return new Charset(java.nio.charset.Charset.forName(encodingName));
+        assert (encodingName.equals("UTF8"));
+        return new Charset();
     }
 
     public CharsetDecoder newDecoder() {
-        // TODO Auto-generated method stub
-        return new CharsetDecoder(charset.newDecoder());
+        return new CharsetDecoder();
     }
 
 }

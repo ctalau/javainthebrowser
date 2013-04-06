@@ -68,9 +68,7 @@ public class CharBuffer extends Buffer implements CharSequence {
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        // TODO Auto-generated method stub
-//        throw new UnsupportedOperationException();
-        return new String(array, start, end);
+        throw new UnsupportedOperationException();
     }
 
     public static CharBuffer allocate(int capacity) {
@@ -78,6 +76,7 @@ public class CharBuffer extends Buffer implements CharSequence {
     }
 
     public static CharBuffer wrap(char[] charArray, int off, int length) {
+        assert (off == 0);
         return new CharBuffer(charArray, length);
     }
 
