@@ -52,7 +52,7 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.FF;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.LF;
 
 import gwtjava.lang.System;
-import java.nio.CharBuffer;
+import gwtjava.nio.CharBuffer;
 
 import javac.com.sun.tools.javac.code.Source;
 import javac.com.sun.tools.javac.file.JavacFileManager;

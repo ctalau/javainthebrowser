@@ -143,7 +143,7 @@ public interface Filer {
      * source file for an unnamed package, use {@code "package-info"}.
      *
      * <p> Note that to use a particular {@linkplain
-     * java.nio.charset.Charset charset} to encode the contents of the
+     * gwtjava.nio.charset.Charset charset} to encode the contents of the
      * file, an {@code OutputStreamWriter} with the chosen charset can
      * be created from the {@code OutputStream} from the returned
      * object. If the {@code Writer} from the returned object is

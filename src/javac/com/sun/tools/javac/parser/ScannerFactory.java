@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.parser;
 
-import java.nio.CharBuffer;
+import gwtjava.nio.CharBuffer;
 
 import javac.com.sun.tools.javac.code.Source;
 import javac.com.sun.tools.javac.util.Context;

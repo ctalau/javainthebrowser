@@ -27,11 +27,11 @@ package javac.com.sun.tools.javac.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import gwtjava.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.CharsetDecoder;
+import gwtjava.nio.charset.CharsetDecoder;
 
 import javac.javax.lang.model.element.Modifier;
 import javac.javax.lang.model.element.NestingKind;

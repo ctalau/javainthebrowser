@@ -25,25 +25,25 @@
 
 package javac.com.sun.tools.javac.file;
 
-import java.io.IOException;
-import java.util.Set;
-import javac.javax.tools.JavaFileObject;
+import gwtjava.nio.ByteBuffer;
+import gwtjava.nio.CharBuffer;
+import gwtjava.nio.charset.CharsetDecoder;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharsetDecoder;
+import java.util.Set;
 
 import javac.com.sun.tools.javac.file.JavacFileManager.Archive;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
 import javac.com.sun.tools.javac.util.Assert;
 import javac.com.sun.tools.javac.util.List;
+import javac.javax.tools.JavaFileObject;
 
 /**
  * <p><b>This is NOT part of any supported API.
@@ -159,7 +159,7 @@ public class ZipFileIndexArchive implements Archive {
         }
 
         @Override
-        public CharBuffer getCharContent(boolean ignoreEncodingErrors) throws IOException {
+        public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
             CharBuffer cb = fileManager.getCachedContent(this);
             if (cb == null) {
                 InputStream in = new ByteArrayInputStream(zfIndex.read(entry));

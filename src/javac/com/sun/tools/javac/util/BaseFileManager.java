@@ -32,14 +32,15 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
-    import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CoderResult;
-import java.nio.charset.CodingErrorAction;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
+
+import gwtjava.nio.ByteBuffer;
+import gwtjava.nio.CharBuffer;
+import gwtjava.nio.charset.Charset;
+import gwtjava.nio.charset.CharsetDecoder;
+import gwtjava.nio.charset.CoderResult;
+import gwtjava.nio.charset.CodingErrorAction;
+import gwtjava.nio.charset.IllegalCharsetNameException;
+import gwtjava.nio.charset.UnsupportedCharsetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -57,7 +58,7 @@ import gwtjava.lang.ref.SoftReference;
 /**
  * Utility methods for building a filemanager.
  * There are no references here to file-system specific objects such as
- * java.io.File or java.nio.file.Path.
+ * java.io.File or gwtjava.nio.file.Path.
  */
 public abstract class BaseFileManager {
     protected BaseFileManager(Charset charset) {

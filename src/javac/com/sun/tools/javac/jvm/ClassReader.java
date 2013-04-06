@@ -84,7 +84,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.CharBuffer;
+import gwtjava.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;

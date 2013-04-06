@@ -34,9 +34,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharsetDecoder;
+import gwtjava.nio.ByteBuffer;
+import gwtjava.nio.CharBuffer;
+import gwtjava.nio.charset.CharsetDecoder;
 
 import javac.javax.tools.JavaFileObject;
 import gwtjava.lang.ref.SoftReference;

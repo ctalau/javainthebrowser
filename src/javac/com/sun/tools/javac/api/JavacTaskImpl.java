@@ -29,7 +29,7 @@ import gwtjava.util.Locale;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.CharBuffer;
+import gwtjava.nio.CharBuffer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

@@ -30,7 +30,7 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.LF;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.TabInc;
 
 import java.io.IOException;
-import java.nio.CharBuffer;
+import gwtjava.nio.CharBuffer;
 import java.util.Map;
 
 import javac.com.sun.tools.javac.file.JavacFileManager;
