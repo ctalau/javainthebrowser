@@ -1,94 +1,84 @@
 package gwtjava.nio;
 
 
-public class CharBuffer implements CharSequence {
-    public java.nio.CharBuffer buffer;
-
-    public CharBuffer(java.nio.CharBuffer buffer) {
-        this.buffer = buffer;
+public class CharBuffer extends Buffer implements CharSequence {
+    char [] array;
+    private CharBuffer(int capacity) {
+        super(capacity);
+        array = new char[capacity];
     }
 
-    public int limit() {
-        // TODO Auto-generated method stub
-        return buffer.limit();
+    private CharBuffer(char [] array, int capacity) {
+        super(capacity);
+        this.array = array;
     }
 
-    public int capacity() {
-        // TODO Auto-generated method stub
-        return buffer.capacity();
-    }
-
-    public CharBuffer flip() {
-        // TODO Auto-generated method stub
-        return new CharBuffer((java.nio.CharBuffer)buffer.flip());
-    }
-
-    public void position(int limit) {
-        // TODO Auto-generated method stub
-        buffer.position(limit);
-    }
-
-    public void limit(int capacity) {
-        // TODO Auto-generated method stub
-        buffer.limit(capacity);
-    }
 
     public void put(char c) {
-        // TODO Auto-generated method stub
-        buffer.put(c);
+        array[position++] = c;
     }
 
-    public ByteBuffer put(ByteBuffer flip) {
-        // TODO Auto-generated method stub
-        //return buffer.put(flip.buffer);
-        return null;
+    public CharBuffer put(CharBuffer flip) {
+        return put(flip.array(), flip.position, flip.remaining());
     }
 
-    public static CharBuffer allocate(int i) {
-        // TODO Auto-generated method stub
-        return new CharBuffer(java.nio.CharBuffer.allocate(i));
+    public CharBuffer put(char[] src, int off, int len) {
+        if (off < 0 || len < 0 || (long)off + (long)len > src.length) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (len > remaining()) {
+            throw new IndexOutOfBoundsException();
+        }
+        for (int i = 0; i < len; i++) {
+            array[position++] = src[off++];
+        }
+        return this;
     }
 
-    public CharBuffer put(CharBuffer dest) {
-        // TODO Auto-generated method stub
-        return new CharBuffer(buffer.put(dest.buffer));
-    }
 
     public boolean hasArray() {
-        // TODO Auto-generated method stub
-        return buffer.hasArray();
+        return true;
     }
 
     public CharBuffer compact() {
-        // TODO Auto-generated method stub
-        return new CharBuffer(buffer.compact());
-    }
+      int rem = remaining();
+      for (int i = 0; i < rem; i++) {
+              array[i] = array[position + i];
+      }
+
+      position = limit - position;
+      limit = capacity;
+      mark = UNSET_MARK;
+      return this;
+  }
 
     public char[] array() {
-        // TODO Auto-generated method stub
-        return buffer.array();
-    }
-
-    public static CharBuffer wrap(char[] charArray, int i, int length) {
-        // TODO Auto-generated method stub
-        return new CharBuffer(java.nio.CharBuffer.wrap(charArray, i, length));
+        return array;
     }
 
     @Override
     public char charAt(int index) {
-        // TODO Auto-generated method stub
-        return buffer.charAt(index);
+        return array[position + index];
     }
 
     @Override
     public int length() {
-        // TODO Auto-generated method stub
-        return buffer.length();
+        return remaining();
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
         // TODO Auto-generated method stub
-        return buffer.subSequence(start, end);
+//        throw new UnsupportedOperationException();
+        return new String(array, start, end);
     }
+
+    public static CharBuffer allocate(int capacity) {
+        return new CharBuffer(capacity);
+    }
+
+    public static CharBuffer wrap(char[] charArray, int off, int length) {
+        return new CharBuffer(charArray, length);
+    }
+
 }
