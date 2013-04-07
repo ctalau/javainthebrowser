@@ -36,7 +36,7 @@ import java.util.Set;
 import java.util.Collection;
 import gwtjava.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.StringTokenizer;
+import gwtjava.util.StringTokenizer;
 import java.util.zip.ZipFile;
 import javac.javax.tools.JavaFileManager.Location;
 

@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
+import gwtjava.util.StringTokenizer;
 
 import javac.javax.annotation.processing.AbstractProcessor;
 import javac.javax.annotation.processing.RoundEnvironment;
@@ -337,7 +337,7 @@ public class PrintingProcessor extends AbstractProcessor {
 
             if (docComment != null) {
                 // Break comment into lines
-                java.util.StringTokenizer st = new StringTokenizer(docComment,
+                gwtjava.util.StringTokenizer st = new StringTokenizer(docComment,
                                                                   "\n\r");
                 indent();
                 writer.println("/**");

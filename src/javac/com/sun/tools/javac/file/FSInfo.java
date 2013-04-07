@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import gwtjava.util.Collections;
 import java.util.List;
-import java.util.StringTokenizer;
+import gwtjava.util.StringTokenizer;
 import gwtjava.util.jar.Attributes;
 import gwtjava.util.jar.JarFile;
 import gwtjava.util.jar.Manifest;
