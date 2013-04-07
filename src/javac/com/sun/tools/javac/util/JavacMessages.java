@@ -29,7 +29,8 @@ import gwtjava.util.Locale;
 import gwtjava.util.ResourceBundle;
 
 import gwtjava.lang.ref.SoftReference;
-import java.text.MessageFormat;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -199,6 +200,6 @@ public class JavacMessages implements Messages {
             msg = "compiler message file broken: key=" + key +
                 " arguments={0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}";
         }
-        return MessageFormat.format(msg, args);
+        return msg + ".format(" + Arrays.toString(args) + ")";
     }
 }
