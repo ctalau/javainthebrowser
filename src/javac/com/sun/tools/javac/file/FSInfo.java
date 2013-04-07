@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import gwtjava.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
+import gwtjava.util.jar.Attributes;
+import gwtjava.util.jar.JarFile;
+import gwtjava.util.jar.Manifest;
 
 import javac.com.sun.tools.javac.util.Context;
 
