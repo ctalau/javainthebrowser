@@ -25,9 +25,12 @@
 
 package javac.javax.annotation.processing;
 
-import java.lang.annotation.*;
-import static java.lang.annotation.RetentionPolicy.*;
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import gwtjava.lang.annotation.Documented;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * An annotation used to indicate what options an annotation processor
