@@ -53,9 +53,9 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Queue;
 import java.util.Set;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import gwtjava.util.logging.Handler;
+import gwtjava.util.logging.Level;
+import gwtjava.util.logging.Logger;
 
 import javac.com.sun.source.util.TaskEvent;
 import javac.com.sun.source.util.TaskListener;
