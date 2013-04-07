@@ -25,30 +25,59 @@
 
 package javac.com.sun.tools.javac.model;
 
+import static javac.javax.lang.model.util.ElementFilter.methodsIn;
+
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Inherited;
 import java.util.Map;
-import javac.javax.lang.model.SourceVersion;
-import javac.javax.lang.model.element.*;
-import javac.javax.lang.model.type.DeclaredType;
-import javac.javax.lang.model.util.Elements;
-import javac.javax.tools.JavaFileObject;
-import javac.com.sun.tools.javac.code.*;
-import javac.com.sun.tools.javac.code.Symbol.*;
+
+import javac.com.sun.tools.javac.code.Attribute;
+import javac.com.sun.tools.javac.code.Flags;
+import javac.com.sun.tools.javac.code.Kinds;
+import javac.com.sun.tools.javac.code.Scope;
+import javac.com.sun.tools.javac.code.Symbol;
+import javac.com.sun.tools.javac.code.Symbol.ClassSymbol;
+import javac.com.sun.tools.javac.code.Symbol.CompletionFailure;
+import javac.com.sun.tools.javac.code.Symbol.MethodSymbol;
+import javac.com.sun.tools.javac.code.Symbol.PackageSymbol;
+import javac.com.sun.tools.javac.code.Symbol.TypeSymbol;
+import javac.com.sun.tools.javac.code.Symtab;
+import javac.com.sun.tools.javac.code.Type;
 import javac.com.sun.tools.javac.code.TypeTags;
+import javac.com.sun.tools.javac.code.Types;
 import javac.com.sun.tools.javac.comp.AttrContext;
 import javac.com.sun.tools.javac.comp.Enter;
 import javac.com.sun.tools.javac.comp.Env;
 import javac.com.sun.tools.javac.main.JavaCompiler;
 import javac.com.sun.tools.javac.processing.PrintingProcessor;
 import javac.com.sun.tools.javac.tree.JCTree;
-import javac.com.sun.tools.javac.tree.JCTree.*;
+import javac.com.sun.tools.javac.tree.JCTree.JCAnnotation;
+import javac.com.sun.tools.javac.tree.JCTree.JCAssign;
+import javac.com.sun.tools.javac.tree.JCTree.JCClassDecl;
+import javac.com.sun.tools.javac.tree.JCTree.JCCompilationUnit;
+import javac.com.sun.tools.javac.tree.JCTree.JCExpression;
+import javac.com.sun.tools.javac.tree.JCTree.JCIdent;
+import javac.com.sun.tools.javac.tree.JCTree.JCMethodDecl;
+import javac.com.sun.tools.javac.tree.JCTree.JCNewArray;
+import javac.com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import javac.com.sun.tools.javac.tree.TreeInfo;
 import javac.com.sun.tools.javac.tree.TreeScanner;
-import javac.com.sun.tools.javac.util.*;
+import javac.com.sun.tools.javac.util.Constants;
+import javac.com.sun.tools.javac.util.Context;
+import javac.com.sun.tools.javac.util.List;
 import javac.com.sun.tools.javac.util.Name;
-
-import static javac.javax.lang.model.util.ElementFilter.methodsIn;
+import javac.com.sun.tools.javac.util.Names;
+import javac.com.sun.tools.javac.util.Pair;
+import javac.javax.lang.model.SourceVersion;
+import javac.javax.lang.model.element.AnnotationMirror;
+import javac.javax.lang.model.element.AnnotationValue;
+import javac.javax.lang.model.element.Element;
+import javac.javax.lang.model.element.ElementKind;
+import javac.javax.lang.model.element.ExecutableElement;
+import javac.javax.lang.model.element.PackageElement;
+import javac.javax.lang.model.element.TypeElement;
+import javac.javax.lang.model.type.DeclaredType;
+import javac.javax.lang.model.util.Elements;
+import javac.javax.tools.JavaFileObject;
 
 /**
  * Utility methods for operating on program elements.
@@ -113,21 +142,21 @@ public class JavacElements implements Elements {
      * An internal-use utility that creates a reified annotation.
      * This overloaded version take annotation inheritance into account.
      */
-    public static <A extends Annotation> A getAnnotation(ClassSymbol annotated,
-                                                         Class<A> annoType) {
-        boolean inherited = annoType.isAnnotationPresent(Inherited.class);
-        A result = null;
-        while (annotated.name != annotated.name.table.names.java_lang_Object) {
-            result = getAnnotation((Symbol)annotated, annoType);
-            if (result != null || !inherited)
-                break;
-            Type sup = annotated.getSuperclass();
-            if (sup.tag != TypeTags.CLASS || sup.isErroneous())
-                break;
-            annotated = (ClassSymbol) sup.tsym;
-        }
-        return result;
-    }
+//    public static <A extends Annotation> A getAnnotation(ClassSymbol annotated,
+//                                                         Class<A> annoType) {
+//        boolean inherited = annoType.isAnnotationPresent(Inherited.class);
+//        A result = null;
+//        while (annotated.name != annotated.name.table.names.java_lang_Object) {
+//            result = getAnnotation((Symbol)annotated, annoType);
+//            if (result != null || !inherited)
+//                break;
+//            Type sup = annotated.getSuperclass();
+//            if (sup.tag != TypeTags.CLASS || sup.isErroneous())
+//                break;
+//            annotated = (ClassSymbol) sup.tsym;
+//        }
+//        return result;
+//    }
 
 
     public PackageSymbol getPackageElement(CharSequence name) {

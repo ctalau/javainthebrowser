@@ -877,10 +877,10 @@ public abstract class Symbol implements Element {
         /**
          * @deprecated this method should never be used by javac internally.
          */
-        @Override @Deprecated
-        public <A extends java.lang.annotation.Annotation> A getAnnotation(Class<A> annoType) {
-            return JavacElements.getAnnotation(this, annoType);
-        }
+//        @Override @Deprecated
+//        public <A extends java.lang.annotation.Annotation> A getAnnotation(Class<A> annoType) {
+//            return JavacElements.getAnnotation(this, annoType);
+//        }
 
         public <R, P> R accept(ElementVisitor<R, P> v, P p) {
             return v.visitType(this, p);
