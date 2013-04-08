@@ -1,29 +1,27 @@
 package gwtjava.util;
 
-// http://docs.oracle.com/javase/1.4.2/docs/api/java/util/StringTokenizer.html
-public class StringTokenizer extends java.util.StringTokenizer {
+public class StringTokenizer {
+    private String [] tokens;
+    private int crtToken;
 
-    public StringTokenizer(String docComment, String string) {
-        super(docComment, string);
+    public StringTokenizer(String string, String delim) {
+        tokens = string.split(delim);
     }
 
-    public StringTokenizer(String path) {
-        super(path);
+    public StringTokenizer(String string) {
+        this(string, " |\t|\r|\n|\f");
     }
 
-//    public boolean hasMoreTokens() {
-//        // TODO Auto-generated method stub
-//        return false;
-//    }
-//
-//    public String nextToken() {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-//
-//    public int countTokens() {
-//        // TODO Auto-generated method stub
-//        return 0;
-//    }
+    public boolean hasMoreTokens() {
+        return crtToken < tokens.length;
+    }
+
+    public String nextToken() {
+        return tokens[crtToken++];
+    }
+
+    public int countTokens() {
+        return tokens.length;
+    }
 
 }
