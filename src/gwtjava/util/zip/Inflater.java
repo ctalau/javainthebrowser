@@ -2,23 +2,25 @@ package gwtjava.util.zip;
 
 public class Inflater {
 
+    java.util.zip.Inflater jinfl;
     public Inflater(boolean b) {
-        // TODO Auto-generated constructor stub
+        jinfl = new java.util.zip.Inflater(b);
     }
 
     public void reset() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        jinfl.reset();
     }
 
     public void setInput(byte[] src) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        jinfl.setInput(src);
     }
 
     public int inflate(byte[] dest) throws DataFormatException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        try {
+            return jinfl.inflate(dest);
+        } catch (java.util.zip.DataFormatException e) {
+            throw new DataFormatException(e.getMessage());
+        }
     }
 
 }

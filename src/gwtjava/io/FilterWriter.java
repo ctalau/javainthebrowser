@@ -24,4 +24,9 @@ public class FilterWriter extends Writer {
 
     }
 
+    @Override
+    public String toString() {
+        throw new UnsupportedOperationException();
+    }
+
 }

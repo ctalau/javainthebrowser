@@ -4,29 +4,36 @@ import gwtjava.io.IOException;
 import gwtjava.io.OutputStream;
 
 public class ByteArrayOutputStream extends OutputStream {
-
-    public ByteArrayOutputStream(int i) {
-        // TODO Auto-generated constructor stub
-    }
+    protected int count;
+    protected byte[] buf;
 
     public ByteArrayOutputStream() {
-        // TODO Auto-generated constructor stub
+        this(16);
+    }
+
+    public ByteArrayOutputStream(int initialSize) {
+        buf = new byte[initialSize];
     }
 
     @Override
-    public void write(int arg0) throws IOException {
-        // TODO Auto-generated method stub
+    public void write(int b) {
+        if (buf.length == count) {
+            byte[] newBuf = new byte[buf.length * 3 / 2];
+            System.arraycopy(buf, 0, newBuf, 0, count);
+            buf = newBuf;
+        }
 
+        buf[count++] = (byte) b;
     }
 
     public byte[] toByteArray() {
-        // TODO Auto-generated method stub
-        return null;
+        byte[] result = new byte[count];
+        System.arraycopy(buf, 0, result, 0, count);
+        return result;
     }
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
 
     }
 

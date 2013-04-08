@@ -1,22 +1,27 @@
 package gwtjava.io;
 
 public class ByteArrayInputStream extends InputStream {
+    private byte [] buf;
+    private int pos, lim;
 
-    public ByteArrayInputStream(byte[] read) {
-        // TODO Auto-generated constructor stub
+    public ByteArrayInputStream(byte[] buf) {
+        this.buf = buf;
+        this.pos = 0;
+        this.lim = buf.length;
     }
 
-    public ByteArrayInputStream(byte[] buf, int bp, int i) {
-        // TODO Auto-generated constructor stub
+    public ByteArrayInputStream(byte[] buf, int pos, int len) {
+        this.buf = buf;
+        this.pos = pos;
+        this.lim = pos + len;
     }
 
     public int read() {
-        throw new UnsupportedOperationException();
+        return pos < lim ? buf[pos++] : -1;
     }
+
     @Override
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
 }

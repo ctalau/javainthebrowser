@@ -36,7 +36,8 @@ public class System {
 
         @Override
         public java.io.PrintStream getPrintStream() {
-            throw new UnsupportedOperationException();
+            return java.lang.System.err;
+//XXX            throw new UnsupportedOperationException();
         }
 
     }

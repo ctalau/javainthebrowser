@@ -14,24 +14,29 @@ public class OutputStreamWriter extends Writer {
     @Override
     public void close() throws IOException {
         // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void flush() throws IOException {
         // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
         // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     public String getEncoding() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public String toString() {
+        throw new UnsupportedOperationException();
     }
 
 }

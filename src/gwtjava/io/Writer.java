@@ -11,7 +11,5 @@ public abstract class Writer implements Closeable, Flushable {
 
     public abstract void write(char[] cbuf, int off, int len) throws IOException;
 
-    public String getContent() {
-        return null;
-    }
+    public abstract String toString();
 }

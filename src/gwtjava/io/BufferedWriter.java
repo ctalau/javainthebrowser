@@ -2,26 +2,29 @@ package gwtjava.io;
 
 public class BufferedWriter extends Writer {
 
-    public BufferedWriter(Writer openWriter) {
-        // TODO Auto-generated constructor stub
+    private Writer writer;
+    public BufferedWriter(Writer writer) {
+        this.writer = writer;
     }
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
-
+        writer.close();
     }
 
     @Override
     public void flush() throws IOException {
-        // TODO Auto-generated method stub
-
+        writer.flush();
     }
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public String toString() {
+        return writer.toString();
     }
 
 }

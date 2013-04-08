@@ -34,7 +34,7 @@ public class PrintWriter extends Writer {
             }
 
             @Override
-            public String getContent() {
+            public String toString() {
                 throw new UnsupportedOperationException();
             }
         };
@@ -45,8 +45,8 @@ public class PrintWriter extends Writer {
     }
 
     @Override
-    public String getContent() {
-        return w.getContent();
+    public String toString() {
+        return w.toString();
     }
 
     @Override
