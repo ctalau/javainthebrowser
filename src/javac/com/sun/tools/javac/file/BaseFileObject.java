@@ -29,8 +29,8 @@ import gwtjava.io.File;
 import gwtjava.io.IOException;
 import gwtjava.io.InputStreamReader;
 import gwtjava.io.Reader;
-import java.net.URI;
-import java.net.URISyntaxException;
+import gwtjava.net.URI;
+import gwtjava.net.URISyntaxException;
 import gwtjava.nio.charset.CharsetDecoder;
 
 import javac.javax.lang.model.element.Modifier;

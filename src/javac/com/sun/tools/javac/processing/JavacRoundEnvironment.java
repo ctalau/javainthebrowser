@@ -73,7 +73,7 @@ public class JavacRoundEnvironment implements RoundEnvironment {
     }
 
     public String toString() {
-        return String.format("[errorRaised=%b, rootElements=%s, processingOver=%b]",
+        return gwtjava.statics.SString.format("[errorRaised=%b, rootElements=%s, processingOver=%b]",
                              errorRaised,
                              rootElements,
                              processingOver);

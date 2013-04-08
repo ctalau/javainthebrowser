@@ -27,6 +27,8 @@ package javac.com.sun.tools.javac.model;
 
 import static javac.javax.lang.model.util.ElementFilter.methodsIn;
 
+import gwtjava.io.Writer;
+
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
@@ -582,7 +584,7 @@ public class JavacElements implements Elements {
      * @param w the writer to print the output to
      * @param elements the elements to print
      */
-    public void printElements(java.io.Writer w, Element... elements) {
+    public void printElements(Writer w, Element... elements) {
         for (Element element : elements)
             (new PrintingProcessor.PrintingElementVisitor(w, this)).visit(element).flush();
     }
@@ -661,4 +663,5 @@ public class JavacElements implements Elements {
             throw new IllegalArgumentException(o.toString());
         return clazz.cast(o);
     }
+
 }

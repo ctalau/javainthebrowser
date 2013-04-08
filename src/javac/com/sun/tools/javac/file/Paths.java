@@ -27,8 +27,9 @@ package javac.com.sun.tools.javac.file;
 
 import gwtjava.io.File;
 import gwtjava.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import gwtjava.net.MalformedURLException;
+import gwtjava.net.URL;
+import gwtjava.lang.System;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,7 +38,7 @@ import java.util.Collection;
 import gwtjava.util.Collections;
 import java.util.LinkedHashSet;
 import gwtjava.util.StringTokenizer;
-import java.util.zip.ZipFile;
+import gwtjava.util.zip.ZipFile;
 import javac.javax.tools.JavaFileManager.Location;
 
 import javac.com.sun.tools.javac.code.Lint;

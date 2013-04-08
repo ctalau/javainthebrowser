@@ -884,7 +884,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             elapsed_msec = delegateCompiler.elapsed_msec;
         } catch (Abort ex) {
             if (devVerbose)
-                ex.printStackTrace(System.err);
+                ex.printStackTrace(System.err.getPrintStream());
         } finally {
             if (procEnvImpl != null)
                 procEnvImpl.close();
@@ -928,7 +928,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             }
         } catch (Abort ex) {
             if (devVerbose)
-                ex.printStackTrace(System.err);
+                ex.printStackTrace(System.err.getPrintStream());
         }
 
         if (verbose) {

@@ -35,7 +35,7 @@ import gwtjava.io.IOException;
 import gwtjava.io.InputStream;
 import gwtjava.io.OutputStream;
 import gwtjava.io.Writer;
-import java.net.URI;
+import gwtjava.net.URI;
 import java.util.Set;
 
 import javac.com.sun.tools.javac.file.JavacFileManager.Archive;

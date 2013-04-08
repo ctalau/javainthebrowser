@@ -30,7 +30,7 @@ import gwtjava.io.InputStream;
 import gwtjava.io.OutputStream;
 import gwtjava.io.Reader;
 import gwtjava.io.Writer;
-import java.net.URI;
+import gwtjava.net.URI;
 
 /**
  * File abstraction for tools.  In this context, <em>file</em> means

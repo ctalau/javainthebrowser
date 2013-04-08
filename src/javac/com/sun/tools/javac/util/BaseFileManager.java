@@ -30,8 +30,8 @@ import gwtjava.io.IOException;
 import gwtjava.io.InputStream;
 import gwtjava.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.net.URLClassLoader;
+import gwtjava.net.URL;
+import gwtjava.net.URLClassLoader;
 
 import gwtjava.nio.ByteBuffer;
 import gwtjava.nio.CharBuffer;

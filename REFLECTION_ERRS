@@ -1,0 +1,115 @@
+Validating units:
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/source/util/Trees.java'
+      [ERROR] Line 78: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+      [ERROR] Line 78: The method getClassLoader() is undefined for the type Class<capture#3-of ? extends Object>
+      [ERROR] Line 79: The method forName(String, boolean, ClassLoader) is undefined for the type Class
+      [ERROR] Line 80: The method forName(String, boolean, ClassLoader) is undefined for the type Class
+      [ERROR] Line 81: No source code is available for type java.lang.reflect.Method; did you forget to inherit a required module?
+      [ERROR] Line 81: The method getMethod(String, Class<?>[]) is undefined for the type Class<capture#6-of ?>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/api/ClientCodeWrapper.java'
+      [ERROR] Line 165: The method isAnnotationPresent(Class<ClientCodeWrapper.Trusted>) is undefined for the type Class<capture#10-of ?>
+      [ERROR] Line 184: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/code/Scope.java'
+      [ERROR] Line 143: Cannot invoke clone() on the array type Scope.Entry[]
+      [ERROR] Line 743: Cannot invoke clone() on the array type Scope.Entry[]
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/file/BaseFileObject.java'
+      [ERROR] Line 60: The method getSimpleName() is undefined for the type Class<capture#1-of ? extends BaseFileObject>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/file/JavacFileManager.java'
+      [ERROR] Line 601: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/jvm/ClassReader.java'
+      [ERROR] Line 1081: The method copyOf(int[], int) is undefined for the type Arrays
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/jvm/Code.java'
+      [ERROR] Line 1613: The method clone() is undefined for the type Object
+      [ERROR] Line 1615: Cannot invoke clone() on the array type Type[]
+      [ERROR] Line 1616: Cannot invoke clone() on the array type int[]
+      [ERROR] Line 1622: No source code is available for type java.lang.CloneNotSupportedException; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/main/JavaCompiler.java'
+      [ERROR] Line 1674: The method getPackage() is undefined for the type Class<Main>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/model/AnnotationProxyMaker.java'
+      [ERROR] Line 89: The method cast(Annotation) is undefined for the type Class<A>
+      [ERROR] Line 97: No source code is available for type sun.reflect.annotation.AnnotationParser; did you forget to inherit a required module?
+      [ERROR] Line 169: No source code is available for type java.lang.reflect.Method; did you forget to inherit a required module?
+      [ERROR] Line 171: The method getMethod(String) is undefined for the type Class<capture#1-of ? extends Annotation>
+      [ERROR] Line 177: No source code is available for type sun.reflect.annotation.ExceptionProxy; did you forget to inherit a required module?
+      [ERROR] Line 178: No source code is available for type sun.reflect.annotation.AnnotationType; did you forget to inherit a required module?
+      [ERROR] Line 179: The method isInstance(Object) is undefined for the type Class<capture#5-of ?>
+      [ERROR] Line 211: No source code is available for type java.lang.reflect.Array; did you forget to inherit a required module?
+      [ERROR] Line 238: No source code is available for type sun.reflect.annotation.EnumConstantNotPresentExceptionProxy; did you forget to inherit a required module?
+      [ERROR] Line 249: The method asSubclass(Class<Annotation>) is undefined for the type Class<capture#16-of ?>
+      [ERROR] Line 275: The constructor AnnotationTypeMismatchException(Method, String) is undefined
+      [ERROR] Line 320: No source code is available for type java.lang.ClassNotFoundException; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/model/JavacElements.java'
+      [ERROR] Line 133: The method isAnnotation() is undefined for the type Class<A>
+      [ERROR] Line 199: The method isInstance(Symbol) is undefined for the type Class<S>
+      [ERROR] Line 201: The method cast(Symbol) is undefined for the type Class<S>
+      [ERROR] Line 662: The method isInstance(Object) is undefined for the type Class<T>
+      [ERROR] Line 664: The method cast(Object) is undefined for the type Class<T>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/model/JavacTypes.java'
+      [ERROR] Line 299: The method isInstance(Object) is undefined for the type Class<T>
+      [ERROR] Line 301: The method cast(Object) is undefined for the type Class<T>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/parser/Scanner.java'
+      [ERROR] Line 601: No source code is available for type java.lang.NoSuchMethodError; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/processing/JavacProcessingEnvironment.java'
+      [ERROR] Line 247: The method newInstance() is undefined for the type Class<PrintingProcessor>
+      [ERROR] Line 276: No source code is available for type java.lang.SecurityException; did you forget to inherit a required module?
+      [ERROR] Line 348: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+      [ERROR] Line 354: The method forName(String) is undefined for the type Class
+      [ERROR] Line 357: No source code is available for type java.lang.ClassNotFoundException; did you forget to inherit a required module?
+      [ERROR] Line 359: The method forName(String) is undefined for the type Class
+      [ERROR] Line 371: No source code is available for type java.lang.reflect.Method; did you forget to inherit a required module?
+      [ERROR] Line 371: The method getMethod(String, Class<Class>, Class<ClassLoader>) is undefined for the type Class<capture#4-of ?>
+      [ERROR] Line 383: The method getMethod(String) is undefined for the type Class<capture#5-of ?>
+      [ERROR] Line 400: The method getSimpleName() is undefined for the type Class<capture#9-of ? extends Throwable>
+      [ERROR] Line 412: The method getSimpleName() is undefined for the type Class<capture#11-of ? extends Throwable>
+      [ERROR] Line 429: The method getMethod(String) is undefined for the type Class<capture#12-of ?>
+      [ERROR] Line 464: The method newInstance() is undefined for the type Class<capture#13-of ?>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/processing/JavacRoundEnvironment.java'
+      [ERROR] Line 174: The method isAnnotation() is undefined for the type Class<capture#8-of ? extends Annotation>
+      [ERROR] Line 176: The method getCanonicalName() is undefined for the type Class<capture#10-of ? extends Annotation>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/processing/PrintingProcessor.java'
+      [ERROR] Line 455: The method cast(TypeMirror) is undefined for the type Class<ArrayType>
+      [ERROR] Line 479: The method cast(TypeMirror) is undefined for the type Class<ArrayType>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/tree/JCTree.java'
+      [ERROR] Line 439: The method clone() of type JCTree must override or implement a supertype method
+      [ERROR] Line 441: The method clone() is undefined for the type Object
+      [ERROR] Line 442: No source code is available for type java.lang.CloneNotSupportedException; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/tree/TreeMaker.java'
+      [ERROR] Line 219: The method getSimpleName() is undefined for the type Class<capture#1-of ? extends JCTree>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/util/BaseFileManager.java'
+      [ERROR] Line 100: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+      [ERROR] Line 101: The method getClassLoader() is undefined for the type Class<capture#1-of ? extends BaseFileManager>
+      [ERROR] Line 111: The method forName(String) is undefined for the type Class
+      [ERROR] Line 113: No source code is available for type java.lang.reflect.Constructor<T>; did you forget to inherit a required module?
+      [ERROR] Line 113: The method getConstructor(Class<?>[]) is undefined for the type Class<capture#2-of ? extends ClassLoader>
+      [ERROR] Line 121: The method isAssignableFrom(Class<URLClassLoader>) is undefined for the type Class<Closeable>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/util/CloseableURLClassLoader.java'
+      [ERROR] Line 50: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+      [ERROR] Line 71: No source code is available for type java.lang.reflect.Field; did you forget to inherit a required module?
+      [ERROR] Line 71: The method getDeclaredField(String) is undefined for the type Class<capture#4-of ? extends Object>
+      [ERROR] Line 87: No source code is available for type java.lang.NoSuchFieldException; did you forget to inherit a required module?
+      [ERROR] Line 87: No source code is available for type java.lang.IllegalAccessException; did you forget to inherit a required module?
+      [ERROR] Line 89: The method getDeclaredField(String) is undefined for the type Class<URLClassLoader>
+      [ERROR] Line 93: The method getDeclaredField(String) is undefined for the type Class<capture#5-of ? extends Object>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/com/sun/tools/javac/util/List.java'
+      [ERROR] Line 255: No source code is available for type java.lang.reflect.Array; did you forget to inherit a required module?
+      [ERROR] Line 369: The method cast(Object) is undefined for the type Class<T>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/javax/annotation/processing/AbstractProcessor.java'
+      [ERROR] Line 81: The method getAnnotation(Class<SupportedOptions>) is undefined for the type Class<capture#1-of ? extends AbstractProcessor>
+      [ERROR] Line 98: The method getAnnotation(Class<SupportedAnnotationTypes>) is undefined for the type Class<capture#2-of ? extends AbstractProcessor>
+      [ERROR] Line 120: The method getAnnotation(Class<SupportedSourceVersion>) is undefined for the type Class<capture#4-of ? extends AbstractProcessor>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/javax/lang/model/SourceVersion.java'
+      [ERROR] Line 150: No source code is available for type java.lang.SecurityException; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/javax/lang/model/type/MirroredTypeException.java'
+      [ERROR] Line 76: No source code is available for type java.lang.ClassNotFoundException; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/javax/lang/model/type/MirroredTypesException.java'
+      [ERROR] Line 91: No source code is available for type java.lang.ClassNotFoundException; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/javax/lang/model/util/ElementFilter.java'
+      [ERROR] Line 198: The method cast(Element) is undefined for the type Class<E>
+      [ERROR] Line 211: The method cast(Element) is undefined for the type Class<E>
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/javax/tools/ForwardingJavaFileManager.java'
+      [ERROR] Line 63: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/javac/javax/tools/JavaFileManager.java'
+      [ERROR] Line 145: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
+[ERROR] Aborting compile due to errors in some input files
+

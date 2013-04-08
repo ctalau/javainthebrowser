@@ -36,13 +36,17 @@ import static javac.com.sun.tools.javac.main.OptionName.X;
 
 import gwtjava.security.DigestInputStream;
 import gwtjava.security.MessageDigest;
+import gwtjava.statics.SClass;
+import gwtjava.lang.OutOfMemoryError;
+import gwtjava.lang.StackOverflowError;
+
 
 import gwtjava.io.File;
 import gwtjava.io.FileNotFoundException;
 import gwtjava.io.IOException;
 import gwtjava.io.PrintWriter;
 import gwtjava.lang.System;
-import java.net.URL;
+import gwtjava.net.URL;
 import java.util.MissingResourceException;
 
 import javac.com.sun.tools.javac.code.Source;
@@ -499,7 +503,7 @@ public class Main {
     void bugMessage(Throwable ex) {
         Log.printLines(out, getLocalizedString("msg.bug",
                                                JavaCompiler.version()));
-        ex.printStackTrace(out);
+        ex.printStackTrace(out.getPrintStream());
     }
 
     /** Print a message reporting a fatal error.
@@ -507,7 +511,7 @@ public class Main {
     void feMessage(Throwable ex) {
         Log.printLines(out, ex.getMessage());
         if (ex.getCause() != null && options.isSet("dev")) {
-            ex.getCause().printStackTrace(out);
+            ex.getCause().printStackTrace(out.getPrintStream());
         }
     }
 
@@ -515,7 +519,7 @@ public class Main {
      */
     void ioMessage(Throwable ex) {
         Log.printLines(out, getLocalizedString("msg.io"));
-        ex.printStackTrace(out);
+        ex.printStackTrace(out.getPrintStream());
     }
 
     /** Print a message reporting an out-of-resources error.
@@ -523,7 +527,7 @@ public class Main {
     void resourceMessage(Throwable ex) {
         Log.printLines(out, getLocalizedString("msg.resource"));
 //      System.out.println("(name buffer len = " + Name.names.length + " " + Name.nc);//DEBUG
-        ex.printStackTrace(out);
+        ex.printStackTrace(out.getPrintStream());
     }
 
     /** Print a message reporting an uncaught exception from an
@@ -532,13 +536,13 @@ public class Main {
     void apMessage(AnnotationProcessingError ex) {
         Log.printLines(out,
                        getLocalizedString("msg.proc.annotation.uncaught.exception"));
-        ex.getCause().printStackTrace(out);
+        ex.getCause().printStackTrace(out.getPrintStream());
     }
 
     /** Display the location and checksum of a class. */
     void showClass(String className) {
         out.println("javac: show class: " + className);
-        URL url = getClass().getResource('/' + className.replace('.', '/') + ".class");
+        URL url = SClass.getResource(getClass(), '/' + className.replace('.', '/') + ".class");
         if (url == null)
             out.println("  class not found");
         else {
@@ -558,7 +562,7 @@ public class Main {
                 }
                 StringBuilder sb = new StringBuilder();
                 for (byte b: digest)
-                    sb.append(String.format("%02x", b));
+                    sb.append(gwtjava.statics.SString.format("%02x", b));
                 out.println("  " + algorithm + " checksum: " + sb);
             } catch (Exception e) {
                 out.println("  cannot compute digest: " + e);

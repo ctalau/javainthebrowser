@@ -31,9 +31,10 @@ import static javac.com.sun.tools.javac.code.Flags.INTERFACE;
 import static javac.com.sun.tools.javac.code.Flags.SYNTHETIC;
 import static javac.com.sun.tools.javac.code.Flags.StandardFlags;
 import static javac.com.sun.tools.javac.code.Flags.VARARGS;
-
 import gwtjava.io.IOException;
 import gwtjava.io.Writer;
+import gwtjava.lang.System;
+
 import java.util.Map;
 
 import javac.com.sun.tools.javac.code.BoundKind;

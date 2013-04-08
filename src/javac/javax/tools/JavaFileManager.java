@@ -77,7 +77,7 @@ import static javac.javax.tools.JavaFileObject.Kind;
  * section&nbsp;3.3.  Informally, this should be true:
  *
  * <!-- URI.create(relativeName).normalize().getPath().equals(relativeName) -->
- * <pre>  URI.{@linkplain java.net.URI#create create}(relativeName).{@linkplain java.net.URI#normalize normalize}().{@linkplain java.net.URI#getPath getPath}().equals(relativeName)</pre>
+ * <pre>  URI.{@linkplain gwtjava.net.URI#create create}(relativeName).{@linkplain java.net.URI#normalize normalize}().{@linkplain java.net.URI#getPath getPath}().equals(relativeName)</pre>
  *
  * <p>All methods in this interface might throw a SecurityException.
  *
@@ -88,7 +88,7 @@ import static javac.javax.tools.JavaFileObject.Kind;
  *
  * <p><em>Implementation note:</em> a consequence of this requirement
  * is that a trivial implementation of output to a {@linkplain
- * java.util.jar.JarOutputStream} is not a sufficient implementation.
+ * gwtjava.util.jar.JarOutputStream} is not a sufficient implementation.
  * That is, rather than creating a JavaFileObject that returns the
  * JarOutputStream directly, the contents must be cached until closed
  * and then written to the JarOutputStream.

@@ -53,6 +53,7 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.LF;
 
 import gwtjava.lang.System;
 import gwtjava.nio.CharBuffer;
+import gwtjava.statics.SCharacter;
 
 import javac.com.sun.tools.javac.code.Source;
 import javac.com.sun.tools.javac.file.JavacFileManager;
@@ -200,7 +201,7 @@ public class Scanner implements Lexer {
         this(fac);
         eofPos = inputLength;
         if (inputLength == input.length) {
-            if (input.length > 0 && Character.isWhitespace(input[input.length - 1])) {
+            if (input.length > 0 && SCharacter.isWhitespace(input[input.length - 1])) {
                 inputLength--;
             } else {
                 char[] newInput = new char[inputLength + 1];
@@ -576,10 +577,10 @@ public class Scanner implements Lexer {
                         } else {
                             sbuf[sp++] = high;
                         }
-                        isJavaIdentifierPart = Character.isJavaIdentifierPart(
+                        isJavaIdentifierPart = SCharacter.isJavaIdentifierPart(
                             Character.toCodePoint(high, ch));
                     } else {
-                        isJavaIdentifierPart = Character.isJavaIdentifierPart(ch);
+                        isJavaIdentifierPart = SCharacter.isJavaIdentifierPart(ch);
                     }
                 }
                 if (!isJavaIdentifierPart) {
@@ -714,7 +715,7 @@ public class Scanner implements Lexer {
                                                         scanCommentChar();
                                                     }}}}}}}}}}}
             if (deprecatedPrefix && bp < buflen) {
-                if (Character.isWhitespace(ch)) {
+                if (SCharacter.isWhitespace(ch)) {
                     deprecatedFlag = true;
                 } else if (ch == '*') {
                     scanCommentChar();
@@ -973,10 +974,10 @@ public class Scanner implements Lexer {
                                     sbuf[sp++] = high;
                                 }
 
-                                isJavaIdentifierStart = Character.isJavaIdentifierStart(
+                                isJavaIdentifierStart = SCharacter.isJavaIdentifierStart(
                                     Character.toCodePoint(high, ch));
                             } else {
-                                isJavaIdentifierStart = Character.isJavaIdentifierStart(ch);
+                                isJavaIdentifierStart = SCharacter.isJavaIdentifierStart(ch);
                             }
                         }
                         if (isJavaIdentifierStart) {

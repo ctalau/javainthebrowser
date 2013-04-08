@@ -33,7 +33,7 @@ import gwtjava.io.InputStream;
 import gwtjava.io.OutputStream;
 import gwtjava.io.OutputStreamWriter;
 import gwtjava.io.Writer;
-import java.net.URI;
+import gwtjava.net.URI;
 import gwtjava.nio.ByteBuffer;
 import gwtjava.nio.CharBuffer;
 import gwtjava.nio.charset.CharsetDecoder;
@@ -41,6 +41,7 @@ import gwtjava.nio.charset.CharsetDecoder;
 import javac.javax.tools.JavaFileObject;
 import gwtjava.lang.ref.SoftReference;
 import gwtjava.lang.ref.Reference;
+import gwtjava.lang.System;
 
 /**
  * A subclass of JavaFileObject representing regular files.

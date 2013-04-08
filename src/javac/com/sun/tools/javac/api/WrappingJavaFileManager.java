@@ -26,7 +26,7 @@
 package javac.com.sun.tools.javac.api;
 
 import gwtjava.io.IOException;
-import java.net.URI;
+import gwtjava.net.URI;
 import java.util.ArrayList;
 import gwtjava.util.Collections;
 import java.util.List;

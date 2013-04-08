@@ -34,23 +34,25 @@ import gwtjava.io.File;
 import gwtjava.io.FileNotFoundException;
 import gwtjava.io.IOException;
 import gwtjava.lang.System;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import gwtjava.net.MalformedURLException;
+import gwtjava.net.URI;
+import gwtjava.net.URISyntaxException;
+import gwtjava.net.URL;
 import gwtjava.nio.CharBuffer;
 import gwtjava.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import gwtjava.util.Collections;
+import gwtjava.util.Locale;
+
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.ZipFile;
+import gwtjava.util.zip.ZipFile;
 
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
@@ -262,7 +264,8 @@ public class JavacFileManager extends BaseFileManager implements StandardJavaFil
         String message;
         try {
             final String ascii = "US-ASCII";
-            message = new String(String.format(null, format, args).getBytes(ascii), ascii);
+            message = new String(gwtjava.statics.SString.format(
+                    (Locale)null, format, args).getBytes(ascii), ascii);
         } catch (java.io.UnsupportedEncodingException ex) {
             throw new AssertionError(ex);
         }

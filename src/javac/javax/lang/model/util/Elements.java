@@ -26,6 +26,8 @@
 package javac.javax.lang.model.util;
 
 
+import gwtjava.io.Writer;
+
 import java.util.List;
 import java.util.Map;
 
@@ -246,7 +248,7 @@ public interface Elements {
      * @param w the writer to print the output to
      * @param elements the elements to print
      */
-    void printElements(java.io.Writer w, Element... elements);
+    void printElements(Writer w, Element... elements);
 
     /**
      * Return a name with the same sequence of characters as the

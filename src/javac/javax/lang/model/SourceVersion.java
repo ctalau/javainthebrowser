@@ -25,7 +25,10 @@
 
 package javac.javax.lang.model;
 
+import gwtjava.statics.SCharacter;
 import gwtjava.util.Collections;
+import gwtjava.lang.System;
+
 import java.util.Set;
 import java.util.HashSet;
 
@@ -187,14 +190,14 @@ public enum SourceVersion {
             return false;
         }
         int cp = id.codePointAt(0);
-        if (!Character.isJavaIdentifierStart(cp)) {
+        if (!SCharacter.isJavaIdentifierStart(cp)) {
             return false;
         }
         for (int i = Character.charCount(cp);
                 i < id.length();
                 i += Character.charCount(cp)) {
             cp = id.codePointAt(i);
-            if (!Character.isJavaIdentifierPart(cp)) {
+            if (!SCharacter.isJavaIdentifierPart(cp)) {
                 return false;
             }
         }

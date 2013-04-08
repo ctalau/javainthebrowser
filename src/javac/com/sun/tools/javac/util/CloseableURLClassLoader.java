@@ -28,10 +28,10 @@ package javac.com.sun.tools.javac.util;
 import gwtjava.io.Closeable;
 import gwtjava.io.IOException;
 import java.lang.reflect.Field;
-import java.net.URL;
-import java.net.URLClassLoader;
+import gwtjava.net.URL;
+import gwtjava.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.jar.JarFile;
+import gwtjava.util.jar.JarFile;
 
 /**
  * A URLClassLoader that also implements Closeable.

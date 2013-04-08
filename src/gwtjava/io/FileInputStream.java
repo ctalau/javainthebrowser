@@ -6,4 +6,10 @@ public class FileInputStream extends InputStream {
         // TODO Auto-generated constructor stub
     }
 
+    @Override
+    public int read() throws IOException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }

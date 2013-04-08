@@ -32,16 +32,17 @@ import gwtjava.io.IOException;
 import gwtjava.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
+import gwtjava.util.Calendar;
 import gwtjava.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
-import java.util.zip.ZipException;
+import gwtjava.util.zip.DataFormatException;
+import gwtjava.util.zip.Inflater;
+import gwtjava.util.zip.ZipException;
+import gwtjava.lang.System;
 
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
@@ -123,7 +124,7 @@ public class ZipFileIndex {
         this.zipFile = zipFile;
         this.symbolFilePrefix = symbolFilePrefix;
         this.symbolFilePrefixLength = (symbolFilePrefix == null ? 0 :
-            symbolFilePrefix.getPath().getBytes("UTF-8").length);
+            symbolFilePrefix.getPath().getBytes().length);
         this.writeIndex = writeIndex;
         this.usePreindexedCache = useCache;
         this.preindexedCacheLocation = cacheLocation;
@@ -441,7 +442,7 @@ public class ZipFileIndex {
     }
 
   /*
-   * Inflate using the java.util.zip.Inflater class
+   * Inflate using the gwtjava.util.zip.Inflater class
    */
     private SoftReference<Inflater> inflaterRef;
     private int inflate(byte[] src, byte[] dest) {
@@ -641,7 +642,7 @@ public class ZipFileIndex {
                 lastStart = dirStart;
                 lastLen = fileStart - dirStart - 1;
 
-                directory = getRelativeDirectory(new String(zipDir, dirStart, lastLen, "UTF-8"));
+                directory = getRelativeDirectory(new String(zipDir, dirStart, lastLen));
                 lastDir = directory;
 
                 // Enter also all the parent directories
@@ -666,7 +667,7 @@ public class ZipFileIndex {
             // For each dir create also a file
             if (fileStart != fileEnd) {
                 Entry entry = new Entry(directory,
-                        new String(zipDir, fileStart, fileEnd - fileStart, "UTF-8"));
+                        new String(zipDir, fileStart, fileEnd - fileStart));
 
                 entry.setNativeTime(get4ByteLittleEndian(zipDir, pos + 12));
                 entry.compressedSize = get4ByteLittleEndian(zipDir, pos + 20);

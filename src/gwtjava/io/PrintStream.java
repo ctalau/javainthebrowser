@@ -1,36 +1,17 @@
 package gwtjava.io;
 
-
-public class PrintStream implements Closeable, Flushable {
-
-    public void append(String string) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void close() {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void print(String string) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void println(Object string) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void println() {
-        // TODO Auto-generated method stub
-
-    }
+public interface PrintStream extends Closeable, Flushable {
+    @Override
+    public void close() ;
 
     @Override
-    public void flush() throws IOException {
-        // TODO Auto-generated method stub
+    public void flush() throws IOException ;
 
-    }
+    public void println(Object string) ;
+
+    public void print(Object string) ;
+
+    public void println() ;
+
+    public java.io.PrintStream getPrintStream() ;
 }

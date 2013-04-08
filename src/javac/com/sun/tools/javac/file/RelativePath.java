@@ -26,8 +26,8 @@
 package javac.com.sun.tools.javac.file;
 
 import gwtjava.io.File;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import gwtjava.util.zip.ZipEntry;
+import gwtjava.util.zip.ZipFile;
 import javac.javax.tools.JavaFileObject;
 
 /**

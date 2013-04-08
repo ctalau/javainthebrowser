@@ -87,6 +87,7 @@ public class MirroredTypesException extends RuntimeException {
     /**
      * Explicitly set all transient fields.
      */
+    @SuppressWarnings("unused")
     private void readObject(ObjectInputStream s)
         throws IOException, ClassNotFoundException {
         s.defaultReadObject();

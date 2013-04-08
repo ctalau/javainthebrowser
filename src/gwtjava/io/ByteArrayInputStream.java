@@ -10,6 +10,9 @@ public class ByteArrayInputStream extends InputStream {
         // TODO Auto-generated constructor stub
     }
 
+    public int read() {
+        throw new UnsupportedOperationException();
+    }
     @Override
     public void close() {
         // TODO Auto-generated method stub

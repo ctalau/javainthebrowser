@@ -1,34 +1,33 @@
 package gwtjava.io;
 
-public class InputStream {
-
-    public void close() throws IOException {
-
-    }
-
-    public long readLong() throws IOException {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+public abstract class InputStream {
 
     public int available() {
         // TODO Auto-generated method stub
         return 0;
     }
 
-    public int read(byte[] array, int position, int i) throws IOException {
-        // TODO Auto-generated method stub
-        return 0;
+    public int read(byte[] buf, int start, int len) throws IOException {
+
+        int end = start + len;
+        for (int i = start; i < end; i++) {
+            int r = read();
+            if (r == -1) {
+                return i == start ? -1 : i - start;
+            }
+            buf[i] = (byte) r;
+        }
+        return len;
     }
 
-    public int read(byte[] array) throws IOException {
-        // TODO Auto-generated method stub
-        return 0;
+    public int read(byte[] buf) throws IOException {
+        return read(buf, 0, buf.length);
     }
 
-    public int read() throws IOException {
-        // TODO Auto-generated method stub
-        return 0;
+    public void close() throws IOException {
+
     }
+
+    public abstract int read() throws IOException;
 
 }

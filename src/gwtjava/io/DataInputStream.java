@@ -16,4 +16,15 @@ public class DataInputStream extends InputStream {
         return 0;
     }
 
+    public long readLong() throws IOException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int read() throws IOException {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }

@@ -106,11 +106,11 @@ public class Constants {
     }
 
     private static String formatByte(byte b) {
-        return String.format("(byte)0x%02x", b);
+        return gwtjava.statics.SString.format("(byte)0x%02x", b);
     }
 
     private static String formatShort(short s) {
-        return String.format("(short)%d", s);
+        return gwtjava.statics.SString.format("(short)%d", s);
     }
 
     private static String formatLong(long lng) {

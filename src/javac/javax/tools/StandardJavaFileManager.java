@@ -43,7 +43,7 @@ import gwtjava.io.IOException;
  *
  * This file manager creates file objects representing regular
  * {@linkplain File files},
- * {@linkplain java.util.zip.ZipEntry zip file entries}, or entries in
+ * {@linkplain gwtjava.util.zip.ZipEntry zip file entries}, or entries in
  * similar file system based containers.  Any file object returned
  * from a file manager implementing this interface must observe the
  * following behavior:
@@ -86,15 +86,15 @@ import gwtjava.io.IOException;
  *     </ul>
  *   </li>
  *   <li>
- *     The {@linkplain java.net.URI URI} returned from
+ *     The {@linkplain gwtjava.net.URI URI} returned from
  *     <code>{@linkplain FileObject#toUri()}</code>
  *     <ul>
  *       <li>
- *         must be {@linkplain java.net.URI#isAbsolute() absolute} (have a schema), and
+ *         must be {@linkplain gwtjava.net.URI#isAbsolute() absolute} (have a schema), and
  *       </li>
  *       <li>
- *         must have a {@linkplain java.net.URI#normalize() normalized}
- *         {@linkplain java.net.URI#getPath() path component} which
+ *         must have a {@linkplain gwtjava.net.URI#normalize() normalized}
+ *         {@linkplain gwtjava.net.URI#getPath() path component} which
  *         can be resolved without any process-specific context such
  *         as the current directory (file names must be absolute).
  *       </li>

@@ -1,6 +1,6 @@
 package gwtjava.io;
 
-import java.net.URI;
+import gwtjava.net.URI;
 
 public class File {
 

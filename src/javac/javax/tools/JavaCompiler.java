@@ -198,7 +198,7 @@ import javac.javax.annotation.processing.Processor;
  *            * {@code @}param code the source code for the compilation unit represented by this file object
  *            {@code *}/
  *           JavaSourceFromString(String name, String code) {
- *               super({@linkplain java.net.URI#create URI.create}("string:///" + name.replace('.','/') + Kind.SOURCE.extension),
+ *               super({@linkplain gwtjava.net.URI#create URI.create}("string:///" + name.replace('.','/') + Kind.SOURCE.extension),
  *                     Kind.SOURCE);
  *               this.code = code;
  *           }

@@ -241,7 +241,7 @@ public class Convert {
         default:
             return (isPrintableAscii(ch))
                 ? String.valueOf(ch)
-                : String.format("\\u%04x", (int) ch);
+                : gwtjava.statics.SString.format("\\u%04x", (int) ch);
         }
     }
 

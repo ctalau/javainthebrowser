@@ -27,6 +27,7 @@ package javac.com.sun.tools.javac.util;
 
 import gwtjava.util.Locale;
 import gwtjava.util.ResourceBundle;
+import gwtjava.lang.InternalError;
 
 import gwtjava.lang.ref.SoftReference;
 

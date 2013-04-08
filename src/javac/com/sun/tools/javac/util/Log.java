@@ -447,7 +447,7 @@ public class Log extends AbstractLog {
         }
 
         if (dumpOnError)
-            new RuntimeException().printStackTrace(writer);
+            new RuntimeException().printStackTrace(writer.getPrintStream());
 
         writer.flush();
     }
@@ -535,7 +535,7 @@ public class Log extends AbstractLog {
     }
 
     public static String format(String fmt, Object... args) {
-        return String.format(fmt, args);
+        return gwtjava.statics.SString.format(fmt, args);
     }
 
 }

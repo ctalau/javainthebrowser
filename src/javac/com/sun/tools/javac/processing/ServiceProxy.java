@@ -30,8 +30,9 @@ import gwtjava.io.FileNotFoundException;
 import gwtjava.io.IOException;
 import gwtjava.io.InputStream;
 import gwtjava.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
+import gwtjava.net.MalformedURLException;
+import gwtjava.net.URL;
+import gwtjava.statics.SCharacter;
 
 /**
  * Utility class to determine if a service can be found on the
@@ -98,11 +99,11 @@ class ServiceProxy {
                     if ((ln.indexOf(' ') >= 0) || (ln.indexOf('\t') >= 0))
                         fail(service, u, lc, "Illegal configuration-file syntax");
                     int cp = ln.codePointAt(0);
-                    if (!Character.isJavaIdentifierStart(cp))
+                    if (!SCharacter.isJavaIdentifierStart(cp))
                         fail(service, u, lc, "Illegal provider-class name: " + ln);
                     for (int i = Character.charCount(cp); i < n; i += Character.charCount(cp)) {
                         cp = ln.codePointAt(i);
-                        if (!Character.isJavaIdentifierPart(cp) && (cp != '.'))
+                        if (!SCharacter.isJavaIdentifierPart(cp) && (cp != '.'))
                             fail(service, u, lc, "Illegal provider-class name: " + ln);
                     }
                     return true;

@@ -43,8 +43,8 @@ import gwtjava.io.IOException;
 import gwtjava.io.PrintWriter;
 import gwtjava.io.StringWriter;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
+import gwtjava.net.MalformedURLException;
+import gwtjava.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import gwtjava.util.Collections;
@@ -834,7 +834,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
             return false;
         } catch (CompletionFailure ex) {
             StringWriter out = new StringWriter();
-            ex.printStackTrace(new PrintWriter(out));
+            ex.printStackTrace(new PrintWriter(out).getPrintStream());
             log.error("proc.cant.access", ex.sym, ex.getDetailValue(), out.toString());
             return false;
         } catch (ClientCodeException e) {

@@ -6,12 +6,12 @@ public class BufferedReader extends Reader {
         // TODO Auto-generated constructor stub
     }
 
-    public String readLine() {
+    public String readLine() throws IOException {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public void close() {
+    public void close() throws IOException {
         // TODO Auto-generated method stub
 
     }
