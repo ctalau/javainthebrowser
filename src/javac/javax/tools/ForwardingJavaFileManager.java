@@ -25,7 +25,7 @@
 
 package javac.javax.tools;
 
-import java.io.IOException;
+import gwtjava.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 

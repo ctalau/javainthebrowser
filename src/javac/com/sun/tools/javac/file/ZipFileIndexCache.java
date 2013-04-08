@@ -27,8 +27,8 @@ package javac.com.sun.tools.javac.file;
 
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.util.Context;
-import java.io.File;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

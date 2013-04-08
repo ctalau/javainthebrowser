@@ -37,9 +37,10 @@ import static javac.com.sun.tools.javac.main.OptionName.X;
 import gwtjava.security.DigestInputStream;
 import gwtjava.security.MessageDigest;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import gwtjava.io.File;
+import gwtjava.io.FileNotFoundException;
+import gwtjava.io.IOException;
+import gwtjava.io.PrintWriter;
 import gwtjava.lang.System;
 import java.net.URL;
 import java.util.MissingResourceException;
@@ -393,7 +394,7 @@ public class Main {
                     }
                     return EXIT_CMDERR;
                 }
-            } catch (java.io.FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 Log.printLines(out, ownName + ": " +
                                getLocalizedString("err.file.not.found",
                                                   e.getMessage()));

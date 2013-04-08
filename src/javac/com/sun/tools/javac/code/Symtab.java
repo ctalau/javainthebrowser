@@ -579,7 +579,7 @@ public class Symtab {
         proprietaryType.interfaces_field = List.nil();
 
         // Enter a class for arrays.
-        // The class implements java.lang.Cloneable and java.io.Serializable.
+        // The class implements java.lang.Cloneable and gwtjava.io.Serializable.
         // It has a final length field and a clone method.
         ClassType arrayClassType = (ClassType)arrayClass.type;
         arrayClassType.supertype_field = objectType;

@@ -25,8 +25,8 @@
 
 package javac.com.sun.tools.javac.util;
 
-import java.io.Closeable;
-import java.io.IOException;
+import gwtjava.io.Closeable;
+import gwtjava.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -60,7 +60,7 @@ public class CloseableURLClassLoader
      * Close any jar files that may have been opened by the class loader.
      * Reflection is used to access the jar files in the URLClassLoader's
      * internal data structures.
-     * @throws java.io.IOException if the jar files cannot be found for any
+     * @throws gwtjava.io.IOException if the jar files cannot be found for any
      * reson, or if closing the jar file itself causes an IOException.
      */
     @Override

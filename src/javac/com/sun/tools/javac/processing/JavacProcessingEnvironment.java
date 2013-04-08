@@ -37,11 +37,11 @@ import static javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticFlag.RECOVER
 import static javac.javax.tools.StandardLocation.ANNOTATION_PROCESSOR_PATH;
 import static javac.javax.tools.StandardLocation.CLASS_PATH;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import gwtjava.io.Closeable;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
+import gwtjava.io.PrintWriter;
+import gwtjava.io.StringWriter;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -35,8 +35,8 @@ import static javac.javax.lang.model.element.ElementKind.PARAMETER;
 import static javac.javax.lang.model.element.ElementKind.STATIC_INIT;
 import static javac.javax.lang.model.element.NestingKind.TOP_LEVEL;
 
-import java.io.PrintWriter;
-import java.io.Writer;
+import gwtjava.io.PrintWriter;
+import gwtjava.io.Writer;
 import gwtjava.lang.System;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

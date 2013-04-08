@@ -25,10 +25,10 @@
 
 package javac.com.sun.tools.javac.file;
 
-import java.io.File;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 import gwtjava.io.InputStreamReader;
-import java.io.Reader;
+import gwtjava.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import gwtjava.nio.charset.CharsetDecoder;

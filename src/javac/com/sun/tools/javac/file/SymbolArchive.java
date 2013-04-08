@@ -25,8 +25,8 @@
 
 package javac.com.sun.tools.javac.file;
 
-import java.io.File;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javac.javax.tools.JavaFileObject;

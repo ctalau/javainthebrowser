@@ -1,6 +1,6 @@
 package gwtjava.io;
 
-import java.io.PrintStream;
+import gwtjava.io.PrintStream;
 
 import gwtjava.util.Locale;
 

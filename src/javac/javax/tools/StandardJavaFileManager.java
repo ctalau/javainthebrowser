@@ -25,11 +25,11 @@
 
 package javac.javax.tools;
 
-import java.io.File;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 
 /**
- * File manager based on {@linkplain File java.io.File}.  A common way
+ * File manager based on {@linkplain File gwtjava.io.File}.  A common way
  * to obtain an instance of this class is using {@linkplain
  * JavaCompiler#getStandardFileManager
  * getStandardFileManager}, for example:
@@ -70,7 +70,7 @@ import java.io.IOException;
  *         must succeed if the following would succeed (ignoring
  *         encoding issues):
  *         <blockquote>
- *           <pre>new {@linkplain java.io.FileInputStream#FileInputStream(File) FileInputStream}(new {@linkplain File#File(java.net.URI) File}({@linkplain FileObject fileObject}.{@linkplain FileObject#toUri() toUri}()))</pre>
+ *           <pre>new {@linkplain gwtjava.io.FileInputStream#FileInputStream(File) FileInputStream}(new {@linkplain File#File(java.net.URI) File}({@linkplain FileObject fileObject}.{@linkplain FileObject#toUri() toUri}()))</pre>
  *         </blockquote>
  *       </li>
  *       <li>
@@ -80,7 +80,7 @@ import java.io.IOException;
  *         succeed if the following would succeed (ignoring encoding
  *         issues):
  *         <blockquote>
- *           <pre>new {@linkplain java.io.FileOutputStream#FileOutputStream(File) FileOutputStream}(new {@linkplain File#File(java.net.URI) File}({@linkplain FileObject fileObject}.{@linkplain FileObject#toUri() toUri}()))</pre>
+ *           <pre>new {@linkplain gwtjava.io.FileOutputStream#FileOutputStream(File) FileOutputStream}(new {@linkplain File#File(java.net.URI) File}({@linkplain FileObject fileObject}.{@linkplain FileObject#toUri() toUri}()))</pre>
  *         </blockquote>
  *       </li>
  *     </ul>

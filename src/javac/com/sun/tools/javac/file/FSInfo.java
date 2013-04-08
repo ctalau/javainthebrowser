@@ -1,8 +1,8 @@
 
 package javac.com.sun.tools.javac.file;
 
-import java.io.File;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 import java.util.ArrayList;
 import gwtjava.util.Collections;
 import java.util.List;

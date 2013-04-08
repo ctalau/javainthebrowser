@@ -25,8 +25,8 @@
 
 package javac.com.sun.tools.javac.file;
 
-import java.io.File;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 import java.util.List;
 import java.util.Map;
 import gwtjava.util.concurrent.ConcurrentHashMap;

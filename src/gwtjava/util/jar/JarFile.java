@@ -1,6 +1,6 @@
 package gwtjava.util.jar;
 
-import java.io.File;
+import gwtjava.io.File;
 
 public class JarFile {
 

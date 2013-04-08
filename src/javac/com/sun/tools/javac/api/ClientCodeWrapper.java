@@ -26,11 +26,11 @@
 
 package javac.com.sun.tools.javac.api;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import gwtjava.io.IOException;
+import gwtjava.io.InputStream;
+import gwtjava.io.OutputStream;
+import gwtjava.io.Reader;
+import gwtjava.io.Writer;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

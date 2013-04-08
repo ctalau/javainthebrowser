@@ -25,11 +25,11 @@
 
 package javac.javax.tools;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import gwtjava.io.IOException;
+import gwtjava.io.InputStream;
+import gwtjava.io.OutputStream;
+import gwtjava.io.Reader;
+import gwtjava.io.Writer;
 import java.net.URI;
 
 /**

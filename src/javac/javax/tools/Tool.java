@@ -26,8 +26,8 @@
 package javac.javax.tools;
 
 import java.util.Set;
-import java.io.InputStream;
-import java.io.OutputStream;
+import gwtjava.io.InputStream;
+import gwtjava.io.OutputStream;
 import javac.javax.lang.model.SourceVersion;
 
 /**

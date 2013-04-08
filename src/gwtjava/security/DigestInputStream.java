@@ -1,6 +1,6 @@
 package gwtjava.security;
 
-import java.io.InputStream;
+import gwtjava.io.InputStream;
 
 public class DigestInputStream {
     public DigestInputStream(InputStream is, MessageDigest md) {

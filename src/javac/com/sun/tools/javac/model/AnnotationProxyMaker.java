@@ -25,8 +25,8 @@
 
 package javac.com.sun.tools.javac.model;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import gwtjava.io.IOException;
+import gwtjava.io.ObjectInputStream;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.AnnotationTypeMismatchException;
 import java.lang.reflect.Array;
@@ -360,6 +360,7 @@ public class AnnotationProxyMaker {
         }
 
         // Explicitly set all transient fields.
+        @SuppressWarnings("unused")
         private void readObject(ObjectInputStream s)
             throws IOException, ClassNotFoundException {
             s.defaultReadObject();

@@ -25,7 +25,7 @@
 
 package javac.com.sun.tools.javac.main;
 
-import java.io.PrintWriter;
+import gwtjava.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javac.com.sun.tools.javac.util.Log;

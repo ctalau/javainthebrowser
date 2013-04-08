@@ -35,9 +35,10 @@ import javac.com.sun.tools.javac.main.JavacOption.XOption;
 import javac.com.sun.tools.javac.util.ListBuffer;
 import javac.com.sun.tools.javac.util.Options;
 import javac.com.sun.tools.javac.processing.JavacProcessingEnvironment;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import gwtjava.io.File;
+import gwtjava.io.FileWriter;
+import gwtjava.io.IOException;
+import gwtjava.io.PrintWriter;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -518,7 +519,7 @@ public class RecognizedOptions {
             public boolean process(Options options, String option, String arg) {
                 try {
                     helper.setOut(new PrintWriter(new FileWriter(arg), true));
-                } catch (java.io.IOException e) {
+                } catch (IOException e) {
                     helper.error("err.error.writing.file", arg, e);
                     return true;
                 }

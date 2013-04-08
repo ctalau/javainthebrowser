@@ -27,8 +27,8 @@ package javac.com.sun.tools.javac.api;
 
 import gwtjava.util.Locale;
 
-import java.io.File;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 import gwtjava.nio.CharBuffer;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -235,7 +235,7 @@ public class JavacTaskImpl extends JavacTask {
     /**
      * Parse the specified files returning a list of abstract syntax trees.
      *
-     * @throws java.io.IOException TODO
+     * @throws gwtjava.io.IOException TODO
      * @return a list of abstract syntax trees
      */
     public Iterable<? extends CompilationUnitTree> parse() throws IOException {
@@ -273,7 +273,7 @@ public class JavacTaskImpl extends JavacTask {
      * Translate the given abstract syntax trees to elements.
      *
      * @param trees a list of abstract syntax trees.
-     * @throws java.io.IOException TODO
+     * @throws gwtjava.io.IOException TODO
      * @return a list of elements corresponding to the top level
      * classes in the abstract syntax trees
      */

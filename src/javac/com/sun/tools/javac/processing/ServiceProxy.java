@@ -25,11 +25,11 @@
 
 package javac.com.sun.tools.javac.processing;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import gwtjava.io.BufferedReader;
+import gwtjava.io.FileNotFoundException;
+import gwtjava.io.IOException;
+import gwtjava.io.InputStream;
+import gwtjava.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 

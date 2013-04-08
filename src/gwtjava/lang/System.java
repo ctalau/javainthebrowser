@@ -1,7 +1,7 @@
 package gwtjava.lang;
 
-import java.io.InputStream;
-import java.io.PrintStream;
+import gwtjava.io.InputStream;
+import gwtjava.io.PrintStream;
 
 
 public class System {

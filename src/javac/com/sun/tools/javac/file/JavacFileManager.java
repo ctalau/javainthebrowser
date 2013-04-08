@@ -30,9 +30,9 @@ import static javac.com.sun.tools.javac.main.OptionName.S;
 import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javac.javax.tools.StandardLocation.SOURCE_OUTPUT;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import gwtjava.io.File;
+import gwtjava.io.FileNotFoundException;
+import gwtjava.io.IOException;
 import gwtjava.lang.System;
 import java.net.MalformedURLException;
 import java.net.URI;

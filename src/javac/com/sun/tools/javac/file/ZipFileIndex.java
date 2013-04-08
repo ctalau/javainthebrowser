@@ -26,10 +26,10 @@
 package javac.com.sun.tools.javac.file;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import gwtjava.io.File;
+import gwtjava.io.FileNotFoundException;
+import gwtjava.io.IOException;
+import gwtjava.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;

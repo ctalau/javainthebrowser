@@ -25,11 +25,11 @@
 
 package javac.com.sun.tools.javac.main;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.StreamTokenizer;
+import gwtjava.io.IOException;
+import gwtjava.io.Reader;
+import gwtjava.io.FileReader;
+import gwtjava.io.BufferedReader;
+import gwtjava.io.StreamTokenizer;
 import javac.com.sun.tools.javac.util.ListBuffer;
 
 /**

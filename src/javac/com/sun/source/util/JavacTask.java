@@ -27,7 +27,7 @@ package javac.com.sun.source.util;
 
 import javac.com.sun.source.tree.CompilationUnitTree;
 import javac.com.sun.source.tree.Tree;
-import java.io.IOException;
+import gwtjava.io.IOException;
 import javac.javax.lang.model.element.Element;
 import javac.javax.lang.model.type.TypeMirror;
 import javac.javax.lang.model.util.Elements;

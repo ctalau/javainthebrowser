@@ -25,14 +25,14 @@
 
 package javac.com.sun.tools.javac.file;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import gwtjava.io.File;
+import gwtjava.io.FileInputStream;
+import gwtjava.io.FileOutputStream;
+import gwtjava.io.IOException;
+import gwtjava.io.InputStream;
+import gwtjava.io.OutputStream;
+import gwtjava.io.OutputStreamWriter;
+import gwtjava.io.Writer;
 import java.net.URI;
 import gwtjava.nio.ByteBuffer;
 import gwtjava.nio.CharBuffer;

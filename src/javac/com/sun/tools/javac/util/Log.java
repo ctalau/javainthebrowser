@@ -31,8 +31,8 @@ import static javac.com.sun.tools.javac.main.OptionName.XLINT_CUSTOM;
 import static javac.com.sun.tools.javac.main.OptionName.XMAXERRS;
 import static javac.com.sun.tools.javac.main.OptionName.XMAXWARNS;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import gwtjava.io.IOException;
+import gwtjava.io.PrintWriter;
 import gwtjava.lang.System;
 import java.util.Arrays;
 import java.util.EnumSet;

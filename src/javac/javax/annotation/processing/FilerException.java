@@ -25,7 +25,7 @@
 
 package javac.javax.annotation.processing;
 
-import java.io.IOException;
+import gwtjava.io.IOException;
 import javac.javax.annotation.processing.Filer;
 
 /**

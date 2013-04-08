@@ -25,7 +25,7 @@
 
 package javac.javax.tools;
 
-import java.io.Writer;
+import gwtjava.io.Writer;
 import gwtjava.nio.charset.Charset;
 import gwtjava.util.Locale;
 import gwtjava.util.concurrent.Callable;
@@ -89,7 +89,7 @@ import javac.javax.annotation.processing.Processor;
  *
  *     Every compiler which implements this interface provides a
  *     standard file manager for operating on regular {@linkplain
- *     java.io.File files}.  The StandardJavaFileManager interface
+ *     gwtjava.io.File files}.  The StandardJavaFileManager interface
  *     defines additional methods for creating file objects from
  *     regular files.
  *

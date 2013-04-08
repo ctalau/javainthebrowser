@@ -25,8 +25,8 @@
 
 package javac.com.sun.tools.javac.tree;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import gwtjava.io.IOException;
+import gwtjava.io.StringWriter;
 import java.util.Map;
 import java.util.Set;
 

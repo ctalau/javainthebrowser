@@ -28,7 +28,7 @@ package javac.javax.annotation.processing;
 import javac.javax.tools.JavaFileManager;
 import javac.javax.tools.*;
 import javac.javax.lang.model.element.Element;
-import java.io.IOException;
+import gwtjava.io.IOException;
 
 /**
  * This interface supports the creation of new files by an annotation

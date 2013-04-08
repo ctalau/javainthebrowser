@@ -29,7 +29,7 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.CR;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.LF;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.TabInc;
 
-import java.io.IOException;
+import gwtjava.io.IOException;
 import gwtjava.nio.CharBuffer;
 import java.util.Map;
 

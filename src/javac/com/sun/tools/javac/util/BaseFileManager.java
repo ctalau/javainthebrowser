@@ -24,11 +24,11 @@
 
 package javac.com.sun.tools.javac.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
+import gwtjava.io.ByteArrayOutputStream;
+import gwtjava.io.Closeable;
+import gwtjava.io.IOException;
+import gwtjava.io.InputStream;
+import gwtjava.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -58,7 +58,7 @@ import gwtjava.lang.ref.SoftReference;
 /**
  * Utility methods for building a filemanager.
  * There are no references here to file-system specific objects such as
- * java.io.File or gwtjava.nio.file.Path.
+ * gwtjava.io.File or gwtjava.nio.file.Path.
  */
 public abstract class BaseFileManager {
     protected BaseFileManager(Charset charset) {

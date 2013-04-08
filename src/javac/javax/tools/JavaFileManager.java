@@ -25,9 +25,9 @@
 
 package javac.javax.tools;
 
-import java.io.Closeable;
-import java.io.Flushable;
-import java.io.IOException;
+import gwtjava.io.Closeable;
+import gwtjava.io.Flushable;
+import gwtjava.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
 import static javac.javax.tools.JavaFileObject.Kind;
@@ -65,7 +65,7 @@ import static javac.javax.tools.JavaFileObject.Kind;
  * as case-sensitive.  For example, some file systems have
  * case-insensitive, case-aware file names.  File objects representing
  * such files should take care to preserve case by using {@link
- * java.io.File#getCanonicalFile} or similar means.  If the system is
+ * gwtjava.io.File#getCanonicalFile} or similar means.  If the system is
  * not case-aware, file objects must use other means to preserve case.
  *
  * <p><em><a name="relative_name">Relative names</a>:</em> some

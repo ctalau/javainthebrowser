@@ -73,8 +73,8 @@ import static javac.com.sun.tools.javac.main.OptionName.VERBOSE;
 import static javac.com.sun.tools.javac.main.OptionName.XJCOV;
 import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import gwtjava.io.IOException;
+import gwtjava.io.OutputStream;
 import gwtjava.lang.System;
 import java.util.HashSet;
 import java.util.Set;

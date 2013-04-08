@@ -42,8 +42,8 @@ import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 
 import gwtjava.util.ResourceBundle;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
+import gwtjava.io.BufferedWriter;
+import gwtjava.io.IOException;
 import gwtjava.lang.System;
 import java.util.HashMap;
 import java.util.HashSet;
