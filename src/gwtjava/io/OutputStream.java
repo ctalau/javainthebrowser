@@ -5,7 +5,6 @@ public abstract class OutputStream implements Closeable {
 
     public void write(byte[] elems, int i, int length) throws IOException {
         // TODO Auto-generated method stub
-
     }
 
 }

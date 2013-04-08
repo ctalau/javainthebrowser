@@ -73,7 +73,6 @@ import static javac.com.sun.tools.javac.main.OptionName.VERBOSE;
 import static javac.javax.tools.StandardLocation.CLASS_PATH;
 import static javac.javax.tools.StandardLocation.PLATFORM_CLASS_PATH;
 import static javac.javax.tools.StandardLocation.SOURCE_PATH;
-
 import gwtjava.io.ByteArrayInputStream;
 import gwtjava.io.DataInputStream;
 import gwtjava.io.File;
@@ -85,18 +84,13 @@ import gwtjava.io.Writer;
 import gwtjava.net.URI;
 import gwtjava.net.URISyntaxException;
 import gwtjava.nio.CharBuffer;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javac.javax.lang.model.SourceVersion;
-import javac.javax.tools.JavaFileManager;
-import javac.javax.tools.JavaFileManager.Location;
-import javac.javax.tools.JavaFileObject;
-import javac.javax.tools.StandardJavaFileManager;
 
 import javac.com.sun.tools.javac.code.Attribute;
 import javac.com.sun.tools.javac.code.BoundKind;
@@ -137,6 +131,11 @@ import javac.com.sun.tools.javac.util.Name;
 import javac.com.sun.tools.javac.util.Names;
 import javac.com.sun.tools.javac.util.Options;
 import javac.com.sun.tools.javac.util.Pair;
+import javac.javax.lang.model.SourceVersion;
+import javac.javax.tools.JavaFileManager;
+import javac.javax.tools.JavaFileManager.Location;
+import javac.javax.tools.JavaFileObject;
+import javac.javax.tools.StandardJavaFileManager;
 
 /** This class provides operations to read a classfile into an internal
  *  representation. The internal representation is anchored in a

@@ -4,35 +4,39 @@ import gwtjava.io.OutputStream;
 
 public class DataOutputStream extends OutputStream {
 
-    public DataOutputStream(OutputStream buffer) {
-        // TODO Auto-generated constructor stub
+    private OutputStream os;
+    public DataOutputStream(OutputStream os) {
+        this.os = os;
     }
 
     @Override
     public void write(int b) throws IOException {
-        // TODO Auto-generated method stub
+        os.write(b);
+    }
 
+    public void writeInt(int v) throws IOException {
+        os.write(v >> 24);
+        os.write(v >> 16);
+        os.write(v >> 8);
+        os.write(v);
     }
 
     public void writeFloat(float x) throws IOException {
-        // TODO Auto-generated method stub
-
+        writeInt(Float.floatToIntBits(x));
     }
 
-    public void writeLong(long x) throws IOException {
-        // TODO Auto-generated method stub
-
+    public void writeLong(long v) throws IOException {
+        writeInt((int) (v >> 32L));
+        writeInt((int) v);
     }
 
     public void writeDouble(double x) throws IOException {
-        // TODO Auto-generated method stub
-
+        writeLong(Double.doubleToRawLongBits(x));
     }
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
-
+        os.close();
     }
 
 }
