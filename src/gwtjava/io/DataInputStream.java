@@ -2,7 +2,7 @@ package gwtjava.io;
 
 public class DataInputStream extends InputStream {
 
-    public DataInputStream(ByteArrayInputStream byteArrayInputStream) {
+    public DataInputStream(InputStream byteArrayInputStream) {
         // TODO Auto-generated constructor stub
     }
 

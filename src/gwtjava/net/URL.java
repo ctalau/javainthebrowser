@@ -12,9 +12,12 @@ public class URL {
         // TODO Auto-generated constructor stub
     }
 
+    public URL(String uri) {
+        // TODO Auto-generated constructor stub
+    }
+
     public InputStream openStream() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 }

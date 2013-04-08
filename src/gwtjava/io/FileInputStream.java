@@ -8,8 +8,7 @@ public class FileInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
 }

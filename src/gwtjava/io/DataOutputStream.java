@@ -4,7 +4,7 @@ import gwtjava.io.OutputStream;
 
 public class DataOutputStream extends OutputStream {
 
-    public DataOutputStream(ByteArrayOutputStream buffer) {
+    public DataOutputStream(OutputStream buffer) {
         // TODO Auto-generated constructor stub
     }
 

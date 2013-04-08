@@ -17,7 +17,6 @@ public class PrintWriter extends Writer {
     }
 
     public PrintWriter(final PrintStream ps, boolean flag) {
-        System.out.println(ps);
         this.w = new Writer() {
             @Override
             public void close() throws IOException {
@@ -42,7 +41,7 @@ public class PrintWriter extends Writer {
     }
 
     public java.io.PrintStream getPrintStream() {
-        return null;
+        return System.out;
     }
 
     @Override

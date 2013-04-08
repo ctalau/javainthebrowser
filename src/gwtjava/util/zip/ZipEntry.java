@@ -2,14 +2,18 @@ package gwtjava.util.zip;
 
 public class ZipEntry {
 
+    java.util.zip.ZipEntry entry;
+
+    public ZipEntry(java.util.zip.ZipEntry entry) {
+        this.entry = entry;
+    }
+
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return entry.getName();
     }
 
     public long getTime() {
-        // TODO Auto-generated method stub
-        return 0;
+        return entry.getTime();
     }
 
 }

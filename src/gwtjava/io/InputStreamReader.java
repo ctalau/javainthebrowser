@@ -6,7 +6,7 @@ import gwtjava.io.IOException;
 import gwtjava.io.InputStream;
 import gwtjava.io.Reader;
 
-public class InputStreamReader extends Reader{
+public class InputStreamReader extends Reader {
 
     public InputStreamReader(InputStream openInputStream, CharsetDecoder decoder) {
         // TODO Auto-generated constructor stub

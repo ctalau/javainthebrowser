@@ -8,14 +8,12 @@ public class FileOutputStream extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void write(int b) throws IOException {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
 }

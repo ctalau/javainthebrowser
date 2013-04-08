@@ -1,119 +1,129 @@
 package gwtjava.io;
 
 import gwtjava.net.URI;
+import gwtjava.net.URISyntaxException;
 
 public class File {
 
-    public static final char separatorChar = 0;
-    public static final String separator = null;
-    public static final String pathSeparator = null;
-    public static final String pathSeparatorChar = null;
+    public static final char separatorChar = '/';
+    public static final String separator = "/";
+    public static final String pathSeparator = ":";
+    public static final char pathSeparatorChar = ':';
 
+    public java.io.File jfile;
     public File(String name) {
-        // TODO Auto-generated constructor stub
+        this(new java.io.File(name));
     }
 
     public File(File parent, String name) {
-        // TODO Auto-generated constructor stub
+        this(new java.io.File(parent.jfile, name));
     }
 
-    public File(String parent, String elt) {
-        // TODO Auto-generated constructor stub
+    public File(String parent, String name) {
+        this(new java.io.File(parent, name));
+    }
+
+    public File(java.io.File file) {
+        this.jfile = file;
+//        System.out.println("Opening file: " + jfile.getAbsolutePath());
     }
 
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return jfile.getName();
     }
 
     public File[] listFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        java.io.File [] jfiles = jfile.listFiles();
+        if (jfiles == null) {
+            return null;
+        } else {
+            File [] files = new File[jfiles.length];
+
+            for (int i = 0; i < jfiles.length; i++) {
+                files[i] = new File(jfiles[i]);
+            }
+            return files;
+        }
     }
 
     public boolean isDirectory() {
-        // TODO Auto-generated method stub
-        return false;
+        return jfile.isDirectory();
     }
 
     public File getParentFile() {
-        // TODO Auto-generated method stub
-        return null;
+        return new File(jfile.getParent());
     }
 
     public boolean exists() {
-        // TODO Auto-generated method stub
-        return false;
+        return jfile.exists();
     }
 
     public boolean canWrite() {
-        // TODO Auto-generated method stub
-        return false;
+        return jfile.exists();
     }
 
     public boolean isAbsolute() {
-        // TODO Auto-generated method stub
-        return false;
+        return jfile.isAbsolute();
     }
 
     public String getPath() {
-        // TODO Auto-generated method stub
-        return null;
+        return jfile.getPath();
     }
 
     public URI toURI() {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            return new URI(jfile.toURI().toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getCanonicalPath() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            return jfile.getCanonicalPath();
+        } catch (java.io.IOException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     public boolean isFile() {
-        // TODO Auto-generated method stub
-        return false;
+        return jfile.isFile();
     }
 
     public String getAbsolutePath() {
-        // TODO Auto-generated method stub
-        return null;
+        return jfile.getAbsolutePath();
     }
 
     public long lastModified() {
-        // TODO Auto-generated method stub
-        return 0;
+        return jfile.lastModified();
     }
 
     public long length() {
-        // TODO Auto-generated method stub
-        return 0;
+        return jfile.length();
     }
 
     public File getAbsoluteFile() {
-        // TODO Auto-generated method stub
-        return null;
+        return new File(jfile.getAbsoluteFile());
     }
 
     public String getParent() {
-        // TODO Auto-generated method stub
-        return null;
+        return jfile.getParent();
     }
 
     public File getCanonicalFile() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            return new File(jfile.getCanonicalFile());
+        } catch (java.io.IOException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     public boolean delete() {
-        // TODO Auto-generated method stub
-        return false;
+        return jfile.delete();
     }
 
     public boolean mkdirs() {
-        // TODO Auto-generated method stub
-        return false;
+        return jfile.mkdirs();
     }
 
 }

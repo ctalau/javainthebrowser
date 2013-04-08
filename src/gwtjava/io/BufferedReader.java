@@ -2,18 +2,17 @@ package gwtjava.io;
 
 public class BufferedReader extends Reader {
 
+    private Reader delegate;
     public BufferedReader(Reader inputStreamReader) {
-        // TODO Auto-generated constructor stub
+        this.delegate = inputStreamReader;
     }
 
     public String readLine() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public void close() throws IOException {
-        // TODO Auto-generated method stub
-
+        delegate.close();
     }
 
 }

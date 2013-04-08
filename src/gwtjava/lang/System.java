@@ -59,7 +59,7 @@ public class System {
     }
 
     public static String getProperty(String key) {
-        return java.lang.System.getenv(key);
+        return java.lang.System.getProperty(key);
     }
 
     public static void exit(int code) {

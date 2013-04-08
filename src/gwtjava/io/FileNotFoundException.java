@@ -1,7 +1,7 @@
 package gwtjava.io;
 
 @SuppressWarnings("serial")
-public class FileNotFoundException extends RuntimeException {
+public class FileNotFoundException extends IOException {
 
     public FileNotFoundException(String string) {
         // TODO Auto-generated constructor stub
