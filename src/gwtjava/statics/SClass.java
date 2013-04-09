@@ -4,7 +4,7 @@ import gwtjava.net.URL;
 
 public class SClass {
 
-    public static URL getResource(Class<?> cls, java.lang.String name) {
+    public static URL getResource(Class<?> cls, String name) {
         throw new UnsupportedOperationException();
     }
 }
