@@ -1,0 +1,9 @@
+File
+File*Stream
+PrintWriter.getPrintStream -- is used for exeptions: replace with static fn call.
+RandomAccessFile
+System
+URL/URI
+statics
+zip
+

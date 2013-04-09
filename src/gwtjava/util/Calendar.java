@@ -11,18 +11,14 @@ public class Calendar {
     public static final int MILLISECOND = 6;
 
     public static Calendar getInstance() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     public long getTimeInMillis() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     public void set(int unit, int val) {
-        // TODO Auto-generated method stub
-
     }
 
 }

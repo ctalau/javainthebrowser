@@ -60,6 +60,7 @@ public class System {
     }
 
     public static String getProperty(String key) {
+//        System.out.println("getprop(" + key + ")=" + java.lang.System.getProperty(key));
         return java.lang.System.getProperty(key);
     }
 

@@ -3,25 +3,22 @@ package gwtjava.io;
 public class FilterWriter extends Writer {
     protected Writer out;
     public FilterWriter(Writer openWriter) {
-        // TODO Auto-generated constructor stub
-    }
+        throw new UnsupportedOperationException();
+   }
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void flush() throws IOException {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-        // TODO Auto-generated method stub
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

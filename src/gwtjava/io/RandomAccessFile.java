@@ -6,9 +6,6 @@ public class RandomAccessFile implements Closeable {
     public RandomAccessFile(File file, String mode) throws FileNotFoundException {
         try {
             jfile = new java.io.RandomAccessFile (file.jfile, mode);
-//            if (file.jfile.getAbsolutePath().equals("/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar")) {
-//                new Exception().printStackTrace();
-//            }
         } catch (java.io.FileNotFoundException e) {
             throw new FileNotFoundException(e.getMessage());
         }

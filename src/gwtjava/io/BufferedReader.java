@@ -2,9 +2,7 @@ package gwtjava.io;
 
 public class BufferedReader extends Reader {
 
-    private Reader delegate;
-    public BufferedReader(Reader inputStreamReader) {
-        this.delegate = inputStreamReader;
+    public BufferedReader(Reader reader) {
     }
 
     public String readLine() throws IOException {
@@ -12,7 +10,7 @@ public class BufferedReader extends Reader {
     }
 
     public void close() throws IOException {
-        delegate.close();
+        throw new UnsupportedOperationException();
     }
 
 }
