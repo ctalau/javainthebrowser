@@ -60,8 +60,14 @@ public class System {
     }
 
     public static String getProperty(String key) {
-//        System.out.println("getprop(" + key + ")=" + java.lang.System.getProperty(key));
-        return java.lang.System.getProperty(key);
+        if (key.equals("sun.boot.class.path")) {
+            return "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar";
+        } else if (key.equals("java.specification.version")) {
+            return "1.7";
+        } else if (key.equals("java.class.path")) {
+            return "../../build/toolclasses/";
+        }
+        return null;
     }
 
     public static void exit(int code) {

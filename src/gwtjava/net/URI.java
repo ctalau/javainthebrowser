@@ -1,49 +1,36 @@
 package gwtjava.net;
 
 public class URI {
-    private java.net.URI uri;
+    private String uri;
     public URI(String uri) throws URISyntaxException {
-        try {
-            this.uri = new java.net.URI(uri);
-        } catch (java.net.URISyntaxException e) {
-            throw new URISyntaxException(e.getMessage());
+        if (!uri.startsWith("file:/")) {
+            throw new URISyntaxException(uri);
         }
-    }
-
-    public URI(String scheme, String ssp, String fragment) throws URISyntaxException {
-        try {
-            this.uri = new java.net.URI(scheme, ssp, fragment);
-        } catch (java.net.URISyntaxException e) {
-            throw new URISyntaxException(e.getMessage());
-        }
-    }
-
-    private URI(java.net.URI uri) {
         this.uri = uri;
     }
 
+    public URI(String scheme, String ssp, String fragment) throws URISyntaxException {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean isAbsolute() {
-        return uri.isAbsolute();
+        throw new UnsupportedOperationException();
     }
 
     public URI normalize() {
-        return new URI(uri.normalize());
+        return this;
     }
 
     public String getPath() {
-        return uri.getPath();
+        throw new UnsupportedOperationException();
     }
 
     public URL toURL() throws MalformedURLException {
-        try {
-            return new URL(uri.toURL());
-        } catch (java.net.MalformedURLException e) {
-            throw new MalformedURLException(e.getMessage());
-        }
+        return new URL(uri);
     }
 
     public String getSchemeSpecificPart() {
-        return uri.getSchemeSpecificPart();
+        return uri.substring(5);
     }
 
 }

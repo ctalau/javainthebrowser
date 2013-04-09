@@ -83,7 +83,7 @@ public class File {
 
     public URI toURI() {
         try {
-            return new URI(jfile.toURI().toString());
+            return new URI("file:" + jfile.getAbsolutePath());
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

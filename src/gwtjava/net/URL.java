@@ -4,30 +4,21 @@ import gwtjava.io.InputStream;
 
 public class URL {
 
-    java.net.URL jurl;
+    String url;
     public URL(URL url, String fullName) throws MalformedURLException {
-        try {
-            this.jurl = new java.net.URL(url.jurl, fullName);
-        } catch (java.net.MalformedURLException e) {
-            throw new MalformedURLException(e.getMessage());
-        }
+        throw new UnsupportedOperationException();
     }
 
     public URL(String string, String string2, String name) throws MalformedURLException {
-        try {
-            this.jurl = new java.net.URL(string, string2, name);
-        } catch (java.net.MalformedURLException e) {
-            throw new MalformedURLException(e.getMessage());
-        }
+        throw new UnsupportedOperationException();
     }
 
-    URL(java.net.URL url) {
-        this.jurl = url;
+    URL(String url) {
+        this.url = url;
     }
 
 
     public InputStream openStream() {
-        System.out.println("Open stream " + jurl.toString());
         throw new UnsupportedOperationException();
     }
 
