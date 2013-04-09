@@ -3,7 +3,6 @@ package gwtjava.io;
 public abstract class InputStream {
 
     public int available() {
-        // TODO Auto-generated method stub
         return 0;
     }
 

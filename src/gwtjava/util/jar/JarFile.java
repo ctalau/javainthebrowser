@@ -1,22 +1,34 @@
 package gwtjava.util.jar;
 
+
 import gwtjava.io.File;
+import gwtjava.io.IOException;
 
 public class JarFile {
 
-    public JarFile(File file) {
-        // TODO Auto-generated constructor stub
-        //System.out.println(file.getName());
+    java.util.jar.JarFile jfile;
+    public JarFile(File file) throws IOException {
+        try {
+            jfile = new java.util.jar.JarFile(file.jfile);
+        } catch (java.io.IOException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
-    public Manifest getManifest() {
-        // TODO Auto-generated method stub
-        return null;
+    public Manifest getManifest() throws IOException {
+        try {
+            return new Manifest(jfile.getManifest());
+        } catch (java.io.IOException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
-    public void close() {
-        // TODO Auto-generated method stub
-
+    public void close() throws IOException {
+        try {
+            jfile.close();
+        } catch (java.io.IOException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
 }

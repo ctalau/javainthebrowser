@@ -17,11 +17,16 @@ public class ByteArrayInputStream extends InputStream {
     }
 
     public int read() {
-        return pos < lim ? buf[pos++] : -1;
+        return pos < lim ? (buf[pos++] & 0xff) : -1;
     }
 
     @Override
     public void close() {
+    }
+
+    @Override
+    public int available() {
+        return lim - pos;
     }
 
 }

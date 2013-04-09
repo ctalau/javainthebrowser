@@ -43,6 +43,7 @@ public class ZipFile {
 
     public InputStream getInputStream(ZipEntry entry) {
         // TODO Auto-generated method stub
+        System.out.println("Open stream " + entry.getName());
         throw new UnsupportedOperationException();
     }
 

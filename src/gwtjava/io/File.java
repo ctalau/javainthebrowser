@@ -25,7 +25,8 @@ public class File {
 
     public File(java.io.File file) {
         this.jfile = file;
-       // System.out.println(file.getAbsolutePath() + " " + file.exists());
+//        if (file.exists());
+//            System.out.println(file.getAbsolutePath());
     }
 
     public String getName() {

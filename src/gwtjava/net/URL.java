@@ -27,6 +27,7 @@ public class URL {
 
 
     public InputStream openStream() {
+        System.out.println("Open stream " + jurl.toString());
         throw new UnsupportedOperationException();
     }
 

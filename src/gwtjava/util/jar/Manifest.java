@@ -2,9 +2,13 @@ package gwtjava.util.jar;
 
 public class Manifest {
 
+    java.util.jar.Manifest manifest;
+    public Manifest(java.util.jar.Manifest manifest) {
+        this.manifest = manifest;
+    }
+
     public Attributes getMainAttributes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException();
+        return new Attributes(manifest.getMainAttributes());
     }
 
 }
