@@ -16,7 +16,11 @@ public class File {
     }
 
     public File(File parent, String name) {
-        this(new java.io.File(parent.jfile, name));
+        if (parent == null) {
+            this.jfile = new java.io.File(name);
+        } else {
+            this.jfile = new java.io.File(parent.jfile, name);
+        }
     }
 
     public File(String parent, String name) {
@@ -24,6 +28,9 @@ public class File {
     }
 
     public File(java.io.File file) {
+        if (file == null) {
+            throw new NullPointerException();
+        }
         this.jfile = file;
 //        if (file.exists());
 //            System.out.println(file.getAbsolutePath());
@@ -39,9 +46,8 @@ public class File {
             return null;
         } else {
             File [] files = new File[jfiles.length];
-
             for (int i = 0; i < jfiles.length; i++) {
-                files[i] = new File(jfiles[i]);
+                files[i] = (jfiles[i] == null) ? null : new File(jfiles[i]);
             }
             return files;
         }
@@ -52,7 +58,11 @@ public class File {
     }
 
     public File getParentFile() {
-        return new File(jfile.getParent());
+        java.io.File parent = jfile.getParentFile();
+        if (parent == null) {
+            return null;
+        }
+        return new File(parent);
     }
 
     public boolean exists() {
@@ -60,7 +70,7 @@ public class File {
     }
 
     public boolean canWrite() {
-        return jfile.exists();
+        return jfile.canWrite();
     }
 
     public boolean isAbsolute() {
@@ -104,7 +114,11 @@ public class File {
     }
 
     public File getAbsoluteFile() {
-        return new File(jfile.getAbsoluteFile());
+        java.io.File absolute = jfile.getAbsoluteFile();
+        if (absolute == null) {
+            return null;
+        }
+        return new File(absolute);
     }
 
     public String getParent() {
@@ -113,7 +127,11 @@ public class File {
 
     public File getCanonicalFile() throws IOException {
         try {
-            return new File(jfile.getCanonicalFile());
+            java.io.File canonical = jfile.getCanonicalFile();
+            if (canonical == null) {
+                return null;
+            }
+            return new File(canonical);
         } catch (java.io.IOException e) {
             throw new IOException(e.getMessage());
         }
