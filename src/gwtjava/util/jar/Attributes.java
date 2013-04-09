@@ -6,15 +6,11 @@ public class Attributes {
         public static final Name CLASS_PATH = new Name();
     }
 
-    java.util.jar.Attributes mainAttributes;
-    public Attributes(java.util.jar.Attributes mainAttributes) {
-        this.mainAttributes = mainAttributes;
+    public Attributes() {
     }
 
     public String getValue(Name classPath) {
-        assert (classPath == Name.CLASS_PATH);
-        String ret = mainAttributes.getValue(java.util.jar.Attributes.Name.CLASS_PATH);
-        return ret;
+        return null;
     }
 
 }
