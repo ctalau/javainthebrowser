@@ -6,7 +6,7 @@ import gwtjava.io.PrintWriter;
 public class SException {
 
     public static void printStackTrace(Throwable ex, PrintStream ps) {
-        ps.println(ex.getMessage());
+        ps.println(ex.getClass() + ": " + ex.getMessage());
         for (StackTraceElement elt : ex.getStackTrace()) {
             ps.println(elt.toString());
         }
@@ -17,7 +17,7 @@ public class SException {
     }
 
     public static void printStackTrace(Throwable ex, PrintWriter ps) {
-        ps.println(ex.getMessage());
+        ps.println(ex.getClass() + ": " + ex.getMessage());
         for (StackTraceElement elt : ex.getStackTrace()) {
             ps.println(elt.toString());
         }

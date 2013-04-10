@@ -435,7 +435,6 @@ public abstract class JCTree implements Tree, Cloneable, DiagnosticPosition {
 
     /** Return a shallow copy of this tree.
      */
-    @Override
     public Object clone() {
 //        try {
 //            return super.clone();

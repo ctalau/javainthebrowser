@@ -356,7 +356,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
             this.log = log;
             try {
                 try {
-                    loaderClass = SClass.forName("java.util.ServiceLoader");
+                    loaderClass = SClass.forName("gwtjava.util.ServiceLoader");
                     loadMethodName = "load";
                     jusl = true;
                 } catch (ClassNotFoundException cnfe) {
@@ -379,7 +379,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
 
                 Object result = loadMethod.invoke(null,
                                                   Processor.class,
-                                                  classLoader.jcl);
+                                                  classLoader);
 
                 // For java.util.ServiceLoader, we have to call another
                 // method to get the iterator.

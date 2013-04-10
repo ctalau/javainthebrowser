@@ -53,7 +53,6 @@ public class System {
     }
 
     public static void exit(int code) {
-        java.lang.System.exit(code);
     }
 
     public static long currentTimeMillis() {

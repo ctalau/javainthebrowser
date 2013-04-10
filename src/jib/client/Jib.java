@@ -43,7 +43,7 @@ public class Jib implements EntryPoint {
     @Override
     public void onModuleLoad() {
         try {
-//            Main.main(new String[] {"ceva" } );
+            Main.main(new String[] {"ceva" } );
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,43 +10,35 @@ import gwtjava.lang.reflect.Field;
 import gwtjava.lang.reflect.Method;
 import gwtjava.lang.reflect.Constructor;
 import gwtjava.net.URL;
+import gwtjava.util.ServiceLoader;
 
 public class SClass {
+    public static ClassLoader getClassLoader(Class<?> cls) {
+        return new ClassLoader();
+    }
 
     public static Class<?> forName(String className)
             throws ClassNotFoundException {
-        try {
-            return Class.forName(className);
-        } catch (java.lang.ClassNotFoundException e) {
-            throw new ClassNotFoundException(e.getMessage());
+        if (!className.equals("gwtjava.util.ServiceLoader")) {
+            throw new IllegalArgumentException(className);
         }
-    }
-
-    public static ClassLoader getClassLoader(Class<?> cls) {
-        java.lang.ClassLoader cl = cls.getClassLoader();
-        return cl == null ? null : new ClassLoader(cl);
+        return ServiceLoader.class;
     }
 
     public static Method getMethod(Class<?> c, String string,
             Class<?>... classes) throws NoSuchMethodException,
             SecurityException {
-        for (int i = 0; i < classes.length; i++) {
-            if (classes[i] == ClassLoader.class) {
-                classes[i] = java.lang.ClassLoader.class;
-            }
-        }
-        java.lang.reflect.Method m = c.getMethod(string, classes);
-        return m == null ? null : new Method(m);
-    }
-
-    public static String getSimpleName(Class<?> class1) {
-        int split = class1.getName().lastIndexOf('$');
-        return class1.getName().substring(split+1);
+        return new Method(string);
     }
 
     public static Class<?> forName(String name, boolean init, ClassLoader cl)
             throws ClassNotFoundException {
         throw new UnsupportedOperationException();
+    }
+
+    public static Field getDeclaredField(Class<?> class1, String string)
+            throws NoSuchFieldException, SecurityException {
+        return new Field();
     }
 
     public static <T, U> Class<? extends U> asSubclass(Class<T> cls,
@@ -76,18 +68,6 @@ public class SClass {
         return false;
     }
 
-    public static boolean isInstance(Class<?> cls, Object obj) {
-        return cls != null && cls.isInstance(obj);
-    }
-
-    public static <U> U cast(Class<U> cls, Object obj) {
-        return cls.cast(obj);
-    }
-
-    public static String getCanonicalName(Class<?> cls) {
-        return cls.getCanonicalName();
-    }
-
     public static <T> T getAnnotation(Class<?> class1, Class<? extends T> class2) {
         return null;
     }
@@ -96,8 +76,21 @@ public class SClass {
         return false;
     }
 
-    public static Field getDeclaredField(Class<?> class1, String string)
-            throws NoSuchFieldException, SecurityException {
-        return new Field();
+    public static String getSimpleName(Class<?> class1) {
+        int split = class1.getName().lastIndexOf('$');
+        return class1.getName().substring(split + 1);
     }
+
+    public static boolean isInstance(Class<?> cls, Object obj) {
+        throw new UnsupportedOperationException();
+    }
+
+    public static <U> U cast(Class<U> cls, Object obj) {
+        throw new UnsupportedOperationException();
+    }
+
+    public static String getCanonicalName(Class<?> cls) {
+        throw new UnsupportedOperationException();
+    }
+
 }
