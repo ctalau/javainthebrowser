@@ -1614,7 +1614,7 @@ public class Code {
             try {
                 State state = new State();
                 state.defined = defined.dup();
-                state.stack = SObject.clone(stack);
+                state.stack = SObject.clone(stack, new Type[0]);
                 state.stacksize = stacksize;
                 if (locks != null) {
                     state.locks = SObject.clone(locks);

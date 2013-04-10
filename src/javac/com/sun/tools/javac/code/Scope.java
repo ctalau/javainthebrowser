@@ -141,7 +141,7 @@ public class Scope {
      *  the table of its outer scope.
      */
     public Scope dupUnshared() {
-        return new Scope(this, this.owner, SObject.clone(this.table), this.nelems);
+        return new Scope(this, this.owner, SObject.clone(this.table, new Entry[0]), this.nelems);
     }
 
     /** Remove all entries of this scope from its table, if shared
@@ -741,7 +741,7 @@ public class Scope {
             return new ErrorScope(this, owner, table);
         }
         public Scope dupUnshared() {
-            return new ErrorScope(this, owner, SObject.clone(table));
+            return new ErrorScope(this, owner, SObject.clone(table, new Entry[0]));
         }
         public Entry lookup(Name name) {
             Entry e = super.lookup(name);

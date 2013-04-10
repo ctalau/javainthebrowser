@@ -13,19 +13,6 @@ import gwtjava.net.URL;
 
 public class SClass {
 
-    public static URL getResource(Class<?> cls, String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    public static Class<?> forName(String name, boolean init, ClassLoader cl)
-            throws ClassNotFoundException {
-        try {
-            return Class.forName(name, init, cl.jcl);
-        } catch (java.lang.ClassNotFoundException e) {
-            throw new ClassNotFoundException(e.getMessage());
-        }
-    }
-
     public static Class<?> forName(String className)
             throws ClassNotFoundException {
         try {
@@ -48,20 +35,32 @@ public class SClass {
                 classes[i] = java.lang.ClassLoader.class;
             }
         }
-        return new Method(c.getMethod(string, classes));
-    }
-
-    public static boolean isAnnotationPresent(Class<?> c, Class<?> class1) {
-        return false;
+        java.lang.reflect.Method m = c.getMethod(string, classes);
+        return m == null ? null : new Method(m);
     }
 
     public static String getSimpleName(Class<?> class1) {
-        return class1.getSimpleName();
+        int split = class1.getName().lastIndexOf('$');
+        return class1.getName().substring(split+1);
+    }
+
+    public static Class<?> forName(String name, boolean init, ClassLoader cl)
+            throws ClassNotFoundException {
+        throw new UnsupportedOperationException();
     }
 
     public static <T, U> Class<? extends U> asSubclass(Class<T> cls,
             Class<U> cls1) {
-        return cls.asSubclass(cls1);
+        throw new UnsupportedOperationException();
+    }
+
+    public static <T> T newInstance(Class<T> loadClass)
+            throws InstantiationException, IllegalAccessException {
+        throw new UnsupportedOperationException();
+    }
+
+    public static URL getResource(Class<?> cls, String name) {
+        throw new UnsupportedOperationException();
     }
 
     public static <T> Constructor<? extends T> getConstructor(Class<T> loader,
@@ -93,15 +92,8 @@ public class SClass {
         return null;
     }
 
-    public static <T> T newInstance(Class<T> loadClass)
-            throws InstantiationException, IllegalAccessException {
-        try {
-            return loadClass.newInstance();
-        } catch (java.lang.IllegalAccessException e) {
-            throw new IllegalAccessException(e.getMessage());
-        } catch (java.lang.InstantiationException e) {
-            throw new InstantiationException(e.getMessage());
-        }
+    public static boolean isAnnotationPresent(Class<?> c, Class<?> class1) {
+        return false;
     }
 
     public static Field getDeclaredField(Class<?> class1, String string)

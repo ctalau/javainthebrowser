@@ -426,7 +426,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
                         options.isSet(G_CUSTOM, "lines");
         genEndPos     = options.isSet(XJCOV) ||
                         context.get(DiagnosticListener.class) != null;
-        devVerbose    = options.isSet("dev");
+        devVerbose    = true || options.isSet("dev");
         processPcks   = options.isSet("process.packages");
         werror        = options.isSet(WERROR);
 

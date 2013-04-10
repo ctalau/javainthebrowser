@@ -1,17 +1,17 @@
 package gwtjava.statics;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
 public class SArrays {
 
     public static int[] copyOf(int[] array, int newSize) {
-        return Arrays.copyOf(array, newSize);
+        int [] newArray = new int[newSize];
+        System.arraycopy(array, 0, newArray, 0, Math.min(newSize, array.length));
+        return newArray;
     }
+
     public static Object newInstance(Class<?> elemType, int size) {
-        return Array.newInstance(elemType, size);
+        throw new UnsupportedOperationException();
     }
     public static void set(Object array, int index, Object value) {
-        Array.set(array, index, value);
+        throw new UnsupportedOperationException();
     }
 }
