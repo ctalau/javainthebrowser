@@ -27,10 +27,18 @@ package javac.com.sun.tools.javac.model;
 
 import gwtjava.io.IOException;
 import gwtjava.io.ObjectInputStream;
+import gwtjava.lang.ClassNotFoundException;
+import gwtjava.lang.annotation.AnnotationTypeMismatchException;
+import gwtjava.lang.reflect.Method;
+import gwtjava.lang.reflect.annotation.AnnotationParser;
+import gwtjava.lang.reflect.annotation.AnnotationType;
+import gwtjava.lang.reflect.annotation.EnumConstantNotPresentExceptionProxy;
+import gwtjava.lang.reflect.annotation.ExceptionProxy;
+import gwtjava.statics.SArrays;
+import gwtjava.statics.SClass;
+
 import java.lang.annotation.Annotation;
-import java.lang.annotation.AnnotationTypeMismatchException;
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -48,10 +56,6 @@ import javac.com.sun.tools.javac.util.Pair;
 import javac.javax.lang.model.type.MirroredTypeException;
 import javac.javax.lang.model.type.MirroredTypesException;
 import javac.javax.lang.model.type.TypeMirror;
-import sun.reflect.annotation.AnnotationParser;
-import sun.reflect.annotation.AnnotationType;
-import sun.reflect.annotation.EnumConstantNotPresentExceptionProxy;
-import sun.reflect.annotation.ExceptionProxy;
 
 
 /**
@@ -86,7 +90,7 @@ public class AnnotationProxyMaker {
     public static <A extends Annotation> A generateAnnotation(
             Attribute.Compound anno, Class<A> annoType) {
         AnnotationProxyMaker apm = new AnnotationProxyMaker(anno, annoType);
-        return annoType.cast(apm.generateAnnotation());
+        return SClass.cast(annoType, apm.generateAnnotation());
     }
 
 
@@ -168,15 +172,16 @@ public class AnnotationProxyMaker {
         Object getValue(Attribute attr) {
             Method method;              // runtime method of annotation element
             try {
-                method = annoType.getMethod(meth.name.toString());
+                method = SClass.getMethod(annoType, meth.name.toString());
             } catch (NoSuchMethodException e) {
                 return null;
             }
             returnClass = method.getReturnType();
             attr.accept(this);
             if (!(value instanceof ExceptionProxy) &&
-                !AnnotationType.invocationHandlerReturnType(returnClass)
-                                                        .isInstance(value)) {
+                !SClass.isInstance(
+                        AnnotationType.invocationHandlerReturnType(returnClass),
+                        value)) {
                 typeMismatch(method, attr);
             }
             return value;
@@ -208,7 +213,7 @@ public class AnnotationProxyMaker {
                 Class<?> returnClassSaved = returnClass;
                 returnClass = returnClass.getComponentType();
                 try {
-                    Object res = Array.newInstance(returnClass, len);
+                    Object res = SArrays.newInstance(returnClass, len);
                     for (int i = 0; i < len; i++) {
                         a.values[i].accept(this);
                         if (value == null || value instanceof ExceptionProxy) {
@@ -246,7 +251,7 @@ public class AnnotationProxyMaker {
         public void visitCompound(Attribute.Compound c) {
             try {
                 Class<? extends Annotation> nested =
-                    returnClass.asSubclass(Annotation.class);
+                    SClass.asSubclass(returnClass, Annotation.class);
                 value = generateAnnotation(c, nested);
             } catch (ClassCastException ex) {
                 value = null;   // indicates a type mismatch
@@ -263,6 +268,7 @@ public class AnnotationProxyMaker {
          */
         private void typeMismatch(Method method, final Attribute attr) {
             class AnnotationTypeMismatchExceptionProxy extends ExceptionProxy {
+                @SuppressWarnings("unused")
                 static final long serialVersionUID = 269;
                 transient final Method method;
                 AnnotationTypeMismatchExceptionProxy(Method method) {
@@ -271,6 +277,7 @@ public class AnnotationProxyMaker {
                 public String toString() {
                     return "<error>";   // eg:  @Anno(value=<error>)
                 }
+                @SuppressWarnings("unused")
                 protected RuntimeException generateException() {
                     return new AnnotationTypeMismatchException(method,
                                 attr.type.toString());
@@ -287,6 +294,7 @@ public class AnnotationProxyMaker {
      * type.
      */
     private static final class MirroredTypeExceptionProxy extends ExceptionProxy {
+        @SuppressWarnings("unused")
         static final long serialVersionUID = 269;
 
         private transient TypeMirror type;
@@ -311,6 +319,7 @@ public class AnnotationProxyMaker {
                    type.equals(((MirroredTypeExceptionProxy) obj).type);
         }
 
+        @SuppressWarnings("unused")
         protected RuntimeException generateException() {
             return new MirroredTypeException(type);
         }
@@ -331,6 +340,7 @@ public class AnnotationProxyMaker {
      * types.
      */
     private static final class MirroredTypesExceptionProxy extends ExceptionProxy {
+        @SuppressWarnings("unused")
         static final long serialVersionUID = 269;
 
         private transient List<TypeMirror> types;
@@ -356,6 +366,7 @@ public class AnnotationProxyMaker {
                       ((MirroredTypesExceptionProxy) obj).types);
         }
 
+        @SuppressWarnings("unused")
         protected RuntimeException generateException() {
             return new MirroredTypesException(types);
         }

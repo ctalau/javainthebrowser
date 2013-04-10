@@ -27,6 +27,8 @@ package javac.javax.annotation.processing;
 
 import java.util.Set;
 import java.util.HashSet;
+
+import gwtjava.statics.SClass;
 import gwtjava.util.Collections;
 import javac.javax.lang.model.element.*;
 import javac.javax.lang.model.SourceVersion;
@@ -78,7 +80,7 @@ public abstract class AbstractProcessor implements Processor {
      * set if none
      */
     public Set<String> getSupportedOptions() {
-        SupportedOptions so = this.getClass().getAnnotation(SupportedOptions.class);
+        SupportedOptions so = SClass.getAnnotation(this.getClass(), SupportedOptions.class);
         if  (so == null)
             return Collections.emptySet();
         else
@@ -95,7 +97,7 @@ public abstract class AbstractProcessor implements Processor {
      * processor, or an empty set if none
      */
     public Set<String> getSupportedAnnotationTypes() {
-            SupportedAnnotationTypes sat = this.getClass().getAnnotation(SupportedAnnotationTypes.class);
+            SupportedAnnotationTypes sat = SClass.getAnnotation(this.getClass(), SupportedAnnotationTypes.class);
             if  (sat == null) {
                 if (isInitialized())
                     processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING,
@@ -117,7 +119,7 @@ public abstract class AbstractProcessor implements Processor {
      * @return the latest source version supported by this processor
      */
     public SourceVersion getSupportedSourceVersion() {
-        SupportedSourceVersion ssv = this.getClass().getAnnotation(SupportedSourceVersion.class);
+        SupportedSourceVersion ssv = SClass.getAnnotation(this.getClass(), SupportedSourceVersion.class);
         SourceVersion sv = null;
         if (ssv == null) {
             sv = SourceVersion.RELEASE_6;

@@ -42,11 +42,16 @@ import gwtjava.io.File;
 import gwtjava.io.IOException;
 import gwtjava.io.PrintWriter;
 import gwtjava.io.StringWriter;
-import java.lang.reflect.Method;
+import gwtjava.lang.ClassLoader;
+import gwtjava.lang.ClassNotFoundException;
+import gwtjava.lang.reflect.Method;
+import gwtjava.lang.SecurityException;
 import gwtjava.net.MalformedURLException;
 import gwtjava.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import gwtjava.statics.SClass;
 import gwtjava.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -244,7 +249,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
 
         if (options.isSet(XPRINT)) {
             try {
-                Processor processor = PrintingProcessor.class.newInstance();
+                Processor processor = SClass.newInstance(PrintingProcessor.class);
                 processorIterator = List.of(processor).iterator();
             } catch (Throwable t) {
                 AssertionError assertError =
@@ -351,12 +356,12 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
             this.log = log;
             try {
                 try {
-                    loaderClass = Class.forName("java.util.ServiceLoader");
+                    loaderClass = SClass.forName("java.util.ServiceLoader");
                     loadMethodName = "load";
                     jusl = true;
                 } catch (ClassNotFoundException cnfe) {
                     try {
-                        loaderClass = Class.forName("sun.misc.Service");
+                        loaderClass = SClass.forName("sun.misc.Service");
                         loadMethodName = "providers";
                         jusl = false;
                     } catch (ClassNotFoundException cnfe2) {
@@ -368,19 +373,19 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
                 }
 
                 // java.util.ServiceLoader.load or sun.misc.Service.providers
-                Method loadMethod = loaderClass.getMethod(loadMethodName,
+                Method loadMethod = SClass.getMethod(loaderClass, loadMethodName,
                                                           Class.class,
-                                                          ClassLoader.class);
+                                                          java.lang.ClassLoader.class);
 
                 Object result = loadMethod.invoke(null,
                                                   Processor.class,
-                                                  classLoader);
+                                                  classLoader.jcl);
 
                 // For java.util.ServiceLoader, we have to call another
                 // method to get the iterator.
                 if (jusl) {
                     loader = result; // Store ServiceLoader to call reload later
-                    Method m = loaderClass.getMethod("iterator");
+                    Method m = SClass.getMethod(loaderClass, "iterator");
                     result = m.invoke(result); // serviceLoader.iterator();
                 }
 
@@ -397,7 +402,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
                 return iterator.hasNext();
             } catch (Throwable t) {
                 if ("ServiceConfigurationError".
-                    equals(t.getClass().getSimpleName())) {
+                    equals(SClass.getSimpleName(t.getClass()))) {
                     log.error("proc.bad.config.file", t.getLocalizedMessage());
                 }
                 throw new Abort(t);
@@ -409,7 +414,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
                 return (Processor)(iterator.next());
             } catch (Throwable t) {
                 if ("ServiceConfigurationError".
-                    equals(t.getClass().getSimpleName())) {
+                    equals(SClass.getSimpleName(t.getClass()))) {
                     log.error("proc.bad.config.file", t.getLocalizedMessage());
                 } else {
                     log.error("proc.processor.constructor.error", t.getLocalizedMessage());
@@ -426,7 +431,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
             if (jusl) {
                 try {
                     // Call java.util.ServiceLoader.reload
-                    Method reloadMethod = loaderClass.getMethod("reload");
+                    Method reloadMethod = SClass.getMethod(loaderClass, "reload");
                     reloadMethod.invoke(loader);
                 } catch(Exception e) {
                     ; // Ignore problems during a call to reload.
@@ -461,7 +466,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
                     try {
                         try {
                             processor =
-                                (Processor) (processorCL.loadClass(processorName).newInstance());
+                                (Processor) (SClass.newInstance(processorCL.loadClass(processorName)));
                         } catch (ClassNotFoundException cnfe) {
                             log.error("proc.processor.not.found", processorName);
                             return false;

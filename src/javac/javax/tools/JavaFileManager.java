@@ -28,6 +28,7 @@ package javac.javax.tools;
 import gwtjava.io.Closeable;
 import gwtjava.io.Flushable;
 import gwtjava.io.IOException;
+import gwtjava.lang.ClassLoader;
 import java.util.Iterator;
 import java.util.Set;
 import static javac.javax.tools.JavaFileObject.Kind;

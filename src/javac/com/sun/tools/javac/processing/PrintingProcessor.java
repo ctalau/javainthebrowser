@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import gwtjava.statics.SClass;
 import gwtjava.util.StringTokenizer;
 
 import javac.javax.annotation.processing.AbstractProcessor;
@@ -452,7 +454,7 @@ public class PrintingProcessor extends AbstractProcessor {
                         TypeMirror tm = parameter.asType();
                         if (tm.getKind() != TypeKind.ARRAY)
                             throw new AssertionError("Var-args parameter is not an array type: " + tm);
-                        writer.print((ArrayType.class.cast(tm)).getComponentType() );
+                        writer.print(SClass.cast(ArrayType.class, tm).getComponentType() );
                         writer.print("...");
                     } else
                         writer.print(parameter.asType());
@@ -476,7 +478,7 @@ public class PrintingProcessor extends AbstractProcessor {
                             TypeMirror tm = parameter.asType();
                             if (tm.getKind() != TypeKind.ARRAY)
                                 throw new AssertionError("Var-args parameter is not an array type: " + tm);
-                                    writer.print((ArrayType.class.cast(tm)).getComponentType() );
+                                    writer.print(SClass.cast(ArrayType.class, tm).getComponentType() );
 
                             writer.print("...");
                         } else

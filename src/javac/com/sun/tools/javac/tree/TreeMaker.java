@@ -45,6 +45,7 @@ import static javac.com.sun.tools.javac.code.TypeTags.SHORT;
 import static javac.com.sun.tools.javac.code.TypeTags.TYPEVAR;
 import static javac.com.sun.tools.javac.code.TypeTags.VOID;
 import static javac.com.sun.tools.javac.code.TypeTags.WILDCARD;
+import gwtjava.statics.SClass;
 
 import javac.com.sun.tools.javac.code.Attribute;
 import javac.com.sun.tools.javac.code.BoundKind;
@@ -216,7 +217,7 @@ public class TreeMaker implements JCTree.Factory {
                 || node instanceof JCErroneous
                 || (node instanceof JCExpressionStatement
                     && ((JCExpressionStatement)node).expr instanceof JCErroneous),
-                node.getClass().getSimpleName());
+                SClass.getSimpleName(node.getClass()));
         JCCompilationUnit tree = new JCCompilationUnit(packageAnnotations, pid, defs,
                                      null, null, null, null);
         tree.pos = pos;

@@ -26,6 +26,8 @@
 package javac.com.sun.tools.javac.jvm;
 
 import gwtjava.lang.System;
+import gwtjava.statics.SObject;
+import gwtjava.lang.CloneNotSupportedException;
 
 import javac.com.sun.tools.javac.code.*;
 import javac.com.sun.tools.javac.code.Symbol.*;
@@ -1610,10 +1612,14 @@ public class Code {
 
         State dup() {
             try {
-                State state = (State)super.clone();
+                State state = new State();
                 state.defined = defined.dup();
-                state.stack = stack.clone();
-                if (locks != null) state.locks = locks.clone();
+                state.stack = SObject.clone(stack);
+                state.stacksize = stacksize;
+                if (locks != null) {
+                    state.locks = SObject.clone(locks);
+                    state.nlocks = nlocks;
+                }
                 if (debugCode) {
                     System.err.println("duping state " + this);
                     dump();

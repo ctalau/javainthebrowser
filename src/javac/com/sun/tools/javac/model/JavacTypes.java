@@ -25,6 +25,8 @@
 
 package javac.com.sun.tools.javac.model;
 
+import gwtjava.statics.SClass;
+
 import java.util.List;
 import java.util.Set;
 import java.util.EnumSet;
@@ -296,8 +298,8 @@ public class JavacTypes implements javac.javax.lang.model.util.Types {
      * @throws IllegalArgumentException if the object is of the wrong type
      */
     private static <T> T cast(Class<T> clazz, Object o) {
-        if (! clazz.isInstance(o))
+        if (! SClass.isInstance(clazz, o))
             throw new IllegalArgumentException(o.toString());
-        return clazz.cast(o);
+        return SClass.cast(clazz, o);
     }
 }

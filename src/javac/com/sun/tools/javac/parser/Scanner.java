@@ -52,6 +52,7 @@ import static javac.com.sun.tools.javac.util.LayoutCharacters.FF;
 import static javac.com.sun.tools.javac.util.LayoutCharacters.LF;
 
 import gwtjava.lang.System;
+import gwtjava.lang.NoSuchMethodError;
 import gwtjava.nio.CharBuffer;
 import gwtjava.statics.SCharacter;
 

@@ -25,6 +25,7 @@
 
 package javac.com.sun.tools.javac.code;
 
+import gwtjava.statics.SObject;
 import javac.com.sun.tools.javac.util.*;
 import java.util.Iterator;
 
@@ -140,7 +141,7 @@ public class Scope {
      *  the table of its outer scope.
      */
     public Scope dupUnshared() {
-        return new Scope(this, this.owner, this.table.clone(), this.nelems);
+        return new Scope(this, this.owner, SObject.clone(this.table), this.nelems);
     }
 
     /** Remove all entries of this scope from its table, if shared
@@ -740,7 +741,7 @@ public class Scope {
             return new ErrorScope(this, owner, table);
         }
         public Scope dupUnshared() {
-            return new ErrorScope(this, owner, table.clone());
+            return new ErrorScope(this, owner, SObject.clone(table.clone()));
         }
         public Entry lookup(Name name) {
             Entry e = super.lookup(name);

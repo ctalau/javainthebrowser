@@ -28,6 +28,7 @@ package javac.javax.tools;
 import gwtjava.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
+import gwtjava.lang.ClassLoader;
 
 import javac.javax.tools.JavaFileObject.Kind;
 

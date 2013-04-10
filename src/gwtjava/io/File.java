@@ -5,7 +5,7 @@ import gwtjava.net.URISyntaxException;
 
 public class File {
 
-    public static final char separatorChar = '/';
+    public static char separatorChar = '/';
     public static final String separator = "/";
     public static final String pathSeparator = ":";
     public static final char pathSeparatorChar = ':';

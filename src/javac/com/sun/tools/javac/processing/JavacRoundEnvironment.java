@@ -26,6 +26,8 @@
 package javac.com.sun.tools.javac.processing;
 
 import java.lang.annotation.Annotation;
+
+import gwtjava.statics.SClass;
 import gwtjava.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -171,9 +173,9 @@ public class JavacRoundEnvironment implements RoundEnvironment {
      * {@inheritdoc}
      */
     public Set<? extends Element> getElementsAnnotatedWith(Class<? extends Annotation> a) {
-        if (!a.isAnnotation())
+        if (!SClass.isAnnotation(a))
             throw new IllegalArgumentException(NOT_AN_ANNOTATION_TYPE + a);
-        String name = a.getCanonicalName();
+        String name = SClass.getCanonicalName(a);
         if (name == null)
             return Collections.emptySet();
         else {

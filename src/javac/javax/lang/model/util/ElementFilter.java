@@ -26,6 +26,8 @@
 package javac.javax.lang.model.util;
 
 import java.util.ArrayList;
+
+import gwtjava.statics.SClass;
 import gwtjava.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
@@ -195,7 +197,7 @@ public class ElementFilter {
         List<E> list = new ArrayList<E>();
         for (Element e : elements) {
             if (targetKinds.contains(e.getKind()))
-                list.add(clazz.cast(e));
+                list.add(SClass.cast(clazz, e));
         }
         return list;
     }

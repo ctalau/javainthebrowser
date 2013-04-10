@@ -27,10 +27,14 @@ package javac.com.sun.tools.javac.util;
 
 import gwtjava.io.Closeable;
 import gwtjava.io.IOException;
-import java.lang.reflect.Field;
+import gwtjava.lang.ClassLoader;
+import gwtjava.lang.reflect.Field;
+import gwtjava.lang.NoSuchFieldException;
 import gwtjava.net.URL;
 import gwtjava.net.URLClassLoader;
 import java.util.ArrayList;
+
+import gwtjava.statics.SClass;
 import gwtjava.util.jar.JarFile;
 
 /**
@@ -68,7 +72,7 @@ public class CloseableURLClassLoader
         try {
             for (Object l: getLoaders()) {
                 if (l.getClass().getName().equals("sun.misc.URLClassPath$JarLoader")) {
-                    Field jarField = l.getClass().getDeclaredField("jar");
+                    Field jarField = SClass.getDeclaredField(l.getClass(), "jar");
                     JarFile jar = (JarFile) getField(l, jarField);
                     if (jar != null) {
                         //System.err.println("CloseableURLClassLoader: closing " + jar);
@@ -86,11 +90,11 @@ public class CloseableURLClassLoader
     private ArrayList<?> getLoaders()
             throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
     {
-        Field ucpField = URLClassLoader.class.getDeclaredField("ucp");
+        Field ucpField = SClass.getDeclaredField(URLClassLoader.class, "ucp");
         Object urlClassPath = getField(this, ucpField);
         if (urlClassPath == null)
             throw new AssertionError("urlClassPath not set in URLClassLoader");
-        Field loadersField = urlClassPath.getClass().getDeclaredField("loaders");
+        Field loadersField = SClass.getDeclaredField(urlClassPath.getClass(), "loaders");
         return (ArrayList<?>) getField(urlClassPath, loadersField);
     }
 

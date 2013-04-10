@@ -28,6 +28,8 @@ package javac.javax.lang.model;
 import gwtjava.statics.SCharacter;
 import gwtjava.util.Collections;
 import gwtjava.lang.System;
+import gwtjava.lang.SecurityException;
+
 
 import java.util.Set;
 import java.util.HashSet;

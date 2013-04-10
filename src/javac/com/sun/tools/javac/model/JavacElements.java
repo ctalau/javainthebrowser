@@ -28,6 +28,7 @@ package javac.com.sun.tools.javac.model;
 import static javac.javax.lang.model.util.ElementFilter.methodsIn;
 
 import gwtjava.io.Writer;
+import gwtjava.statics.SClass;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -130,7 +131,7 @@ public class JavacElements implements Elements {
      */
     public static <A extends Annotation> A getAnnotation(Symbol annotated,
                                                          Class<A> annoType) {
-        if (!annoType.isAnnotation())
+        if (!SClass.isAnnotation(annoType))
             throw new IllegalArgumentException("Not an annotation type: "
                                                + annoType);
         String name = annoType.getName();
@@ -196,9 +197,9 @@ public class JavacElements implements Elements {
 
             return (sym.kind != Kinds.ERR &&
                     sym.exists() &&
-                    clazz.isInstance(sym) &&
+                    SClass.isInstance(clazz, sym) &&
                     name.equals(sym.getQualifiedName()))
-                ? clazz.cast(sym)
+                ? SClass.cast(clazz, sym)
                 : null;
         } catch (CompletionFailure e) {
             return null;
@@ -659,9 +660,9 @@ public class JavacElements implements Elements {
      * @throws IllegalArgumentException if the object is of the wrong type
      */
     private static <T> T cast(Class<T> clazz, Object o) {
-        if (! clazz.isInstance(o))
+        if (! SClass.isInstance(clazz, o))
             throw new IllegalArgumentException(o.toString());
-        return clazz.cast(o);
+        return SClass.cast(clazz, o);
     }
 
 }

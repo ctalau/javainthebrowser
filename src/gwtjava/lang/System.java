@@ -41,23 +41,15 @@ public class System {
         }
 
     }
-    public static PrintStream err = new JPrintStream(); //XXX: java.lang.System.err;
-    public static PrintStream out = new JPrintStream(); //XXX: java.lang.System.out;
-    public static InputStream in = new InputStream() {
-        @Override
-        public int read() throws IOException {
-            throw new UnsupportedOperationException();
-        }
-    };
-
-
-    public static long currentTimeMillis() {
-        return java.lang.System.currentTimeMillis();
-    }
 
     public static void arraycopy(Object src, int offsrc, Object dst, int offdst, int len) {
         java.lang.System.arraycopy(src, offsrc, dst, offdst, len);
     }
+
+    public static PrintStream err = new JPrintStream();
+    public static PrintStream out = new JPrintStream();
+    public static InputStream in = null ;
+
 
     public static String getProperty(String key) {
         if (key.equals("sun.boot.class.path")) {
@@ -74,5 +66,8 @@ public class System {
         java.lang.System.exit(code);
     }
 
+    public static long currentTimeMillis() {
+        return 0;
+    }
 }
 

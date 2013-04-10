@@ -53,6 +53,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import gwtjava.util.zip.ZipFile;
+import gwtjava.lang.ClassLoader;
 
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;

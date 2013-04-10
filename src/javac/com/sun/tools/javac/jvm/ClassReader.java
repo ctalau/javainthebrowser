@@ -84,6 +84,7 @@ import gwtjava.io.Writer;
 import gwtjava.net.URI;
 import gwtjava.net.URISyntaxException;
 import gwtjava.nio.CharBuffer;
+import gwtjava.statics.SArrays;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -1077,7 +1078,7 @@ public class ClassReader implements Completer {
                                 if (register >= parameterNameIndices.length) {
                                     int newSize = Math.max(register, parameterNameIndices.length + 8);
                                     parameterNameIndices =
-                                            Arrays.copyOf(parameterNameIndices, newSize);
+                                            SArrays.copyOf(parameterNameIndices, newSize);
                                 }
                                 parameterNameIndices[register] = nameIndex;
                                 haveParameterNameIndices = true;

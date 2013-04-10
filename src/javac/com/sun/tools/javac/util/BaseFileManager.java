@@ -29,9 +29,10 @@ import gwtjava.io.Closeable;
 import gwtjava.io.IOException;
 import gwtjava.io.InputStream;
 import gwtjava.io.OutputStreamWriter;
-import java.lang.reflect.Constructor;
+import gwtjava.lang.reflect.Constructor;
 import gwtjava.net.URL;
 import gwtjava.net.URLClassLoader;
+import gwtjava.lang.ClassLoader;
 
 import gwtjava.nio.ByteBuffer;
 import gwtjava.nio.CharBuffer;
@@ -41,6 +42,8 @@ import gwtjava.nio.charset.CoderResult;
 import gwtjava.nio.charset.CodingErrorAction;
 import gwtjava.nio.charset.IllegalCharsetNameException;
 import gwtjava.nio.charset.UnsupportedCharsetException;
+import gwtjava.statics.SClass;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -98,7 +101,7 @@ public abstract class BaseFileManager {
     }
 
     protected ClassLoader getClassLoader(URL[] urls) {
-        ClassLoader thisClassLoader = getClass().getClassLoader();
+        ClassLoader thisClassLoader = SClass.getClassLoader(getClass());
 
         // Bug: 6558476
         // Ideally, ClassLoader should be Closeable, but before JDK7 it is not.
@@ -108,9 +111,9 @@ public abstract class BaseFileManager {
         if (classLoaderClass != null) {
             try {
                 Class<? extends ClassLoader> loader =
-                        Class.forName(classLoaderClass).asSubclass(ClassLoader.class);
+                        SClass.asSubclass(SClass.forName(classLoaderClass), ClassLoader.class);
                 Class<?>[] constrArgTypes = { URL[].class, ClassLoader.class };
-                Constructor<? extends ClassLoader> constr = loader.getConstructor(constrArgTypes);
+                Constructor<? extends ClassLoader> constr = SClass.getConstructor(loader, constrArgTypes);
                 return constr.newInstance(new Object[] { urls, thisClassLoader });
             } catch (Throwable t) {
                 // ignore errors loading user-provided class loader, fall through
@@ -118,7 +121,7 @@ public abstract class BaseFileManager {
         }
 
         // 2: If URLClassLoader implements Closeable, use that.
-        if (Closeable.class.isAssignableFrom(URLClassLoader.class))
+        if (SClass.isAssignableFrom(Closeable.class, URLClassLoader.class))
             return new URLClassLoader(urls, thisClassLoader);
 
         // 3: Try using private reflection-based CloseableURLClassLoader

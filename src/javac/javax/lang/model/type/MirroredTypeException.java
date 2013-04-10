@@ -27,6 +27,7 @@ package javac.javax.lang.model.type;
 
 import gwtjava.io.IOException;
 import gwtjava.io.ObjectInputStream;
+import gwtjava.lang.ClassNotFoundException;
 
 import javac.javax.lang.model.element.Element;
 

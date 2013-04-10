@@ -30,6 +30,8 @@ import gwtjava.io.ObjectInputStream;
 import java.util.ArrayList;
 import gwtjava.util.Collections;
 import java.util.List;
+import gwtjava.lang.ClassNotFoundException;
+
 
 import javac.javax.lang.model.element.Element;
 

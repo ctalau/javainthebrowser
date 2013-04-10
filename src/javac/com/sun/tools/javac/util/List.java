@@ -25,11 +25,13 @@
 
 package javac.com.sun.tools.javac.util;
 
-import java.lang.reflect.Array;
+import gwtjava.statics.SArrays;
+import gwtjava.statics.SClass;
+import gwtjava.util.Collections;
+
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
-import gwtjava.util.Collections;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -252,7 +254,7 @@ public class List<A> extends AbstractCollection<A> implements java.util.List<A> 
             return vec;
         }
 
-        vec = (T[])Array.newInstance(vec.getClass().getComponentType(), size());
+        vec = (T[])SArrays.newInstance(vec.getClass().getComponentType(), size());
         return toArray(vec);
     }
 
@@ -366,7 +368,7 @@ public class List<A> extends AbstractCollection<A> implements java.util.List<A> 
         if (list == null)
             return null;
         for (Object o : list)
-            klass.cast(o);
+            SClass.cast(klass, o);
         return (List<T>)list;
     }
 

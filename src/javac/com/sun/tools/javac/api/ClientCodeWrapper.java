@@ -37,6 +37,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import gwtjava.net.URI;
 import java.util.ArrayList;
+import gwtjava.lang.ClassLoader;
+
+
+import gwtjava.statics.SClass;
 import gwtjava.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -162,7 +166,7 @@ public class ClientCodeWrapper {
         Boolean trusted = trustedClasses.get(c);
         if (trusted == null) {
             trusted = c.getName().startsWith("javac.com.sun.tools.javac.")
-                    || c.isAnnotationPresent(Trusted.class);
+                    || SClass.isAnnotationPresent(c, Trusted.class);
             trustedClasses.put(c, trusted);
         }
         return trusted;

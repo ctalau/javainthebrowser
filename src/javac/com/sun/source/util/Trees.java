@@ -25,7 +25,6 @@
 
 package javac.com.sun.source.util;
 
-import java.lang.reflect.Method;
 import javac.javax.annotation.processing.ProcessingEnvironment;
 import javac.javax.lang.model.element.AnnotationMirror;
 import javac.javax.lang.model.element.AnnotationValue;
@@ -44,6 +43,10 @@ import javac.com.sun.source.tree.CompilationUnitTree;
 import javac.com.sun.source.tree.MethodTree;
 import javac.com.sun.source.tree.Scope;
 import javac.com.sun.source.tree.Tree;
+
+import gwtjava.lang.ClassLoader;
+import gwtjava.lang.reflect.Method;
+import gwtjava.statics.SClass;
 
 /**
  * Bridges JSR 199, JSR 269, and the Tree API.
@@ -75,10 +78,10 @@ public abstract class Trees {
 
     private static Trees getJavacTrees(Class<?> argType, Object arg) {
         try {
-            ClassLoader cl = arg.getClass().getClassLoader();
-            Class<?> c = Class.forName("javac.com.sun.tools.javac.api.JavacTrees", false, cl);
-            argType = Class.forName(argType.getName(), false, cl);
-            Method m = c.getMethod("instance", new Class<?>[] { argType });
+            ClassLoader cl = SClass.getClassLoader(arg.getClass());
+            Class<?> c = SClass.forName("javac.com.sun.tools.javac.api.JavacTrees", false, cl);
+            argType = SClass.forName(argType.getName(), false, cl);
+            Method m = SClass.getMethod(c, "instance", new Class<?>[] { argType });
             return (Trees) m.invoke(null, new Object[] { arg });
         } catch (Throwable e) {
             throw new AssertionError(e);

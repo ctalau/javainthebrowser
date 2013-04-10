@@ -32,6 +32,7 @@ import gwtjava.io.Reader;
 import gwtjava.net.URI;
 import gwtjava.net.URISyntaxException;
 import gwtjava.nio.charset.CharsetDecoder;
+import gwtjava.statics.SClass;
 
 import javac.javax.lang.model.element.Modifier;
 import javac.javax.lang.model.element.NestingKind;
@@ -57,7 +58,7 @@ public abstract class BaseFileObject implements JavaFileObject {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "[" + getName() + "]";
+        return SClass.getSimpleName(getClass()) + "[" + getName() + "]";
     }
 
     public NestingKind getNestingKind() { return null; }

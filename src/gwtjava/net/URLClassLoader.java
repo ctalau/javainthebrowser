@@ -3,11 +3,15 @@ package gwtjava.net;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Enumeration;
+import gwtjava.lang.ClassLoader;
 
 public class URLClassLoader extends ClassLoader {
 
-    java.net.URLClassLoader jcl;
     public URLClassLoader(URL[] urls, ClassLoader parent) {
+        super(getClassLoader(urls, parent));
+    }
+
+    private static java.net.URLClassLoader getClassLoader(URL[] urls, ClassLoader parent) {
         java.net.URL [] jurls = new java.net.URL [urls.length];
         for (int i = 0; i < urls.length; i++) {
             try {
@@ -16,12 +20,11 @@ public class URLClassLoader extends ClassLoader {
                 e.printStackTrace();
             }
         }
-        jcl = new java.net.URLClassLoader(jurls);
+        return new java.net.URLClassLoader(jurls, parent.jcl);
     }
-
-    @Override
     public Enumeration<java.net.URL> getResources(String name)
             throws IOException {
+        System.out.println(jcl);
         return jcl.getResources(name);
     }
 }
