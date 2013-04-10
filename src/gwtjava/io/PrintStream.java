@@ -12,6 +12,4 @@ public interface PrintStream extends Closeable, Flushable {
     public void print(Object string) ;
 
     public void println() ;
-
-    public java.io.PrintStream getPrintStream() ;
 }

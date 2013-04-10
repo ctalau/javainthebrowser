@@ -40,6 +40,7 @@ import static javac.com.sun.tools.javac.util.JCDiagnostic.DiagnosticFlag.RECOVER
 import static javac.com.sun.tools.javac.util.ListBuffer.lb;
 import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 
+import gwtjava.statics.SException;
 import gwtjava.util.ResourceBundle;
 
 import gwtjava.io.BufferedWriter;
@@ -884,7 +885,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             elapsed_msec = delegateCompiler.elapsed_msec;
         } catch (Abort ex) {
             if (devVerbose)
-                ex.printStackTrace(System.err.getPrintStream());
+                SException.printStackTrace(ex, System.err);
         } finally {
             if (procEnvImpl != null)
                 procEnvImpl.close();
@@ -928,7 +929,7 @@ public class JavaCompiler implements ClassReader.SourceCompleter {
             }
         } catch (Abort ex) {
             if (devVerbose)
-                ex.printStackTrace(System.err.getPrintStream());
+                SException.printStackTrace(ex, System.err);
         }
 
         if (verbose) {

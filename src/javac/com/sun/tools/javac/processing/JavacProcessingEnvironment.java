@@ -375,7 +375,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
                 // java.util.ServiceLoader.load or sun.misc.Service.providers
                 Method loadMethod = SClass.getMethod(loaderClass, loadMethodName,
                                                           Class.class,
-                                                          java.lang.ClassLoader.class);
+                                                          ClassLoader.class);
 
                 Object result = loadMethod.invoke(null,
                                                   Processor.class,

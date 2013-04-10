@@ -1,9 +1,11 @@
-File
-File*Stream
+Revise using 2.5 JRE Emulation
+ - annotation.Documented
+ - System is supported
+
+File -- internal.FS
+File*Stream -- internal.fs
 PrintWriter.getPrintStream -- is used for exeptions: replace with static fn call.
-RandomAccessFile
+RandomAccessFile -- internal.fs
 System
-URL/URI
-statics
-zip
+zip -- unzip rt.jar
 

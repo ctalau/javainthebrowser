@@ -11,7 +11,6 @@ import gwtjava.lang.reflect.Method;
 import gwtjava.lang.reflect.Constructor;
 import gwtjava.net.URL;
 
-
 public class SClass {
 
     public static URL getResource(Class<?> cls, String name) {
@@ -27,7 +26,8 @@ public class SClass {
         }
     }
 
-    public static Class<?> forName(String className) throws ClassNotFoundException {
+    public static Class<?> forName(String className)
+            throws ClassNotFoundException {
         try {
             return Class.forName(className);
         } catch (java.lang.ClassNotFoundException e) {
@@ -43,6 +43,11 @@ public class SClass {
     public static Method getMethod(Class<?> c, String string,
             Class<?>... classes) throws NoSuchMethodException,
             SecurityException {
+        for (int i = 0; i < classes.length; i++) {
+            if (classes[i] == ClassLoader.class) {
+                classes[i] = java.lang.ClassLoader.class;
+            }
+        }
         return new Method(c.getMethod(string, classes));
     }
 
@@ -88,19 +93,19 @@ public class SClass {
         return null;
     }
 
-    public static <T> T newInstance(Class<T> loadClass) throws InstantiationException, IllegalAccessException{
+    public static <T> T newInstance(Class<T> loadClass)
+            throws InstantiationException, IllegalAccessException {
         try {
             return loadClass.newInstance();
-        } catch (java.lang.IllegalAccessException | java.lang.InstantiationException e) {
+        } catch (java.lang.IllegalAccessException e) {
             throw new IllegalAccessException(e.getMessage());
+        } catch (java.lang.InstantiationException e) {
+            throw new InstantiationException(e.getMessage());
         }
     }
 
-    public static Field getDeclaredField(Class<?> class1, String string) throws NoSuchFieldException, SecurityException {
-        try {
-            return new Field(class1.getDeclaredField(string));
-        } catch (java.lang.NoSuchFieldException e) {
-            throw new NoSuchFieldException(e.getMessage());
-        }
+    public static Field getDeclaredField(Class<?> class1, String string)
+            throws NoSuchFieldException, SecurityException {
+        return new Field();
     }
 }

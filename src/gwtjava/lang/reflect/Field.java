@@ -1,21 +1,22 @@
 package gwtjava.lang.reflect;
 
+import gwtjava.lang.IllegalAccessException;
+
 public class Field {
-    java.lang.reflect.Field declaredField;
-    public Field(java.lang.reflect.Field declaredField) {
-        this.declaredField = declaredField;
+    public Field() {
+        throw new UnsupportedOperationException();
     }
 
     public boolean isAccessible() {
-        return declaredField.isAccessible();
+        throw new UnsupportedOperationException();
     }
 
     public void setAccessible(boolean b) {
-        declaredField.setAccessible(b);
+        throw new UnsupportedOperationException();
     }
 
     public Object get(Object o) throws IllegalArgumentException, IllegalAccessException {
-        return declaredField.get(o);
+        throw new UnsupportedOperationException();
     }
 
 }

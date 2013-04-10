@@ -8,15 +8,12 @@ import gwtjava.io.PrintStream;
 public class System {
 
     private static class JPrintStream implements PrintStream {
-
         @Override
         public void close() {
-            java.lang.System.out.close();
         }
 
         @Override
         public void flush() throws IOException {
-            java.lang.System.out.flush();
         }
 
         @Override
@@ -33,13 +30,6 @@ public class System {
         public void println() {
             java.lang.System.out.println();
         }
-
-        @Override
-        public java.io.PrintStream getPrintStream() {
-            return java.lang.System.err;
-//XXX            throw new UnsupportedOperationException();
-        }
-
     }
 
     public static void arraycopy(Object src, int offsrc, Object dst, int offdst, int len) {

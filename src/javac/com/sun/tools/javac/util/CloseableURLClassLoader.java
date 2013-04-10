@@ -30,6 +30,7 @@ import gwtjava.io.IOException;
 import gwtjava.lang.ClassLoader;
 import gwtjava.lang.reflect.Field;
 import gwtjava.lang.NoSuchFieldException;
+import gwtjava.lang.IllegalAccessException;
 import gwtjava.net.URL;
 import gwtjava.net.URLClassLoader;
 import java.util.ArrayList;

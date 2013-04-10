@@ -210,7 +210,7 @@ public class ElementFilter {
         Set<E> set = new LinkedHashSet<E>();
         for (Element e : elements) {
             if (targetKinds.contains(e.getKind()))
-                set.add(clazz.cast(e));
+                set.add(SClass.cast(clazz, e));
         }
         return set;
     }

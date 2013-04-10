@@ -741,7 +741,7 @@ public class Scope {
             return new ErrorScope(this, owner, table);
         }
         public Scope dupUnshared() {
-            return new ErrorScope(this, owner, SObject.clone(table.clone()));
+            return new ErrorScope(this, owner, SObject.clone(table));
         }
         public Entry lookup(Name name) {
             Entry e = super.lookup(name);

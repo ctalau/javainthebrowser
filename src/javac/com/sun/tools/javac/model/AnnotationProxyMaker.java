@@ -38,7 +38,6 @@ import gwtjava.statics.SArrays;
 import gwtjava.statics.SClass;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -220,7 +219,7 @@ public class AnnotationProxyMaker {
                             return;
                         }
                         try {
-                            Array.set(res, i, value);
+                            SArrays.set(res, i, value);
                         } catch (IllegalArgumentException e) {
                             value = null;       // indicates a type mismatch
                             return;

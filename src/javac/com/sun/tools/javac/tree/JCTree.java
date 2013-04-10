@@ -437,11 +437,12 @@ public abstract class JCTree implements Tree, Cloneable, DiagnosticPosition {
      */
     @Override
     public Object clone() {
-        try {
-            return super.clone();
-        } catch(CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            return super.clone();
+//        } catch(CloneNotSupportedException e) {
+//            throw new RuntimeException(e);
+//        }
+        return this;
     }
 
     /** Get a default position for this tree node.

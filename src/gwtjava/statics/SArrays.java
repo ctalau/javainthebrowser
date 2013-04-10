@@ -11,4 +11,7 @@ public class SArrays {
     public static Object newInstance(Class<?> elemType, int size) {
         return Array.newInstance(elemType, size);
     }
+    public static void set(Object array, int index, Object value) {
+        Array.set(array, index, value);
+    }
 }
