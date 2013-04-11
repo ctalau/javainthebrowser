@@ -43,11 +43,11 @@ public class System {
 
     public static String getProperty(String key) {
         if (key.equals("sun.boot.class.path")) {
-            return "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar";
+            return "";
         } else if (key.equals("java.specification.version")) {
             return "1.7";
         } else if (key.equals("java.class.path")) {
-            return "../../build/toolclasses/";
+            return "../../build/toolclasses/:rt/";
         }
         return null;
     }

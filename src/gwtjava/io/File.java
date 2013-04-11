@@ -32,10 +32,15 @@ public class File {
             throw new NullPointerException();
         }
         this.jfile = file;
-//        if (file.exists());
-//            System.out.println(file.getAbsolutePath());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof File) {
+            return jfile.equals(((File)obj).jfile);
+        }
+        return false;
+    }
     public String getName() {
         return jfile.getName();
     }
