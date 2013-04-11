@@ -1,64 +1,9 @@
 Validating units:
    [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/DataOutputStream.java'
       [ERROR] Line 34: The method doubleToRawLongBits(double) is undefined for the type Double
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/File.java'
-      [ERROR] Line 13: No source code is available for type java.io.File; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/FileInputStream.java'
-      [ERROR] Line 9: No source code is available for type java.io.File; did you forget to inherit a required module?
-      [ERROR] Line 12: No source code is available for type java.io.FileInputStream; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/FileOutputStream.java'
-      [ERROR] Line 14: No source code is available for type java.io.FileOutputStream; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/RandomAccessFile.java'
-      [ERROR] Line 5: No source code is available for type java.io.RandomAccessFile; did you forget to inherit a required module?
-      [ERROR] Line 9: No source code is available for type java.io.FileNotFoundException; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/lang/ClassLoader.java'
-      [ERROR] Line 4: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
-      [ERROR] Line 13: No source code is available for type java.lang.ClassNotFoundException; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/lang/System.java'
-      [ERROR] Line 14: The method close() is undefined for the type PrintStream
-      [ERROR] Line 19: The method flush() is undefined for the type PrintStream
-      [ERROR] Line 66: The method exit(int) is undefined for the type System
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/lang/reflect/Field.java'
-      [ERROR] Line 4: No source code is available for type java.lang.reflect.Field; did you forget to inherit a required module?
-      [ERROR] Line 17: No source code is available for type java.lang.IllegalAccessException; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/lang/reflect/Method.java'
-      [ERROR] Line 6: No source code is available for type java.lang.reflect.Method; did you forget to inherit a required module?
-      [ERROR] Line 11: No source code is available for type java.lang.IllegalAccessException; did you forget to inherit a required module?
-      [ERROR] Line 11: No source code is available for type java.lang.reflect.InvocationTargetException; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/net/URLClassLoader.java'
-      [ERROR] Line 14: No source code is available for type java.net.URLClassLoader; did you forget to inherit a required module?
-      [ERROR] Line 15: No source code is available for type java.net.URL; did you forget to inherit a required module?
-      [ERROR] Line 19: No source code is available for type java.net.MalformedURLException; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/statics/SArrays.java'
-      [ERROR] Line 9: The method copyOf(int[], int) is undefined for the type Arrays
-      [ERROR] Line 12: No source code is available for type java.lang.reflect.Array; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/statics/SClass.java'
-      [ERROR] Line 24: The method forName(String, boolean, ClassLoader) is undefined for the type Class
-      [ERROR] Line 25: No source code is available for type java.lang.ClassNotFoundException; did you forget to inherit a required module?
-      [ERROR] Line 32: The method forName(String) is undefined for the type Class
-      [ERROR] Line 39: No source code is available for type java.lang.ClassLoader; did you forget to inherit a required module?
-      [ERROR] Line 39: The method getClassLoader() is undefined for the type Class<capture#1-of ?>
-      [ERROR] Line 46: The method getMethod(String, Class<?>[]) is undefined for the type Class<capture#2-of ?>
-      [ERROR] Line 54: The method getSimpleName() is undefined for the type Class<capture#3-of ?>
-      [ERROR] Line 59: The method asSubclass(Class<U>) is undefined for the type Class<T>
-      [ERROR] Line 76: The method isInstance(Object) is undefined for the type Class<capture#5-of ?>
-      [ERROR] Line 80: The method cast(Object) is undefined for the type Class<U>
-      [ERROR] Line 84: The method getCanonicalName() is undefined for the type Class<capture#6-of ?>
-      [ERROR] Line 93: The method newInstance() is undefined for the type Class<T>
-      [ERROR] Line 94: java.lang.IllegalAccessException.java cannot be resolved to a type
-      [ERROR] Line 94: Syntax error on token "|", . expected
-      [ERROR] Line 101: The method getDeclaredField(String) is undefined for the type Class<capture#7-of ?>
-      [ERROR] Line 102: No source code is available for type java.lang.NoSuchFieldException; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/statics/SObject.java'
-      [ERROR] Line 6: Cannot invoke clone() on the array type T[]
-      [ERROR] Line 10: Cannot invoke clone() on the array type int[]
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/util/zip/Inflater.java'
-      [ERROR] Line 5: No source code is available for type java.util.zip.Inflater; did you forget to inherit a required module?
-      [ERROR] Line 21: No source code is available for type java.util.zip.DataFormatException; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/util/zip/ZipEntry.java'
-      [ERROR] Line 5: No source code is available for type java.util.zip.ZipEntry; did you forget to inherit a required module?
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/util/zip/ZipFile.java'
-      [ERROR] Line 12: No source code is available for type java.util.zip.ZipFile; did you forget to inherit a required module?
-      [ERROR] Line 23: No source code is available for type java.util.zip.ZipEntry; did you forget to inherit a required module?
+   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/FileSystem.java'
+      [ERROR] Line 19: No source code is available for type java.io.File; did you forget to inherit a required module?
+      [ERROR] Line 22: No source code is available for type java.io.FileNotFoundException; did you forget to inherit a required module?
+      [ERROR] Line 50: No source code is available for type java.io.RandomAccessFile; did you forget to inherit a required module?
+      [ERROR] Line 60: No source code is available for type java.io.FileOutputStream; did you forget to inherit a required module?
 [ERROR] Aborting compile due to errors in some input files
-

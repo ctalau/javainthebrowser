@@ -4,150 +4,127 @@ import gwtjava.net.URI;
 import gwtjava.net.URISyntaxException;
 
 public class File {
-
     public static char separatorChar = '/';
     public static final String separator = "/";
     public static final String pathSeparator = ":";
     public static final char pathSeparatorChar = ':';
 
-    public java.io.File jfile;
-    public File(String name) {
-        this(new java.io.File(name));
-    }
+    private String absolutePath;
 
-    public File(File parent, String name) {
-        if (parent == null) {
-            this.jfile = new java.io.File(name);
-        } else {
-            this.jfile = new java.io.File(parent.jfile, name);
-        }
+    public File(String name) {
+        this((File) null, name);
     }
 
     public File(String parent, String name) {
-        this(new java.io.File(parent, name));
+        this(new File(parent), name);
     }
 
-    public File(java.io.File file) {
-        if (file == null) {
-            throw new NullPointerException();
+    public File(File parent, String name) {
+        if (name.startsWith(separator)) {
+            this.absolutePath = name;
+        } else if (parent == null) {
+            this.absolutePath = FileSystem.canonical(FileSystem.cwd() + separator + name);
+        } else {
+            this.absolutePath = FileSystem.canonical(parent.getAbsolutePath() + separator + name);
         }
-        this.jfile = file;
+    }
+
+    public File[] listFiles() {
+        return FileSystem.listFiles(absolutePath);
+    }
+
+    public boolean isFile() {
+        return FileSystem.isFile(absolutePath);
+    }
+
+    public boolean isDirectory() {
+        return FileSystem.isDirectory(absolutePath);
+    }
+
+    public boolean exists() {
+        return FileSystem.exists(absolutePath);
+    }
+
+    public long length() {
+        return FileSystem.length(absolutePath);
+    }
+
+    public File getParentFile() {
+        return new File(
+                absolutePath.substring(0, absolutePath.lastIndexOf('/')));
     }
 
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof File) {
-            return jfile.equals(((File)obj).jfile);
+            return absolutePath.equals(((File) obj).absolutePath);
         }
         return false;
     }
-    public String getName() {
-        return jfile.getName();
-    }
 
-    public File[] listFiles() {
-        java.io.File [] jfiles = jfile.listFiles();
-        if (jfiles == null) {
-            return null;
-        } else {
-            File [] files = new File[jfiles.length];
-            for (int i = 0; i < jfiles.length; i++) {
-                files[i] = (jfiles[i] == null) ? null : new File(jfiles[i]);
-            }
-            return files;
-        }
-    }
-
-    public boolean isDirectory() {
-        return jfile.isDirectory();
-    }
-
-    public File getParentFile() {
-        java.io.File parent = jfile.getParentFile();
-        if (parent == null) {
-            return null;
-        }
-        return new File(parent);
-    }
-
-    public boolean exists() {
-        return jfile.exists();
-    }
-
-    public boolean canWrite() {
-        return jfile.canWrite();
-    }
-
-    public boolean isAbsolute() {
-        return jfile.isAbsolute();
+    @Override
+    public int hashCode() {
+        return absolutePath.hashCode();
     }
 
     public String getPath() {
-        return jfile.getPath();
+        return absolutePath;
     }
 
     public URI toURI() {
         try {
-            return new URI("file:" + jfile.getAbsolutePath());
+            return new URI("file:" + absolutePath);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String getCanonicalPath() throws IOException {
-        try {
-            return jfile.getCanonicalPath();
-        } catch (java.io.IOException e) {
-            throw new IOException(e.getMessage());
-        }
-    }
-
-    public boolean isFile() {
-        return jfile.isFile();
-    }
-
     public String getAbsolutePath() {
-        return jfile.getAbsolutePath();
+        return absolutePath;
     }
 
-    public long lastModified() {
-        return jfile.lastModified();
-    }
-
-    public long length() {
-        return jfile.length();
-    }
-
-    public File getAbsoluteFile() {
-        java.io.File absolute = jfile.getAbsoluteFile();
-        if (absolute == null) {
-            return null;
-        }
-        return new File(absolute);
-    }
-
-    public String getParent() {
-        return jfile.getParent();
+    public String getName() {
+        return absolutePath.substring(absolutePath.lastIndexOf('/') + 1);
     }
 
     public File getCanonicalFile() throws IOException {
-        try {
-            java.io.File canonical = jfile.getCanonicalFile();
-            if (canonical == null) {
-                return null;
-            }
-            return new File(canonical);
-        } catch (java.io.IOException e) {
-            throw new IOException(e.getMessage());
-        }
+        return new File(absolutePath);
     }
 
-    public boolean delete() {
-        return jfile.delete();
+    @Override
+    public String toString() {
+        return absolutePath;
+    }
+
+    public boolean isAbsolute() {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getCanonicalPath() throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean canWrite() {
+        throw new UnsupportedOperationException();
+    }
+
+    public File getAbsoluteFile() {
+        return new File(this.getAbsolutePath());
     }
 
     public boolean mkdirs() {
-        return jfile.mkdirs();
+        throw new UnsupportedOperationException();
     }
 
+    public boolean delete() {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getParent() {
+        throw new UnsupportedOperationException();
+    }
+
+    public long lastModified() {
+        throw new UnsupportedOperationException();
+    }
 }
