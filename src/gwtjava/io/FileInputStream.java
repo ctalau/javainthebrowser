@@ -4,6 +4,7 @@ public class FileInputStream extends ByteArrayInputStream {
 
     public FileInputStream(File file) throws FileNotFoundException {
         super(readFile(file.jfile));
+        System.out.println(file.getAbsolutePath());
     }
 
     private static byte [] readFile(java.io.File file) throws FileNotFoundException {
