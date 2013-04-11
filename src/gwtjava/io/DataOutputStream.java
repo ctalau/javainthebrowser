@@ -31,7 +31,7 @@ public class DataOutputStream extends OutputStream {
     }
 
     public void writeDouble(double x) throws IOException {
-        writeLong(Double.doubleToRawLongBits(x));
+        writeLong(Double.doubleToLongBits(x));
     }
 
     @Override
