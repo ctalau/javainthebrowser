@@ -2,18 +2,17 @@ package gwtjava.util.zip;
 
 public class ZipEntry {
 
-    java.util.zip.ZipEntry entry;
 
-    public ZipEntry(java.util.zip.ZipEntry entry) {
-        this.entry = entry;
+    public ZipEntry() {
+        throw new UnsupportedOperationException();
     }
 
     public String getName() {
-        return entry.getName();
+        throw new UnsupportedOperationException();
     }
 
     public long getTime() {
-        return entry.getTime();
+        throw new UnsupportedOperationException();
     }
 
 }

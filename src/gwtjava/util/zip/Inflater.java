@@ -2,25 +2,20 @@ package gwtjava.util.zip;
 
 public class Inflater {
 
-    java.util.zip.Inflater jinfl;
     public Inflater(boolean b) {
-        jinfl = new java.util.zip.Inflater(b);
+        throw new UnsupportedOperationException();
     }
 
     public void reset() {
-        jinfl.reset();
+        throw new UnsupportedOperationException();
     }
 
     public void setInput(byte[] src) {
-        jinfl.setInput(src);
+        throw new UnsupportedOperationException();
     }
 
     public int inflate(byte[] dest) throws DataFormatException {
-        try {
-            return jinfl.inflate(dest);
-        } catch (java.util.zip.DataFormatException e) {
-            throw new DataFormatException(e.getMessage());
-        }
+        throw new UnsupportedOperationException();
     }
 
 }
