@@ -1,24 +1,23 @@
-package gwtjava.io;
+package gwtjava.io.fs;
 
+import gwtjava.io.File;
+import gwtjava.io.IOException;
 import gwtjava.lang.System;
 
 import java.io.FileNotFoundException;
-import gwtjava.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Stack;
 
-public class FileSystem {
+class JSFileSystem extends FileSystem {
 
-    private static final Map<String, byte[]> files = new HashMap<String, byte[]>();
+    private final Map<String, byte[]> files = new HashMap<String, byte[]>();
 
-    static {
+    {
         try {
             reset();
             addFile(new java.io.File("Basic.java"));
             addFile(new java.io.File("Error.java"));
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (java.io.IOException e) {
@@ -26,7 +25,8 @@ public class FileSystem {
         }
     }
 
-    public static void reset() throws FileNotFoundException,
+    @Override
+    public void reset() throws FileNotFoundException,
             java.io.IOException {
         String[] paths = System.getProperty("java.class.path").split(
                 File.pathSeparator);
@@ -36,7 +36,7 @@ public class FileSystem {
     }
 
     /** Add files in a subtree to the list of files. */
-    private static void addFiles(java.io.File file)
+    private void addFiles(java.io.File file)
             throws FileNotFoundException, java.io.IOException {
         if (file.isFile()) {
             addFile(file);
@@ -47,18 +47,20 @@ public class FileSystem {
         }
     }
 
-    private static void addFile(java.io.File file)
+    private void addFile(java.io.File file)
             throws FileNotFoundException, java.io.IOException {
         byte[] content = new byte[(int) file.length()];
         new java.io.RandomAccessFile(file, "r").readFully(content);
-        files.put(canonical(file.getAbsolutePath()), content);
+        files.put(File.canonical(file.getAbsolutePath()), content);
     }
 
-    static byte[] readFile(String path) {
+    @Override
+    public byte[] readFile(String path) {
         return files.get(path);
     }
 
-    static void writeFile(String path, byte[] content, int off, int len)
+    @Override
+    public void writeFile(String path, byte[] content, int off, int len)
             throws IOException {
         try {
             java.io.FileOutputStream jfos = new java.io.FileOutputStream(path);
@@ -69,7 +71,13 @@ public class FileSystem {
         }
     }
 
-    static File[] listFiles(String path) {
+    @Override
+    public String cwd() {
+        return new java.io.File(".").getAbsolutePath();
+    }
+
+    @Override
+    public File[] listFiles(String path) {
         HashSet<File> children = new HashSet<File>();
         for (String fileName : files.keySet()) {
             if (fileName.startsWith(path)) {
@@ -86,7 +94,8 @@ public class FileSystem {
         return children.toArray(new File[0]);
     }
 
-    static boolean exists(String name) {
+    @Override
+    public boolean exists(String name) {
         for (String fileName : files.keySet()) {
             if (fileName.startsWith(name)) {
                 return true;
@@ -95,40 +104,18 @@ public class FileSystem {
         return false;
     }
 
-    static boolean isFile(String path) {
+    @Override
+    public boolean isFile(String path) {
         return files.containsKey(path);
     }
 
-    static boolean isDirectory(String path) {
+    @Override
+    public boolean isDirectory(String path) {
         return exists(path) && !isFile(path);
     }
 
-    static long length(String path) {
+    @Override
+    public long length(String path) {
         return files.get(path).length;
-    }
-
-    static String canonical(String path) {
-        String[] parts = path.split(File.separator);
-        Stack<String> stack = new Stack<String>();
-        for (String part : parts) {
-            if (part.equals(".") || part.length() == 0) {
-                continue;
-            } else if (part.equals("..")) {
-                stack.pop();
-            } else {
-                stack.push(part);
-            }
-        }
-
-        StringBuffer ret = new StringBuffer();
-        for (String part : stack) {
-            ret.append(File.separator);
-            ret.append(part);
-        }
-        return ret.toString();
-    }
-
-    static String cwd() {
-        return new java.io.File(".").getAbsolutePath();
     }
 }

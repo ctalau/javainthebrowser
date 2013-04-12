@@ -1,11 +1,7 @@
-Revise using 2.5 JRE Emulation
- - annotation.Documented
- - System is supported
-
-File -- internal.FS
-File*Stream -- internal.fs
-PrintWriter.getPrintStream -- is used for exeptions: replace with static fn call.
-RandomAccessFile -- internal.fs
-System
-zip -- unzip rt.jar
-
+FileSystem
+ - make a tool to create an archive of symbols.
+ - convert it to hex-encoded JSON.
+ - load it.
+ - load the source file contents from a String.
+System:
+  System.setOut - GWT.log ???.

@@ -1,7 +1,10 @@
 package gwtjava.io;
 
+import gwtjava.io.fs.FileSystem;
 import gwtjava.net.URI;
 import gwtjava.net.URISyntaxException;
+
+import java.util.Stack;
 
 public class File {
     public static char separatorChar = '/';
@@ -10,6 +13,7 @@ public class File {
     public static final char pathSeparatorChar = ':';
 
     private String absolutePath;
+    private static FileSystem fs = FileSystem.instance();
 
     public File(String name) {
         this((File) null, name);
@@ -23,30 +27,30 @@ public class File {
         if (name.startsWith(separator)) {
             this.absolutePath = name;
         } else if (parent == null) {
-            this.absolutePath = FileSystem.canonical(FileSystem.cwd() + separator + name);
+            this.absolutePath = canonical(fs.cwd() + separator + name);
         } else {
-            this.absolutePath = FileSystem.canonical(parent.getAbsolutePath() + separator + name);
+            this.absolutePath = canonical(parent.getAbsolutePath() + separator + name);
         }
     }
 
     public File[] listFiles() {
-        return FileSystem.listFiles(absolutePath);
+        return fs.listFiles(absolutePath);
     }
 
     public boolean isFile() {
-        return FileSystem.isFile(absolutePath);
+        return fs.isFile(absolutePath);
     }
 
     public boolean isDirectory() {
-        return FileSystem.isDirectory(absolutePath);
+        return fs.isDirectory(absolutePath);
     }
 
     public boolean exists() {
-        return FileSystem.exists(absolutePath);
+        return fs.exists(absolutePath);
     }
 
     public long length() {
-        return FileSystem.length(absolutePath);
+        return fs.length(absolutePath);
     }
 
     public File getParentFile() {
@@ -94,6 +98,27 @@ public class File {
     @Override
     public String toString() {
         return absolutePath;
+    }
+
+    public static String canonical(String path) {
+        String[] parts = path.split(File.separator);
+        Stack<String> stack = new Stack<String>();
+        for (String part : parts) {
+            if (part.equals(".") || part.length() == 0) {
+                continue;
+            } else if (part.equals("..")) {
+                stack.pop();
+            } else {
+                stack.push(part);
+            }
+        }
+
+        StringBuffer ret = new StringBuffer();
+        for (String part : stack) {
+            ret.append(File.separator);
+            ret.append(part);
+        }
+        return ret.toString();
     }
 
     public boolean isAbsolute() {

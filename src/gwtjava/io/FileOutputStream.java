@@ -1,7 +1,11 @@
 package gwtjava.io;
 
+import gwtjava.io.fs.FileSystem;
+
 
 public class FileOutputStream extends ByteArrayOutputStream {
+
+    private static FileSystem fs = FileSystem.instance();
 
     private File file;
     public FileOutputStream(File file) throws FileNotFoundException {
@@ -10,6 +14,6 @@ public class FileOutputStream extends ByteArrayOutputStream {
 
     @Override
     public void close() throws IOException {
-        FileSystem.writeFile(file.getAbsolutePath(), buf, 0, count);
+        fs.writeFile(file.getAbsolutePath(), buf, 0, count);
     }
 }
