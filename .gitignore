@@ -1,4 +1,6 @@
 build
 war
 gwt-unitCache/
+tools/extractjre/bin/
+tools/extractjre/out/
 
