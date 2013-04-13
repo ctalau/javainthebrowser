@@ -2,7 +2,6 @@ package gwtjava.io.fs;
 
 import gwtjava.io.File;
 import gwtjava.io.IOException;
-import gwtjava.lang.System;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -25,33 +24,26 @@ class JSFileSystem extends FileSystem {
         }
     }
 
-    @Override
-    public void reset() throws FileNotFoundException,
-            java.io.IOException {
-        String[] paths = System.getProperty("java.class.path").split(
-                File.pathSeparator);
-        for (String path : paths) {
-            addFiles(new java.io.File(path));
-        }
-    }
-
-    /** Add files in a subtree to the list of files. */
-    private void addFiles(java.io.File file)
-            throws FileNotFoundException, java.io.IOException {
-        if (file.isFile()) {
-            addFile(file);
-        } else {
-            for (java.io.File child : file.listFiles()) {
-                addFiles(child);
-            }
-        }
-    }
-
     private void addFile(java.io.File file)
             throws FileNotFoundException, java.io.IOException {
         byte[] content = new byte[(int) file.length()];
         new java.io.RandomAccessFile(file, "r").readFully(content);
         files.put(File.canonical(file.getAbsolutePath()), content);
+   }
+
+    @Override
+    public void reset() throws FileNotFoundException {
+        for (Map.Entry<String, String> entry : FileSystemContent.files.entrySet()) {
+            files.put("/jre/" + entry.getKey(), hexDecode(entry.getValue()));
+        }
+    }
+
+    private byte[] hexDecode(String s) {
+        byte[] ret = new byte[s.length()/2];
+        for (int i = 0; i < s.length(); i += 2) {
+            ret[i/2] = (byte) Integer.parseInt(s.substring(i, i+2), 16);
+        }
+        return ret;
     }
 
     @Override

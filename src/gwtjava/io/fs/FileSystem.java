@@ -29,6 +29,6 @@ public abstract class FileSystem {
 
 
     public static FileSystem instance() {
-        return new JVMFileSystem();
+        return new JSFileSystem();
     }
 }

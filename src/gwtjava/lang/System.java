@@ -47,7 +47,7 @@ public class System {
         } else if (key.equals("java.specification.version")) {
             return "1.7";
         } else if (key.equals("java.class.path")) {
-            return "../../build/toolclasses/:rt/";
+            return "/jre/";
         }
         return null;
     }
