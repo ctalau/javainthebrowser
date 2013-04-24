@@ -1,6 +1,5 @@
 package jib.client;
 
-
 import gwtjava.io.IOException;
 import gwtjava.io.PrintStream;
 import gwtjava.io.fs.FileSystem;
@@ -22,8 +21,9 @@ public class Jib implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
-//        setOut();
-        log ("starting");
+
+        setOut();
+        log("starting");
         try {
             Main.compile("class Smth { String f() { return \"\"; }}");
             if (FileSystem.instance().exists("/tmp/Smth.class")) {
@@ -34,7 +34,7 @@ public class Jib implements EntryPoint {
         } catch (Exception e) {
             e.printStackTrace();
         }
-     }
+    }
 
     public void log(String s) {
         Element elem = DOM.getElementById("log");
@@ -48,9 +48,11 @@ public class Jib implements EntryPoint {
             public void print(Object string) {
                 log(String.valueOf(string));
             }
+
             @Override
             public void flush() throws IOException {
             }
+
             @Override
             public void close() {
             }

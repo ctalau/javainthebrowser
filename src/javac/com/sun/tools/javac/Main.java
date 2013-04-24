@@ -28,34 +28,6 @@ package javac.com.sun.tools.javac;
 import gwtjava.io.fs.FileSystem;
 
 public class Main {
-    /**
-     * Unsupported command line interface.
-     *
-     * @param args
-     *            The command line parameters.
-     */
-    public static void main(String[] args) throws Exception {
-        javac.com.sun.tools.javac.main.Main compiler =
-                new javac.com.sun.tools.javac.main.Main("javac");
-        FileSystem fs = FileSystem.instance();
-        fs.reset();
-        fs.addFile("StringSample.java",
-                "package com.jsjvm.sample; \n                             \n" +
-                "import java.io.PrintStream;                              \n" +
-                "public class StringSample {                              \n" +
-                "    public static void main(String[] args) {             \n" +
-                "       System.out.println(\"asdadasd\\n\");              \n" +
-                "    }                                                    \n" +
-                "}");
-        fs.addFile("Error.java", "class Error { void f() { return \"\"; }}");
-
-        compiler.compile(args);
-
-        if (!fs.exists(fs.cwd() + "StringSample.class")) {
-            throw new AssertionError();
-        }
-    }
-
     public static void compile(String sourceFile) {
         String className = getClassName(sourceFile) + ".java";
         FileSystem fs = FileSystem.instance();
