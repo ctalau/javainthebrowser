@@ -56,11 +56,20 @@ public class Main {
         }
     }
 
-    public static void compile(String className, String sourceFile) {
+    public static void compile(String sourceFile) {
+        String className = getClassName(sourceFile) + ".java";
         FileSystem fs = FileSystem.instance();
         fs.reset();
         fs.addFile(className, sourceFile);
 
         new javac.com.sun.tools.javac.main.Main("javac").compile(new String[] { className });
+    }
+
+    public static String getClassName(String content) {
+        final String CLASS_KWD = "class ";
+        int nameStart = content.indexOf(CLASS_KWD) + CLASS_KWD.length();
+        int len = content.substring(nameStart).indexOf(' ');
+
+        return content.substring(nameStart, nameStart + len);
     }
 }

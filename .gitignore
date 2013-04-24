@@ -3,4 +3,6 @@ war
 gwt-unitCache/
 tools/extractjre/bin/
 tools/extractjre/out/
+tools/extractjre/FileSystemContent.java
+test-classes/
 

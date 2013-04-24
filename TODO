@@ -1,7 +1,8 @@
+-- replace System.out from JVM
+-- Make a full JRE using also the Unsafe and ConsoleOutputStream
+
 FileSystem
  - make a tool to create an archive of symbols.
  - convert it to hex-encoded JSON.
  - load it.
  - load the source file contents from a String.
-System:
-  System.setOut - GWT.log ???.

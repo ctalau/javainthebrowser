@@ -25,7 +25,7 @@ public class Jib implements EntryPoint {
 //        setOut();
         log ("starting");
         try {
-            Main.compile("Smth.java", "class Smth { String f() { return \"\"; }}");
+            Main.compile("class Smth { String f() { return \"\"; }}");
             if (FileSystem.instance().exists("/tmp/Smth.class")) {
                 log("it worked");
             } else {

@@ -1,9 +1,0 @@
-Validating units:
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/DataOutputStream.java'
-      [ERROR] Line 34: The method doubleToRawLongBits(double) is undefined for the type Double
-   [ERROR] Errors in 'file:/home/ctalau/src/jib/src/gwtjava/io/FileSystem.java'
-      [ERROR] Line 19: No source code is available for type java.io.File; did you forget to inherit a required module?
-      [ERROR] Line 22: No source code is available for type java.io.FileNotFoundException; did you forget to inherit a required module?
-      [ERROR] Line 50: No source code is available for type java.io.RandomAccessFile; did you forget to inherit a required module?
-      [ERROR] Line 60: No source code is available for type java.io.FileOutputStream; did you forget to inherit a required module?
-[ERROR] Aborting compile due to errors in some input files
