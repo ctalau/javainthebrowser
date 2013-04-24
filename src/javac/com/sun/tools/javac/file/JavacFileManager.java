@@ -29,10 +29,10 @@ import static javac.com.sun.tools.javac.main.OptionName.D;
 import static javac.com.sun.tools.javac.main.OptionName.S;
 import static javac.javax.tools.StandardLocation.CLASS_OUTPUT;
 import static javac.javax.tools.StandardLocation.SOURCE_OUTPUT;
-
 import gwtjava.io.File;
 import gwtjava.io.FileNotFoundException;
 import gwtjava.io.IOException;
+import gwtjava.lang.ClassLoader;
 import gwtjava.lang.System;
 import gwtjava.net.MalformedURLException;
 import gwtjava.net.URI;
@@ -40,20 +40,19 @@ import gwtjava.net.URISyntaxException;
 import gwtjava.net.URL;
 import gwtjava.nio.CharBuffer;
 import gwtjava.nio.charset.Charset;
+import gwtjava.util.Collections;
+import gwtjava.util.Locale;
+import gwtjava.util.zip.ZipFile;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import gwtjava.util.Collections;
-import gwtjava.util.Locale;
-
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import gwtjava.util.zip.ZipFile;
-import gwtjava.lang.ClassLoader;
 
 import javac.com.sun.tools.javac.file.RelativePath.RelativeDirectory;
 import javac.com.sun.tools.javac.file.RelativePath.RelativeFile;
@@ -388,6 +387,7 @@ public class JavacFileManager extends BaseFileManager implements StandardJavaFil
         return fileKinds.contains(kind);
     }
 
+    @SuppressWarnings("unused")
     private static final boolean fileSystemIsCaseSensitive =
         File.separatorChar == '/';
 
@@ -396,29 +396,30 @@ public class JavacFileManager extends BaseFileManager implements StandardJavaFil
      *  Ignore file separators in both path and name.
      */
     private boolean caseMapCheck(File f, RelativePath name) {
-        if (fileSystemIsCaseSensitive) return true;
-        // Note that getCanonicalPath() returns the case-sensitive
-        // spelled file name.
-        String path;
-        try {
-            path = f.getCanonicalPath();
-        } catch (IOException ex) {
-            return false;
-        }
-        char[] pcs = path.toCharArray();
-        char[] ncs = name.path.toCharArray();
-        int i = pcs.length - 1;
-        int j = ncs.length - 1;
-        while (i >= 0 && j >= 0) {
-            while (i >= 0 && pcs[i] == File.separatorChar) i--;
-            while (j >= 0 && ncs[j] == '/') j--;
-            if (i >= 0 && j >= 0) {
-                if (pcs[i] != ncs[j]) return false;
-                i--;
-                j--;
-            }
-        }
-        return j < 0;
+        return true;
+//        if (fileSystemIsCaseSensitive) return true;
+//        // Note that getCanonicalPath() returns the case-sensitive
+//        // spelled file name.
+//        String path;
+//        try {
+//            path = f.getCanonicalPath();
+//        } catch (IOException ex) {
+//            return false;
+//        }
+//        char[] pcs = path.toCharArray();
+//        char[] ncs = name.path.toCharArray();
+//        int i = pcs.length - 1;
+//        int j = ncs.length - 1;
+//        while (i >= 0 && j >= 0) {
+//            while (i >= 0 && pcs[i] == File.separatorChar) i--; // CHANGE
+//            while (j >= 0 && ncs[j] == '/') j--;
+//            if (i >= 0 && j >= 0) {
+//                if (pcs[i] != ncs[j]) return false;
+//                i--;
+//                j--;
+//            }
+//        }
+//        return j < 0;
     }
 
     /**

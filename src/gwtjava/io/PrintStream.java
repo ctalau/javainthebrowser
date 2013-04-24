@@ -1,15 +1,21 @@
 package gwtjava.io;
 
-public interface PrintStream extends Closeable, Flushable {
+public abstract class PrintStream implements Closeable, Flushable {
     @Override
-    public void close() ;
+    public abstract void close() ;
 
     @Override
-    public void flush() throws IOException ;
+    public abstract void flush() throws IOException ;
 
-    public void println(Object string) ;
+    public abstract void print(Object string) ;
 
-    public void print(Object string) ;
+    public void println() {
+        print("\n");
+    }
 
-    public void println() ;
+    public void println(Object string) {
+        print(string);
+        println();
+    }
+
 }

@@ -25,8 +25,6 @@
 
 package javac.com.sun.tools.javac;
 
-import java.util.Arrays;
-
 import gwtjava.io.fs.FileSystem;
 
 public class Main {
@@ -56,5 +54,13 @@ public class Main {
         if (!fs.exists(fs.cwd() + "StringSample.class")) {
             throw new AssertionError();
         }
+    }
+
+    public static void compile(String className, String sourceFile) {
+        FileSystem fs = FileSystem.instance();
+        fs.reset();
+        fs.addFile(className, sourceFile);
+
+        new javac.com.sun.tools.javac.main.Main("javac").compile(new String[] { className });
     }
 }

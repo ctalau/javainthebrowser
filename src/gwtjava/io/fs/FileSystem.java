@@ -3,12 +3,9 @@ package gwtjava.io.fs;
 import gwtjava.io.File;
 import gwtjava.io.IOException;
 
-import java.io.FileNotFoundException;
-
 public abstract class FileSystem {
 
-    public abstract void reset() throws FileNotFoundException,
-            java.io.IOException;
+    public abstract void reset();
 
     public abstract void addFile(String name, String content);
 

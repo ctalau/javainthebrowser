@@ -7,7 +7,7 @@ import gwtjava.io.PrintStream;
 
 public class System {
 
-    private static class JPrintStream implements PrintStream {
+    private static class JPrintStream extends PrintStream {
         @Override
         public void close() {
         }
@@ -17,18 +17,8 @@ public class System {
         }
 
         @Override
-        public void println(Object string) {
-            java.lang.System.out.println(string);
-        }
-
-        @Override
         public void print(Object string) {
             java.lang.System.out.print(string);
-        }
-
-        @Override
-        public void println() {
-            java.lang.System.out.println();
         }
     }
 
@@ -40,6 +30,10 @@ public class System {
     public static PrintStream out = new JPrintStream();
     public static InputStream in = null ;
 
+
+    public static void setOut(PrintStream ps) {
+        out = ps;
+    }
 
     public static String getProperty(String key) {
         if (key.equals("sun.boot.class.path")) {
