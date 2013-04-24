@@ -3,36 +3,22 @@ package gwtjava.io.fs;
 import gwtjava.io.File;
 import gwtjava.io.IOException;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 class JSFileSystem extends FileSystem {
+    private final String USER_PATH = "/tmp/";
 
     private final Map<String, byte[]> files = new HashMap<String, byte[]>();
 
-    {
-        try {
-            reset();
-            addFile(new java.io.File("Basic.java"));
-            addFile(new java.io.File("Error.java"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
+    public void addFile(String name, String content) {
+        files.put(USER_PATH + name, content.getBytes());
     }
 
-    private void addFile(java.io.File file)
-            throws FileNotFoundException, java.io.IOException {
-        byte[] content = new byte[(int) file.length()];
-        new java.io.RandomAccessFile(file, "r").readFully(content);
-        files.put(File.canonical(file.getAbsolutePath()), content);
-   }
-
     @Override
-    public void reset() throws FileNotFoundException {
+    public void reset() {
+        files.clear();
         for (Map.Entry<String, String> entry : FileSystemContent.files.entrySet()) {
             files.put("/jre/" + entry.getKey(), hexDecode(entry.getValue()));
         }
@@ -54,18 +40,14 @@ class JSFileSystem extends FileSystem {
     @Override
     public void writeFile(String path, byte[] content, int off, int len)
             throws IOException {
-        try {
-            java.io.FileOutputStream jfos = new java.io.FileOutputStream(path);
-            jfos.write(content, off, len);
-            jfos.close();
-        } catch (java.io.IOException e) {
-            throw new IOException(e.getMessage());
-        }
+        byte [] buffer = new byte[len];
+        System.arraycopy(content, off, buffer, 0, len);
+        files.put(path, buffer);
     }
 
     @Override
     public String cwd() {
-        return new java.io.File(".").getAbsolutePath();
+        return USER_PATH;
     }
 
     @Override

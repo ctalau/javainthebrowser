@@ -25,40 +25,36 @@
 
 package javac.com.sun.tools.javac;
 
+import java.util.Arrays;
 
+import gwtjava.io.fs.FileSystem;
 
-/**
- * The programmatic interface for the Java Programming Language
- * compiler, javac.
- *
- * <p>Except for the two methods
- * {@link #compile(java.lang.String[])}
- * {@link #compile(java.lang.String[],java.io.PrintWriter)},
- * nothing described in this source file is part of any supported
- * API.  If you write code that depends on this, you do so at your own
- * risk.  This code and its internal interfaces are subject to change
- * or deletion without notice.
- */
 public class Main {
-
-    /** Unsupported command line interface.
-     * @param args   The command line parameters.
+    /**
+     * Unsupported command line interface.
+     *
+     * @param args
+     *            The command line parameters.
      */
     public static void main(String[] args) throws Exception {
-        compile(args);
-    }
-
-    /** Programmatic interface to the Java Programming Language
-     * compiler, javac.
-     *
-     * @param args The command line arguments that would normally be
-     * passed to the javac program as described in the man page.
-     * @return an integer equivalent to the exit value from invoking
-     * javac, see the man page for details.
-     */
-    public static int compile(String[] args) {
         javac.com.sun.tools.javac.main.Main compiler =
-            new javac.com.sun.tools.javac.main.Main("javac");
-        return compiler.compile(args);
+                new javac.com.sun.tools.javac.main.Main("javac");
+        FileSystem fs = FileSystem.instance();
+        fs.reset();
+        fs.addFile("StringSample.java",
+                "package com.jsjvm.sample; \n                             \n" +
+                "import java.io.PrintStream;                              \n" +
+                "public class StringSample {                              \n" +
+                "    public static void main(String[] args) {             \n" +
+                "       System.out.println(\"asdadasd\\n\");              \n" +
+                "    }                                                    \n" +
+                "}");
+        fs.addFile("Error.java", "class Error { void f() { return \"\"; }}");
+
+        compiler.compile(args);
+
+        if (!fs.exists(fs.cwd() + "StringSample.class")) {
+            throw new AssertionError();
+        }
     }
 }

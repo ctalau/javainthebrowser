@@ -10,6 +10,8 @@ public abstract class FileSystem {
     public abstract void reset() throws FileNotFoundException,
             java.io.IOException;
 
+    public abstract void addFile(String name, String content);
+
     public abstract byte[] readFile(String path);
 
     public abstract void writeFile(String path, byte[] content, int off, int len)
@@ -28,7 +30,8 @@ public abstract class FileSystem {
     public abstract long length(String path);
 
 
+    private static FileSystem instance = new JSFileSystem();
     public static FileSystem instance() {
-        return new JSFileSystem();
+        return instance;
     }
 }
