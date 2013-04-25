@@ -1,4 +1,3 @@
--- Assign onClick handler to button
 -- replace System.out from JVM Natives
 -- Make a full JRE using also the Unsafe and ConsoleOutputStream
 

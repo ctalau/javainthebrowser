@@ -929,11 +929,6 @@ public class ExecutionEngine extends Stack {
      */
     private void athrow() {
         ObjectRepr exn = (ObjectRepr) pop();
-//        try {
-//            System.out.println(exn);
-//        } catch (Throwable t) {
-//            System.out.println("sof: " + this.m.getFullName());
-//        }
         boolean handled = false;
         ArrayList<String> stackTrace = new ArrayList<String>();
 

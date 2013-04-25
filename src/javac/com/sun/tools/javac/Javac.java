@@ -25,15 +25,17 @@
 
 package javac.com.sun.tools.javac;
 
+import javac.com.sun.tools.javac.main.Main;
 import gwtjava.io.fs.FileSystem;
 
-public class Main {
-    public static void compile(String fileName, String code) {
+public class Javac {
+    public static boolean compile(String fileName, String code) {
         FileSystem fs = FileSystem.instance();
         fs.reset();
         fs.addFile(fileName, code);
 
-        new javac.com.sun.tools.javac.main.Main("javac").compile(new String[] { fileName });
+        int result = new Main("javac").compile(new String[] { fileName });
+        return result == 0;
     }
 
     public static String getClassName(String content) {

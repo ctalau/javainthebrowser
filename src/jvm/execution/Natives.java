@@ -2,6 +2,9 @@ package jvm.execution;
 
 import java.util.HashMap;
 
+import gwtjava.io.IOException;
+import gwtjava.lang.System;
+
 import jvm.classparser.JClass;
 import jvm.classparser.JMember.JNativeMethod;
 import jvm.classparser.JMember.JNativeMethod0;
@@ -71,7 +74,7 @@ public class Natives {
     private static class NativeIdentityHashCode extends JNativeMethod1<Integer, ObjectRepr> {
         @Override
         public Integer call(ObjectRepr arg1) {
-            return System.identityHashCode(arg1);
+            return java.lang.System.identityHashCode(arg1);
         }
     }
 
@@ -175,6 +178,19 @@ public class Natives {
         }
     }
 
+    private static class NativeConsoleWrite extends JNativeMethod1<Void, Integer> {
+        @Override
+        public Void call(Integer arg1) {
+            System.out.print((char) arg1.intValue());
+            try {
+                System.out.flush();
+            } catch (IOException e) {
+                throw new AssertionError();
+            }
+            return null;
+        }
+    }
+
     private static class NativeDoFreeMemory extends JNativeMethod2<Void, ObjectRepr, Long> {
         @Override
         public Void call(ObjectRepr unsafe, Long arg1) {
@@ -222,17 +238,13 @@ public class Natives {
         methods.put("java/lang/System/setOut0(Ljava/io/PrintStream;)V",
                 new NativeSetOut());
 
+        methods.put("java/io/ConsoleOutputStream/write0(I)V", new NativeConsoleWrite());
         methods.put("sun/misc/Unsafe/freeMemory(J)V", new NativeDoFreeMemory());
         methods.put("sun/misc/Unsafe/getByte(J)B", new NativeGetByte());
         methods.put("sun/misc/Unsafe/putLong(JJ)V", new NativePutLong());
         methods.put("sun/misc/Unsafe/allocateMemory(J)J", new NativeAllocateMemory());
         methods.put("java/lang/System/nanoTime()J", new NativeNanoTime());
         methods.put("java/lang/System/currentTimeMillis()J", new NativeCurrentTime());
-
-    }
-
-    public static void registerConsoleOut(JNativeMethod1<Void, Integer> out) {
-        methods.put("java/io/ConsoleOutputStream/write0(I)V", out);
     }
 
     public static JNativeMethod getNativeMethod(String name) {

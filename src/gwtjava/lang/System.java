@@ -7,6 +7,7 @@ import gwtjava.io.PrintStream;
 
 public class System {
 
+    /** In script mode, it does nothing, and in bytecode mode it outputs to console. */
     private static class JPrintStream extends PrintStream {
         @Override
         public void close() {

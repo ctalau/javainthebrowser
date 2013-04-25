@@ -17,5 +17,7 @@
   <source path='classparser'/>
   <source path='execution'/>
   <source path='util'/>
+  <source path='main'/>
+
 
 </module>

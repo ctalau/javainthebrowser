@@ -11,6 +11,7 @@ h1 {
 }
 
 .runButton {
+  margin: auto;
   display: block;
   font-size: 16pt;
 }

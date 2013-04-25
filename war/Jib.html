@@ -27,22 +27,23 @@
 
     <h1>Java in the Browser Demo</h1>
 
-    <table>
-      <tr>
-        <td>
-          <div style="border: 1px solid black;">
-            <textarea id="source" rows="25">
+    <div>
+      <div style="float: left; width: 100%; border: 1px solid black;">
+        <textarea id="source" rows="25">
 public class Example {
     public String f() {
         return "";
     }
 }
-            </textarea>
-          </div>
-        </td>
-        <td><div id="log-div"></div></td>
-      </tr>
-    </table>
+        </textarea>
+      </div>
+
+      <div style="float: left; width: 100%" id="log-div">
+      </div>
+
+      <div style="float: left; width:100%; text-align:center" id="btn-div">
+      </div>
+    </div>
 
     <script>
       editor = CodeMirror.fromTextArea(document.getElementById('source'), {
