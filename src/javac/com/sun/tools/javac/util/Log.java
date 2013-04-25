@@ -34,6 +34,8 @@ import static javac.com.sun.tools.javac.main.OptionName.XMAXWARNS;
 import gwtjava.io.IOException;
 import gwtjava.io.PrintWriter;
 import gwtjava.lang.System;
+import gwtjava.statics.SException;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -447,7 +449,7 @@ public class Log extends AbstractLog {
         }
 
         if (dumpOnError)
-            new RuntimeException().printStackTrace(writer.getPrintStream());
+            SException.printStackTrace(new RuntimeException(), writer);
 
         writer.flush();
     }

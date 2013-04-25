@@ -22,20 +22,15 @@ public class Jib implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
-        final Button runButton = new Button("Run!");
-        final TextArea source = new TextArea();
         final TextArea log = new TextArea();
-
-
-        RootPanel.get("source-div").add(source);
-        source.setCharacterWidth(80);
-        source.setVisibleLines(25);
-
         System.setOut(new TextAreaPrintStream(log));
+        System.setErr(System.out);
         RootPanel.get("log-div").add(log);
         log.setCharacterWidth(80);
         log.setVisibleLines(25);
+        log.setReadOnly(true);
 
+        final Button runButton = new Button("Run!");
         RootPanel.get().add(runButton);
         runButton.addStyleName("runButton");
 
@@ -43,7 +38,7 @@ public class Jib implements EntryPoint {
             @Override
             public void onClick(ClickEvent event) {
                 log.setValue("");
-                String code = source.getValue();
+                String code = getSourceCode();
                 String className = Main.getClassName(code);
 
                 Main.compile(className + ".java", code);
@@ -52,8 +47,8 @@ public class Jib implements EntryPoint {
                 if (fs.exists(classFile)) {
                     byte [] bytecode = fs.readFile(classFile);
                     System.out.print("Magic number: 0x");
-                    for (int i = 0; i < 8; i++) {
-                        System.out.print(""+(char)bytecode[i]);
+                    for (int i = 0; i < 4; i++) {
+                        System.out.print(Integer.toHexString(bytecode[i] & 0xFF));
                     }
                     System.out.println();
                 } else {
@@ -62,4 +57,8 @@ public class Jib implements EntryPoint {
             }
         });
     }
+
+    private native String getSourceCode() /*-{
+        return $wnd.editor.getCode();
+    }-*/;
 }

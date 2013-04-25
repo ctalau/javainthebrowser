@@ -40,9 +40,9 @@ public class PrintWriter extends Writer {
         };
     }
 
-    public java.io.PrintStream getPrintStream() {
-        return System.out;
-    }
+//    public java.io.PrintStream getPrintStream() {
+//        return System.out;
+//    }
 
     @Override
     public String toString() {

@@ -37,6 +37,7 @@ import static javac.com.sun.tools.javac.main.OptionName.X;
 import gwtjava.security.DigestInputStream;
 import gwtjava.security.MessageDigest;
 import gwtjava.statics.SClass;
+import gwtjava.statics.SException;
 import gwtjava.lang.OutOfMemoryError;
 import gwtjava.lang.StackOverflowError;
 
@@ -503,7 +504,7 @@ public class Main {
     void bugMessage(Throwable ex) {
         Log.printLines(out, getLocalizedString("msg.bug",
                                                JavaCompiler.version()));
-        ex.printStackTrace(out.getPrintStream());
+        SException.printStackTrace(ex, System.err);
     }
 
     /** Print a message reporting a fatal error.
@@ -511,7 +512,7 @@ public class Main {
     void feMessage(Throwable ex) {
         Log.printLines(out, ex.getMessage());
         if (ex.getCause() != null && options.isSet("dev")) {
-            ex.getCause().printStackTrace(out.getPrintStream());
+            SException.printStackTrace(ex.getCause(), out);
         }
     }
 
@@ -519,7 +520,7 @@ public class Main {
      */
     void ioMessage(Throwable ex) {
         Log.printLines(out, getLocalizedString("msg.io"));
-        ex.printStackTrace(out.getPrintStream());
+        SException.printStackTrace(ex, out);
     }
 
     /** Print a message reporting an out-of-resources error.
@@ -527,7 +528,7 @@ public class Main {
     void resourceMessage(Throwable ex) {
         Log.printLines(out, getLocalizedString("msg.resource"));
 //      System.out.println("(name buffer len = " + Name.names.length + " " + Name.nc);//DEBUG
-        ex.printStackTrace(out.getPrintStream());
+        SException.printStackTrace(ex, out);
     }
 
     /** Print a message reporting an uncaught exception from an
@@ -536,7 +537,7 @@ public class Main {
     void apMessage(AnnotationProcessingError ex) {
         Log.printLines(out,
                        getLocalizedString("msg.proc.annotation.uncaught.exception"));
-        ex.getCause().printStackTrace(out.getPrintStream());
+        SException.printStackTrace(ex.getCause(), out);
     }
 
     /** Display the location and checksum of a class. */

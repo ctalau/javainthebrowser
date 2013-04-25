@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import gwtjava.statics.SClass;
+import gwtjava.statics.SException;
 import gwtjava.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -839,7 +840,7 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
             return false;
         } catch (CompletionFailure ex) {
             StringWriter out = new StringWriter();
-            ex.printStackTrace(new PrintWriter(out).getPrintStream());
+            SException.printStackTrace(ex, new PrintWriter(out));
             log.error("proc.cant.access", ex.sym, ex.getDetailValue(), out.toString());
             return false;
         } catch (ClientCodeException e) {

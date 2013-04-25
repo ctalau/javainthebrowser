@@ -1,5 +1,7 @@
 build
-war
+war/jib/
+war/WEB-INF/classes/
+war/WEB-INF/deploy/
 gwt-unitCache/
 tools/extractjre/bin/
 tools/extractjre/out/
