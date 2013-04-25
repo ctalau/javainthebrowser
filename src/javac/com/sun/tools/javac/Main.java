@@ -28,13 +28,12 @@ package javac.com.sun.tools.javac;
 import gwtjava.io.fs.FileSystem;
 
 public class Main {
-    public static void compile(String sourceFile) {
-        String className = getClassName(sourceFile) + ".java";
+    public static void compile(String fileName, String code) {
         FileSystem fs = FileSystem.instance();
         fs.reset();
-        fs.addFile(className, sourceFile);
+        fs.addFile(fileName, code);
 
-        new javac.com.sun.tools.javac.main.Main("javac").compile(new String[] { className });
+        new javac.com.sun.tools.javac.main.Main("javac").compile(new String[] { fileName });
     }
 
     public static String getClassName(String content) {

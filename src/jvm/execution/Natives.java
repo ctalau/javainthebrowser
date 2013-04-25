@@ -182,22 +182,6 @@ public class Natives {
         }
     }
 
-    private static class NativeConsoleWrite extends JNativeMethod1<Void, Integer> {
-        @Override
-        public Void call(Integer arg1) {
-            System.out.write(arg1);
-            return null;
-        }
-    }
-
-    private static class NativeConsoleFlush extends JNativeMethod0<Void> {
-        @Override
-        protected Void call() {
-            System.out.flush();
-            return null;
-        }
-    }
-
     private static class NativeDefault extends JNativeMethod {
         @Override
         public Object call(Object... args) {
@@ -238,8 +222,6 @@ public class Natives {
         methods.put("java/lang/System/setOut0(Ljava/io/PrintStream;)V",
                 new NativeSetOut());
 
-        methods.put("java/io/ConsoleOutputStream/flush0()V", new NativeConsoleFlush());
-        methods.put("java/io/ConsoleOutputStream/write0(I)V", new NativeConsoleWrite());
         methods.put("sun/misc/Unsafe/freeMemory(J)V", new NativeDoFreeMemory());
         methods.put("sun/misc/Unsafe/getByte(J)B", new NativeGetByte());
         methods.put("sun/misc/Unsafe/putLong(JJ)V", new NativePutLong());
@@ -247,6 +229,10 @@ public class Natives {
         methods.put("java/lang/System/nanoTime()J", new NativeNanoTime());
         methods.put("java/lang/System/currentTimeMillis()J", new NativeCurrentTime());
 
+    }
+
+    public static void registerConsoleOut(JNativeMethod1<Void, Integer> out) {
+        methods.put("java/io/ConsoleOutputStream/write0(I)V", out);
     }
 
     public static JNativeMethod getNativeMethod(String name) {

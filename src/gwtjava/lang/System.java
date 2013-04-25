@@ -35,6 +35,10 @@ public class System {
         out = ps;
     }
 
+    public static void setErr(PrintStream ps) {
+        err = ps;
+    }
+
     public static String getProperty(String key) {
         if (key.equals("sun.boot.class.path")) {
             return "";

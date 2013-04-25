@@ -1,7 +1,6 @@
+-- Assign onClick handler to button
 -- replace System.out from JVM Natives
--- class loader based on fs
 -- Make a full JRE using also the Unsafe and ConsoleOutputStream
--- Assign onClick handler
 
 FileSystem
  - make a tool to create an archive of symbols.

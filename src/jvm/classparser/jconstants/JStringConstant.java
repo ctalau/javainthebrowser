@@ -96,7 +96,7 @@ public class JStringConstant extends JDataConstant {
         ArrayRepr value = (ArrayRepr) scst.getField(valueField);
         char [] ret = new char[value.length()];
         for (int i = 0; i < value.length(); i++) {
-            ret[i] = (char) value.get(i);
+            ret[i] = (Character) value.get(i);
         }
         return new String(ret);
     }

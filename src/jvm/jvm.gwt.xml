@@ -2,6 +2,8 @@
 <module rename-to='jvm'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+  <inherits name='gwtjava.gwtjava' />
+
 
   <!-- Inherit the default GWT style sheet.  You can change       -->
   <!-- the theme of your GWT application by uncommenting          -->
@@ -12,6 +14,8 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='com/jsjvm'/>
+  <source path='classparser'/>
+  <source path='execution'/>
+  <source path='util'/>
 
 </module>

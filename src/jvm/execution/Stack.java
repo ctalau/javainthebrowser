@@ -24,14 +24,10 @@ public class Stack {
      *  Push methods
      */
     protected Stack push(Object o){
-        stack[top++] = o;
-        return this;
+        return push(o, 0);
     }
 
     protected Stack push(Object o, int skip){
-        if (top > stack.length - 100) {
-            throw new StackOverflowError();
-        }
         stack[top++] = o;
         top += skip;
         return this;
@@ -115,7 +111,7 @@ public class Stack {
         sbf.append("locals: ").append(locals).append('\n');
 
         for (int i = 0; i < top; ++i) {
-            sbf.append(String.format("%02", i));
+            sbf.append(i);
             sbf.append(": ");
             sbf.append(stack[i]);
             sbf.append('\n');

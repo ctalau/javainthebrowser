@@ -4,6 +4,7 @@ import jvm.util.DataInputStream;
 
 import gwtjava.io.File;
 import gwtjava.io.fs.FileSystem;
+import gwtjava.lang.System;
 import jvm.classparser.JClass;
 import jvm.execution.JClassLoader;
 

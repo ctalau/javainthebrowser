@@ -1,5 +1,8 @@
 package jvm.execution;
 
+import gwtjava.statics.SException;
+import gwtjava.lang.System;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -157,11 +160,11 @@ public class ExecutionEngine extends Stack {
                         Object val = arrayRef.get(idx);
                         // All the values should be loaded as integer
                         if (opcode == OPCodes.OP_caload) {
-                            val = (int) (char) val;
+                            val = (int) ((Character) val).charValue();
                         } else if (opcode == OPCodes.OP_saload) {
-                            val = (int) (short) val;
+                            val = ((Short) val).intValue();
                         } else if (opcode == OPCodes.OP_baload) {
-                            val = (int) (byte) val;
+                            val = ((Byte) val).intValue();
                         }
 
                         push(val, skip);
@@ -837,7 +840,7 @@ public class ExecutionEngine extends Stack {
         } catch (Throwable e) {
             pc = ppc;
             printVMStackTrace(e);
-            throw e;
+            SException.printStackTrace(e, System.out);
         }
     }
 
