@@ -30,9 +30,13 @@
     <div>
       <div style="float: left; width: 100%; border: 1px solid black; padding: 4px;">
         <textarea id="source" rows="25">
-public class Example {
+import java.io.ConsolePrintStream;
+
+public class HelloWorld {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        System.setOut(new ConsolePrintStream());
+
+        System.out.print("Hello, World!");
     }
 }
         </textarea>

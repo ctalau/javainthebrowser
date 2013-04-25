@@ -12,7 +12,7 @@ public class JibClassLoader extends JClassLoader {
     private static FileSystem fs = FileSystem.instance();
 
     @Override
-    public JClass loadClass(String name) {
+    protected JClass loadClass(String name) {
         for (String path : System.getProperty("java.class.path").split(File.pathSeparator)) {
             String fileName = path + name + ".class";
             if (fs.exists(fileName)) {
@@ -21,6 +21,6 @@ public class JibClassLoader extends JClassLoader {
                 return jc;
             }
         }
-        throw new AssertionError();
+        throw new AssertionError(name);
     }
 }

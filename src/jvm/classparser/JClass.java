@@ -64,7 +64,6 @@ public class JClass implements ObjectRepr {
         this.flags = (short) is.readUShort();
 
         this.name = cpool.getClassName(is.readUShort());
-
         String superClassName = cpool.getClassName(is.readUShort());
         if (superClassName != null) {
             this.superClass = JClassLoader.getInstance().getClassByName(

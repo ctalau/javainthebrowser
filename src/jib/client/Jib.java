@@ -48,7 +48,8 @@ public class Jib implements EntryPoint {
                 if (ok) {
                     System.out.println("Compiled!");
                     printMagic(fs.readFile(fs.cwd() + className + ".class"));
-                    JVM.run(fs.cwd() + className);
+                    System.out.println("Output:");
+                    JVM.run(className);
                 }
             }
         });

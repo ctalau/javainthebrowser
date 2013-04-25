@@ -25,8 +25,8 @@ public class TestClassLoader extends JClassLoader {
     }
 
     private static final int MB = 1000 * 1000;
-    private static final String [] PATH = {
-            "tools/extractjre/rt2/", "test-classes/"};
+    private static final String [] PATH = { "test-classes/",
+            "tools/extractjre/rt2/"};
     private static final String RT_PATH = "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/";
     private static final String RT_JAR = "rt.jar";
 

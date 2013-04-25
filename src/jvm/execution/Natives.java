@@ -169,9 +169,11 @@ public class Natives {
         public Void call(ObjectRepr ps) {
             try {
                 StaticMembers.putStaticField(new JMemberConstant(
-                        new JClassConstant("java/lang/System"), "out", "Ljava/io/PrintStream;"), ps);
+                        new JClassConstant("java/lang/System"),
+                        "out", "Ljava/io/PrintStream;"), ps);
             } catch (JClassNotInitializedException e) {
-                throw new AssertionError();
+                throw new AssertionError(e.jClass.getStatus());
+
             }
             return null;
         }

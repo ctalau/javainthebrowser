@@ -43,7 +43,7 @@ public abstract class JClassLoader {
         return jcc.getJClass();
     }
 
-    public abstract JClass loadClass(String name);
+    protected abstract JClass loadClass(String name);
 
     /**
      * Methods to deal with system classes.
