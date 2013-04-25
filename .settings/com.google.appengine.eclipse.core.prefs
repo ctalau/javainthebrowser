@@ -5,3 +5,4 @@ gaeDatanucleusVersion=v2
 gaeHrdEnabled=true
 googleCloudSqlEnabled=false
 localDevMySqlEnabled=true
+validationExclusions=**

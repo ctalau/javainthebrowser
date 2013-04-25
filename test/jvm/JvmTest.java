@@ -11,10 +11,10 @@ public class JvmTest {
     @Test
     public void test() {
         JClassLoader.setInstance(new TestClassLoader());
-        run("Smth");
+        run("jvm/sample/HelloWorld");
     }
 
     private void run(String name){
-        ExecutionEngine.getInstance().bootstrap("/tmp/" + name);
+        ExecutionEngine.getInstance().bootstrap(name);
     }
 }

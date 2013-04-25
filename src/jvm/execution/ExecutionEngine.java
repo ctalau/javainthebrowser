@@ -1,20 +1,20 @@
 package jvm.execution;
 
-import gwtjava.statics.SException;
 import gwtjava.lang.System;
+import gwtjava.statics.SException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import jvm.classparser.JClass;
-import jvm.classparser.JType;
 import jvm.classparser.JAttribute.CodeAttribute.ExceptionDescriptor;
+import jvm.classparser.JClass;
 import jvm.classparser.JClass.Status;
 import jvm.classparser.JMember.JBytecodeMethod;
 import jvm.classparser.JMember.JMethod;
 import jvm.classparser.JMember.JNativeMethod;
+import jvm.classparser.JType;
 import jvm.classparser.jconstants.JClassConstant;
 import jvm.classparser.jconstants.JDataConstant;
 import jvm.classparser.jconstants.JMemberConstant;
@@ -752,7 +752,6 @@ public class ExecutionEngine extends Stack {
                                     break;
                                 }
                             }
-
                         } else {
                             JMethod dm = obj.dispatchMethod(m);
                             call(dm);
@@ -1067,7 +1066,6 @@ public class ExecutionEngine extends Stack {
         try {
              ret = m.call(args.toArray());
         } catch (UnsupportedOperationException e) {
-//            System.err.println("***" + m.getFullName());
             return;
         }
 

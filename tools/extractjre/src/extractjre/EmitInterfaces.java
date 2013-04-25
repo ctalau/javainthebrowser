@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,30 +22,38 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class EmitInterfaces {
 
-    String root = "rt/"; // Root of the unzipped rt.jar (only classes that we want to include)
+    String root = "rt2/"; // Root of the unzipped rt.jar (only classes that we want to include)
     String outRoot = "out/";
 
     public static void main(String[] args) throws IOException {
         EmitInterfaces e = new EmitInterfaces();
-        e.emitJavaSource(new PrintStream(new FileOutputStream("FileSystemContent.java")));
+        e.emitJavaSource(new PrintStream(new FileOutputStream("FileSystemContent.java")), false);
     }
 
-    public void emitJavaSource(PrintStream out) throws IOException {
+    public void emitJavaSource(PrintStream out, boolean strip) throws IOException {
         out.println("package gwtjava.io.fs;");
         out.println("import java.util.HashMap;");
         out.println("class FileSystemContent {");
         out.println("  public static HashMap<String, String> files = new HashMap<String, String>();");
         out.println("  static {");
-        emitJavaSource(new File(root), out);
+        emitJavaSource(new File(root), out, strip);
         out.println("  }");
         out.println("}");
     }
 
-    public void emitJavaSource(File dir, PrintStream out) throws IOException {
+    public void emitJavaSource(File dir, PrintStream out, boolean strip) throws IOException {
         if (dir.isFile()) {
             try {
                 String classPath = dir.getPath().substring(root.length());
-                byte [] bytecode = emit(classPath);
+                byte [] bytecode;
+                if (strip) {
+                    bytecode = emit(classPath);
+                } else {
+                    RandomAccessFile in= new RandomAccessFile(root + classPath, "r");
+                    bytecode =  new byte[(int) in.length()];
+                    in.readFully(bytecode);
+                    in.close();
+                }
                 if (bytecode != null) {
                     out.println("    files.put(\"" + classPath + "\", \"" + hexEncode(bytecode) + "\");");
                 }
@@ -55,7 +64,7 @@ public class EmitInterfaces {
             }
         } else {
             for (File child : dir.listFiles()) {
-                emitJavaSource(child, out);
+                emitJavaSource(child, out, strip);
             }
         }
     }
@@ -101,6 +110,7 @@ public class EmitInterfaces {
         ClassReader cr=new ClassReader(in);
         ClassNode classNode=new ClassNode();
         cr.accept(classNode, 0);
+        in.close();
 
         if ((classNode.access & Opcodes.ACC_PUBLIC) == 0 && classPath.contains("$")) {
             return null;

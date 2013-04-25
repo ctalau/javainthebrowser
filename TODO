@@ -1,4 +1,5 @@
--- replace System.out from JVM Natives
+-- leave setOut(new ConsolePrintStream())
+-- note down the JRE classes used. include those in the distribution.
 -- Make a full JRE using also the Unsafe and ConsoleOutputStream
 
 FileSystem

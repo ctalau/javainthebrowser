@@ -1,9 +1,8 @@
 package jvm.execution;
 
-import java.util.HashMap;
-
-import gwtjava.io.IOException;
 import gwtjava.lang.System;
+
+import java.util.HashMap;
 
 import jvm.classparser.JClass;
 import jvm.classparser.JMember.JNativeMethod;
@@ -182,11 +181,6 @@ public class Natives {
         @Override
         public Void call(Integer arg1) {
             System.out.print((char) arg1.intValue());
-            try {
-                System.out.flush();
-            } catch (IOException e) {
-                throw new AssertionError();
-            }
             return null;
         }
     }
@@ -237,8 +231,9 @@ public class Natives {
                 new NativeNewInstance());
         methods.put("java/lang/System/setOut0(Ljava/io/PrintStream;)V",
                 new NativeSetOut());
+        methods.put("java/io/ConsolePrintStream$ConsoleOutputStream/write0(I)V",
+                new NativeConsoleWrite());
 
-        methods.put("java/io/ConsoleOutputStream/write0(I)V", new NativeConsoleWrite());
         methods.put("sun/misc/Unsafe/freeMemory(J)V", new NativeDoFreeMemory());
         methods.put("sun/misc/Unsafe/getByte(J)B", new NativeGetByte());
         methods.put("sun/misc/Unsafe/putLong(JJ)V", new NativePutLong());

@@ -25,12 +25,11 @@ public class TestClassLoader extends JClassLoader {
     }
 
     private static final int MB = 1000 * 1000;
-    private static final String PATH =
-            "/home/ctalau/workspace/jsvm/bin/";
+    private static final String [] PATH = {
+            "tools/extractjre/rt2/", "test-classes/"};
     private static final String RT_PATH = "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/";
     private static final String RT_JAR = "rt.jar";
 
-    public static final String[] CLASS_PATH = { PATH, RT_PATH, };
 
     private static byte[] readClassFromJar(String jarPath, String name) {
         try {
@@ -53,11 +52,15 @@ public class TestClassLoader extends JClassLoader {
 
     public static byte[] getClassBytes(String className)
             throws IllegalArgumentException {
-        String path = PATH + className + ".class";
-        byte[] data = readClassFromFile(path);
-        if (data == null) {
-            data = readClassFromJar(RT_PATH + RT_JAR, className + ".class");
+        byte[] data = null;
+        for (String dir : PATH){
+            String path = dir + className + ".class";
+            data = readClassFromFile(path);
+            if (data != null) {
+                return data;
+            }
         }
+        data = readClassFromJar(RT_PATH + RT_JAR, className + ".class");
         return data;
     }
 
