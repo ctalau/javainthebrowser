@@ -21,6 +21,10 @@ h1 {
   width: 400px;
 }
 
+.logBox {
+    padding: 0px;
+    width: 100%;
+}
 .dialogVPanel {
   margin: 5px;
 }

@@ -14,7 +14,7 @@ public class JibClassLoader extends JClassLoader {
     @Override
     public JClass loadClass(String name) {
         for (String path : System.getProperty("java.class.path").split(File.pathSeparator)) {
-            String fileName = path + name;
+            String fileName = path + name + ".class";
             if (fs.exists(fileName)) {
                 byte [] content = fs.readFile(fileName);
                 JClass jc = new JClass(new DataInputStream(content));

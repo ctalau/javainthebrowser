@@ -27,7 +27,7 @@ public class Jib implements EntryPoint {
 
         final TextArea log = new TextArea();
         RootPanel.get("log-div").add(log);
-        log.setWidth("100%");
+        log.addStyleName("logBox");
         log.setVisibleLines(10);
         log.setReadOnly(true);
         System.setOut(new TextAreaPrintStream(log));

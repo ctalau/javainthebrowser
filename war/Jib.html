@@ -28,11 +28,11 @@
     <h1>Java in the Browser Demo</h1>
 
     <div>
-      <div style="float: left; width: 100%; border: 1px solid black;">
+      <div style="float: left; width: 100%; border: 1px solid black; padding: 4px;">
         <textarea id="source" rows="25">
 public class Example {
-    public String f() {
-        return "";
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
     }
 }
         </textarea>
@@ -49,7 +49,7 @@ public class Example {
       editor = CodeMirror.fromTextArea(document.getElementById('source'), {
         parserfile: ["tokenizejava.js", "parsejava.js"],
         stylesheet: "lib/javacolors.css",
-        path: "lib/", tabMode : "shift"
+        path: "lib/", tabMode : "shift",
       });
     </script>
 
