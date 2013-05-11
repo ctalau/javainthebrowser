@@ -42,8 +42,6 @@ import jvm.util.DataInputStream;
 public class ExecutionEngine extends Stack {
     public static String BOOT_METHOD_DESCRIPTOR = "main([Ljava/lang/String;)V";
 
-    private JClassLoader jcl = JClassLoader.getInstance();
-
     // Next instruction to be executed
     private int pc = -1;
     private JBytecodeMethod m = null;
@@ -637,7 +635,7 @@ public class ExecutionEngine extends Stack {
                     case OPCodes.OP_anewarray: {
                         JClassConstant cst = crtClass
                                 .getClassConstant(nextShort());
-                        JClass jc = jcl.getClassByConstant(cst);
+                        JClass jc = cst.getJClass();
                         push(ObjectFactory.newArray(jc.getName(), popi()));
                         break;
                     }
@@ -668,7 +666,7 @@ public class ExecutionEngine extends Stack {
                     case OPCodes.OP_new: { // index of the classname
                         JClassConstant cst = crtClass
                                 .getClassConstant(nextShort());
-                        JClass jc = jcl.getClassByConstant(cst);
+                        JClass jc = cst.getJClass();
                         jc.ensureInitialized();
                         push(ObjectFactory.newObject(jc));
                         break;
@@ -856,7 +854,7 @@ public class ExecutionEngine extends Stack {
         this.locals = 0;
         this.top = 1;
 
-        this.jcl.loadSystemClasses();
+        JClassLoader.getInstance().loadSystemClasses();
         this.execute();
     }
 
@@ -999,8 +997,8 @@ public class ExecutionEngine extends Stack {
                     // same primitive type
                     return 1;
 
-                JClass childElemClass = jcl.getClassByName(JType.elemType(child
-                        .getName()));
+                JClass childElemClass = JClassLoader.getInstance()
+                        .getClassByName(JType.elemType(child.getName()));
                 if (isSuperclass(JType.elemType(namep), childElemClass) == 1)
                     return 1;
             }

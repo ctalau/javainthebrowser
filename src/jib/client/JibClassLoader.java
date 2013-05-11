@@ -18,6 +18,7 @@ public class JibClassLoader extends JClassLoader {
             if (fs.exists(fileName)) {
                 byte [] content = fs.readFile(fileName);
                 JClass jc = new JClass(new DataInputStream(content));
+                System.out.println("Loaded " + name);
                 return jc;
             }
         }

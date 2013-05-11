@@ -97,8 +97,8 @@ public class Natives {
         @Override
         public ObjectRepr call(Integer arg1) {
             if (count++ == 0) {
-                JClassLoader jcl = JClassLoader.getInstance();
-                return jcl.getClassByName("java/util/Properties");
+                return JClassLoader.getInstance()
+                        .getClassByName("java/util/Properties");
             } else {
                 throw new AssertionError();
             }

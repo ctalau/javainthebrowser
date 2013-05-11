@@ -7,7 +7,6 @@ import jvm.classparser.JClass;
 import jvm.classparser.JMember.JField;
 import jvm.classparser.JMember.JMethod;
 import jvm.classparser.jconstants.JMemberConstant;
-import jvm.execution.JClassLoader;
 import jvm.execution.objrepr.ObjectRepr;
 
 
@@ -68,8 +67,7 @@ public class JavaObjectRepr implements ObjectRepr  {
 
     @Override
     public JMethod dispatchNonVirtualMethod(JMemberConstant cm) {
-        JClassLoader jcl = JClassLoader.getInstance();
-        JClass jc = jcl.getClassByConstant(cm.getClassConstant());
+        JClass jc = cm.getClassConstant().getJClass();
         return getCachedJavaObject(jc).staticDispatchTable.get(cm.getMemberName());
     }
 

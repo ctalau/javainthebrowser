@@ -23,8 +23,6 @@ public class Jib implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
-        JVM.setClassLoader(new JibClassLoader());
-
         final TextArea log = new TextArea();
         RootPanel.get("log-div").add(log);
         log.addStyleName("logBox");
@@ -49,6 +47,8 @@ public class Jib implements EntryPoint {
                     System.out.println("Compiled!");
                     printMagic(fs.readFile(fs.cwd() + className + ".class"));
                     System.out.println("Output:");
+
+                    JVM.setClassLoader(new JibClassLoader());
                     JVM.run(className);
                 }
             }

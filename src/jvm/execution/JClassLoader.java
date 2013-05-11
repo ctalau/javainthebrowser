@@ -58,8 +58,8 @@ public abstract class JClassLoader {
     public static final String FLOAT_CLASS_NAME = "java/lang/Float";
     public static final String PSTREAM_CLASS_NAME = "java/io/PrintStream";
 
-    private static String[] systemClassNames = { STRING_CLASS_NAME};
-    private static String[] primitiveClassNames = { "int", "float", "double" };
+    private static final String[] systemClassNames = { STRING_CLASS_NAME};
+    private static final String[] primitiveClassNames = { "int", "float", "double" };
 
     /**
      * This method should be called prior to anything and given a continuation

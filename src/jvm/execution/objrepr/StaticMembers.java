@@ -21,8 +21,11 @@ import jvm.execution.JClassLoader.JClassNotInitializedException;
 public class StaticMembers {
     private static HashMap<String, Object> global = new HashMap<String, Object>();
     private static HashMap<String, JMethod> funct = new HashMap<String, JMethod>();
-    private static JClassLoader jcl = JClassLoader.getInstance();
 
+    public static void reset() {
+        global.clear();
+        funct.clear();
+    }
 
     public static void putStaticField(JMemberConstant fld, Object value) throws JClassNotInitializedException {
         ensureInitialized(fld.getClassConstant());
@@ -42,6 +45,7 @@ public class StaticMembers {
         JMethod m = funct.get(cm.getFullName());
 
         if (m == null) {
+            JClassLoader jcl = JClassLoader.getInstance();
             JClass jc = jcl.getClassByConstant(cm.getClassConstant());
             for (JMethod im : jc.getMethods()) {
                 if (im.isStatic()) {
@@ -55,6 +59,7 @@ public class StaticMembers {
     }
 
     private static void ensureInitialized(JClassConstant jcc) throws  JClassNotInitializedException {
+        JClassLoader jcl = JClassLoader.getInstance();
         JClass jc = jcl.getClassByConstant(jcc);
         jc.ensureInitialized();
     }

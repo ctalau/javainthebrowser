@@ -4,6 +4,7 @@ import gwtjava.io.fs.FileSystem;
 import jib.client.JibClassLoader;
 import jvm.execution.ExecutionEngine;
 import jvm.execution.JClassLoader;
+import jvm.execution.objrepr.StaticMembers;
 
 import org.junit.Test;
 
@@ -17,11 +18,13 @@ public class JvmTest {
     @Test
     public void testEmulatedFS() {
         FileSystem.instance().reset();
-        JClassLoader.setInstance(new JibClassLoader());
+        run("jvm/sample/HelloWorld");
         run("jvm/sample/HelloWorld");
     }
 
     private void run(String name){
+        JClassLoader.setInstance(new JibClassLoader());
+        StaticMembers.reset();
         ExecutionEngine.getInstance().bootstrap(name);
     }
 }
