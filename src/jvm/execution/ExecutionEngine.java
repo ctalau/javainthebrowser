@@ -688,9 +688,6 @@ public class ExecutionEngine extends Stack {
                     }
 
                     case OPCodes.OP_getfield: {
-                        // XXX: the class of the field may be any superclass of
-                        // the
-                        // class of the object.
                         JMemberConstant fld = crtClass.getMember(nextShort());
                         Object value = popo().getField(fld);
                         push(value, fld.getSize() - 1);

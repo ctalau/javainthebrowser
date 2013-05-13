@@ -18,4 +18,8 @@ public class ConsolePrintStream extends PrintStream {
         super(new ConsoleOutputStream());
     }
 
+    public static void register() {
+        System.setOut(new ConsolePrintStream());
+    }
+
 }

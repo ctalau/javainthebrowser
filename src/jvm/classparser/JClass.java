@@ -118,12 +118,18 @@ public class JClass implements ObjectRepr {
      * Factory method to obtain the boot class
      */
     public static JClass createBootClass(final String bootClassName) {
+        final JClassConstant consolePrintStream =
+                new JClassConstant("java/io/ConsolePrintStream");
+
         return new JClass() {
             {
                 this.cpool = new JConstantPool();
                 this.cpool.add(null);
                 this.cpool.add(JMemberConstant.getBootMethodRef(bootClassName));
                 this.cpool.add(new JClassConstant(bootClassName));
+                this.cpool.add(new JClassConstant(JClassLoader.STRING_CLASS_NAME));
+                this.cpool.add(consolePrintStream);
+                this.cpool.add(new JMemberConstant(consolePrintStream, "register", "()V"));
                 this.getMethods().add(JMethod.getBootMehtod());
             }
 

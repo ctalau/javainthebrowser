@@ -129,24 +129,31 @@ public class JAttribute {
                 byte [] bytecode = {
 
                 /*
+                 * Register the output stream.
+                 */
+                OPCodes.OP_invokestatic,
+                0,
+                5,
+
+                /*
                  *  Create a String array of size 0; as a side effect,
                  *  the java/lang/String class is loaded.
                  */
-                OPCodes.OP_iconst_0,        // 0
-                OPCodes.OP_anewarray,       // 1
-                0,                          // 2
-                2,                          // 3
+                OPCodes.OP_iconst_0,
+                OPCodes.OP_anewarray,
+                0,
+                3,
 
                 // store the array in the first local variable (argument)
-                OPCodes.OP_astore_0,        // 4
+                OPCodes.OP_astore_0,
 
                 // invoke the <initmethod> (the first one in the constant pool)
-                OPCodes.OP_invokestatic,    // 5
-                0,                          // 6
-                1,                          // 7
+                OPCodes.OP_invokestatic,
+                0,
+                1,
 
                 // implementation dependent opcode to exit the VM
-                OPCodes.OP_impdep1,         // 8
+                OPCodes.OP_impdep1,
                 };
                 this.bytecode = bytecode;
 
