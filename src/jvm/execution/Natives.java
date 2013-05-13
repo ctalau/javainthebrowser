@@ -122,7 +122,18 @@ public class Natives {
     private static class NativeDoPrivileged extends JNativeMethod1<ObjectRepr, ObjectRepr> {
         @Override
         public ObjectRepr call(ObjectRepr arg1) {
-          return JStringConstant.createString("US-ASCII");
+            JMemberConstant thePropField = new JMemberConstant(
+                    new JClassConstant("sun/security/action/GetPropertyAction"),
+                    "theProp", "Ljava/lang/String;");
+            ObjectRepr opNameRepr = (ObjectRepr) arg1.getField(thePropField);
+            String opName = JStringConstant.toString(opNameRepr);
+
+            if (opName.equals("file.encoding")) {
+                return JStringConstant.createString("US-ASCII");
+            } else if (opName.equals("line.separator")){
+                return JStringConstant.createString("\n");
+            }
+            throw new UnsupportedOperationException();
         }
     }
 

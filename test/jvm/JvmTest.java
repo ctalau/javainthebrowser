@@ -4,29 +4,30 @@ import gwtjava.io.fs.FileSystem;
 import jib.client.JibClassLoader;
 import jvm.execution.ExecutionEngine;
 import jvm.execution.JClassLoader;
-import jvm.execution.objrepr.StaticMembers;
 
 import org.junit.Test;
 
 public class JvmTest {
     @Test
-    public void testNativeFS() {
-        JClassLoader.setInstance(new TestClassLoader());
-        run("jvm/sample/HelloWorld");
+    public void testNativeFS() throws InstantiationException, IllegalAccessException {
+        run("jvm/sample/HelloWorld", TestClassLoader.class);
     }
 
     @Test
-    public void testEmulatedFS() {
+    public void testEmultatedFS() throws InstantiationException, IllegalAccessException {
         FileSystem.instance().reset();
-        run("jvm/sample/HelloWorld");
-        System.out.println();
-        System.out.println("*********************************");
-        run("jvm/sample/HelloWorld");
+        run("jvm/sample/HelloWorld", JibClassLoader.class);
     }
 
-    private void run(String name){
-        JClassLoader.setInstance(new JibClassLoader());
-        StaticMembers.reset();
+    @Test
+    public void testRestart() throws InstantiationException, IllegalAccessException {
+        FileSystem.instance().reset();
+        run("jvm/sample/HelloWorld", JibClassLoader.class);
+        run("jvm/sample/HelloWorld", JibClassLoader.class);
+    }
+
+    private void run(String name, Class<? extends JClassLoader> cls) throws InstantiationException, IllegalAccessException{
+        JClassLoader.setInstance(cls.newInstance());
         ExecutionEngine exec = new ExecutionEngine();
         exec.bootstrap(name);
     }

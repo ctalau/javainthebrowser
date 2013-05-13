@@ -897,7 +897,6 @@ public class ExecutionEngine extends Stack {
      * Function return
      */
     private boolean ret() {
-        // System.out.println("Ret  " + m.getFullName());
         if (m.getMemberName().equals(JMethod.CLINIT_METHOD_NAME)) {
             crtClass.setStatus(Status.INITIALIZED); // XXX: or initialized by
                                                     // error if it is called in
@@ -945,6 +944,7 @@ public class ExecutionEngine extends Stack {
                 break;
             stackTrace.add(getStackFrame());
 
+            // The stack is empty.
             if (!this.ret()) {
                 Object message = exn.getField(new JMemberConstant(
                         new JClassConstant("java/lang/Throwable"),
