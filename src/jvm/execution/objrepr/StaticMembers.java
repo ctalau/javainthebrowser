@@ -7,7 +7,6 @@ import jvm.classparser.JType;
 import jvm.classparser.JMember.JMethod;
 import jvm.classparser.jconstants.JClassConstant;
 import jvm.classparser.jconstants.JMemberConstant;
-import jvm.execution.JClassLoader;
 import jvm.execution.JClassLoader.JClassNotInitializedException;
 
 
@@ -45,8 +44,7 @@ public class StaticMembers {
         JMethod m = funct.get(cm.getFullName());
 
         if (m == null) {
-            JClassLoader jcl = JClassLoader.getInstance();
-            JClass jc = jcl.getClassByConstant(cm.getClassConstant());
+            JClass jc = cm.getClassConstant().getJClass();
             for (JMethod im : jc.getMethods()) {
                 if (im.isStatic()) {
                     funct.put(im.getFullName(), im);
@@ -59,8 +57,6 @@ public class StaticMembers {
     }
 
     private static void ensureInitialized(JClassConstant jcc) throws  JClassNotInitializedException {
-        JClassLoader jcl = JClassLoader.getInstance();
-        JClass jc = jcl.getClassByConstant(jcc);
-        jc.ensureInitialized();
+        jcc.getJClass().ensureInitialized();
     }
 }

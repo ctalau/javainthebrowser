@@ -150,4 +150,8 @@ public class JavaObjectRepr implements ObjectRepr  {
         return ret;
     }
 
+    public static void reset() {
+        cache.clear();
+    }
+
 }

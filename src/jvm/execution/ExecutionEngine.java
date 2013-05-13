@@ -847,6 +847,8 @@ public class ExecutionEngine extends Stack {
      * @throws JClassNotLoadedException
      */
     public void bootstrap(final String bootClassName) {
+        StaticMembers.reset();
+        ObjectFactory.reset();
         this.crtClass = JClass.createBootClass(bootClassName);
         this.m = JMethod.getBootMehtod();
         this.pc = 0;
@@ -1038,15 +1040,6 @@ public class ExecutionEngine extends Stack {
 
     private int nextByte() {
         return (int) ((int) (m.getCode().bytecode[pc++]) & 0xFF);
-    }
-
-    /*
-     * Singleton instance
-     */
-    private static ExecutionEngine inst = new ExecutionEngine();
-
-    public static ExecutionEngine getInstance() {
-        return inst;
     }
 
     /**

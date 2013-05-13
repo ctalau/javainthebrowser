@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import jvm.classparser.JClass;
 import jvm.classparser.JType;
-import jvm.classparser.jconstants.JClassConstant;
 
 
 /**
@@ -34,13 +33,6 @@ public abstract class JClassLoader {
 
         }
         return ret;
-    }
-
-    /**
-     * Return a class and cache it also in the JClassConstant object.
-     */
-    public JClass getClassByConstant(JClassConstant jcc) {
-        return jcc.getJClass();
     }
 
     protected abstract JClass loadClass(String name);

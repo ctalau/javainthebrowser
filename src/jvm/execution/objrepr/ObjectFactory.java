@@ -5,6 +5,10 @@ import jvm.execution.objrepr.java.JavaArrayRepr;
 import jvm.execution.objrepr.java.JavaObjectRepr;
 
 public class ObjectFactory {
+    public static void reset() {
+        JavaObjectRepr.reset();
+    }
+
     public static ObjectRepr newObject(JClass jc) {
         return JavaObjectRepr.newJavaObjectRepr(jc);
     }

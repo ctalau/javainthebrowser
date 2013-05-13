@@ -19,12 +19,15 @@ public class JvmTest {
     public void testEmulatedFS() {
         FileSystem.instance().reset();
         run("jvm/sample/HelloWorld");
+        System.out.println();
+        System.out.println("*********************************");
         run("jvm/sample/HelloWorld");
     }
 
     private void run(String name){
         JClassLoader.setInstance(new JibClassLoader());
         StaticMembers.reset();
-        ExecutionEngine.getInstance().bootstrap(name);
+        ExecutionEngine exec = new ExecutionEngine();
+        exec.bootstrap(name);
     }
 }
