@@ -1,3 +1,10 @@
+/**                                                       
+ * This file was changed in order to make it compilable   
+ * with GWT and to integrate it in the JavaInTheBrowser   
+ * project (http://javainthebrowser.appspot.com).         
+ *                                                        
+ * Date: 2013-05-14                                            
+ */                                                       
 
 package javac.com.sun.tools.javac.file;
 

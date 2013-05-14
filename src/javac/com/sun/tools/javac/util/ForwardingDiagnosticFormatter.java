@@ -1,3 +1,10 @@
+/**                                                       
+ * This file was changed in order to make it compilable   
+ * with GWT and to integrate it in the JavaInTheBrowser   
+ * project (http://javainthebrowser.appspot.com).         
+ *                                                        
+ * Date: 2013-05-14                                            
+ */                                                       
 /*
  * Copyright (c) 2009, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
