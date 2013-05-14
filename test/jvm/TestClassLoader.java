@@ -15,6 +15,7 @@ public class TestClassLoader extends JClassLoader {
 
     @Override
     public JClass loadClass(String name) {
+        System.out.println(name);
         byte [] data = getClassBytes(name);
         if (data == null) {
             throw new AssertionError(name);
