@@ -1,7 +1,6 @@
-
-
-FileSystem
- - make a tool to create an archive of symbols.
- - convert it to hex-encoded JSON.
- - load it.
- - load the source file contents from a String.
+- internationalization
+- vmclasses: JString, Exceptions, jclass extend JavaObject
+- correctness tests
+- benchmarks
+- speed improvements
+- dependency injection

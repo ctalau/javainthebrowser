@@ -8,6 +8,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import jvm.classparser.JClass;
+import jvm.classparser.jconstants.JClassConstant;
 import jvm.execution.JClassLoader;
 import jvm.util.DataInputStream;
 
@@ -15,19 +16,29 @@ public class TestClassLoader extends JClassLoader {
 
     @Override
     public JClass loadClass(String name) {
-        System.out.println(name);
         byte [] data = getClassBytes(name);
         if (data == null) {
             throw new AssertionError(name);
         }
         assert (data != null);
         JClass jc = new JClass(new DataInputStream(data));
+        printSuperClasses(jc);
         return jc;
     }
 
+    public void printSuperClasses(JClass jc) {
+        if (jc == null) {
+            return;
+        }
+        System.out.println(jc.getName());
+        printSuperClasses(jc.getSuperClass());
+        for (JClassConstant intf : jc.getInterfaces()) {
+            printSuperClasses(intf.getJClass());
+        }
+    }
+
     private static final int MB = 1000 * 1000;
-    private static final String [] PATH = { "test-classes/",
-            "tools/extractjre/rt2/"};
+    private static final String [] PATH = { "test-classes/"};
     private static final String RT_PATH = "/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/";
     private static final String RT_JAR = "rt.jar";
 
