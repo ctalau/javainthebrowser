@@ -1,4 +1,5 @@
 {
+  "installCommand": "echo 'skip install'",
   "buildCommand": "mvn -DskipTests package",
   "outputDirectory": "target/war",
   "framework": null,

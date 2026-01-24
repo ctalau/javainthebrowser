@@ -24,32 +24,29 @@ jobs:
           cache: "maven"
 
       - name: Build with Maven
-        id: build
-        run: mvn -DskipTests package 2>&1 | tee build.log
+        run: mvn -DskipTests package
 
       - name: Install Vercel CLI
         run: npm install -g vercel
 
-      - name: Pull Vercel Environment (Production)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Pull Vercel Environment (Preview)
-        if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Build with Vercel
+        run: vercel build ${{ github.ref == 'refs/heads/main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy to Production
+      - name: Deploy Prebuilt to Production
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: deploy-prod
         run: |
-          URL=$(vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee deploy.log | grep -o 'https://[^ ]*\.vercel\.app' | tail -1)
+          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$URL" >> $GITHUB_OUTPUT
 
-      - name: Deploy to Preview
+      - name: Deploy Prebuilt to Preview
         if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
         id: deploy-preview
         run: |
-          URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee deploy.log | grep -o 'https://[^ ]*\.vercel\.app' | tail -1)
+          URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Find existing comment
