@@ -39,17 +39,33 @@ public class Jib implements EntryPoint {
             @Override
             public void onClick(ClickEvent event) {
                 log.setValue("");
-                String code = getSourceCode();
-                String className = Javac.getClassName(code);
+                try {
+                    String code = getSourceCode();
+                    if (code == null || code.trim().isEmpty()) {
+                        System.err.println("Error: No source code found in editor");
+                        return;
+                    }
 
-                boolean ok = Javac.compile(className + ".java", code);
-                if (ok) {
-                    System.out.println("Compiled!");
-                    printMagic(fs.readFile(fs.cwd() + className + ".class"));
-                    System.out.println("Output:");
+                    String className = Javac.getClassName(code);
+                    if (className == null || className.trim().isEmpty()) {
+                        System.err.println("Error: Could not extract class name from source code");
+                        return;
+                    }
 
-                    JVM.setClassLoader(new JibClassLoader());
-                    JVM.run(className);
+                    boolean ok = Javac.compile(className + ".java", code);
+                    if (ok) {
+                        System.out.println("Compiled!");
+                        printMagic(fs.readFile(fs.cwd() + className + ".class"));
+                        System.out.println("Output:");
+
+                        JVM.setClassLoader(new JibClassLoader());
+                        JVM.run(className);
+                    } else {
+                        System.err.println("Compilation failed. Check your Java code for errors.");
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error: " + e.getClass().getName() + ": " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
