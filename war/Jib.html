@@ -18,8 +18,43 @@
             details: details
           };
           window._debugLogs.push(entry);
-          console.log('[' + type + ']', message, details || '');
+          // Use original console to avoid recursion
+          if (window._origConsole) {
+            window._origConsole.log('[' + type + ']', message, details || '');
+          }
         }
+
+        // Intercept console methods
+        window._origConsole = {
+          log: console.log.bind(console),
+          warn: console.warn.bind(console),
+          error: console.error.bind(console),
+          info: console.info.bind(console)
+        };
+
+        console.log = function() {
+          log('CONSOLE_LOG', Array.prototype.slice.call(arguments).map(function(a) {
+            try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+            catch(e) { return String(a); }
+          }).join(' '));
+          window._origConsole.log.apply(console, arguments);
+        };
+
+        console.warn = function() {
+          log('CONSOLE_WARN', Array.prototype.slice.call(arguments).map(function(a) {
+            try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+            catch(e) { return String(a); }
+          }).join(' '));
+          window._origConsole.warn.apply(console, arguments);
+        };
+
+        console.error = function() {
+          log('CONSOLE_ERROR', Array.prototype.slice.call(arguments).map(function(a) {
+            try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+            catch(e) { return String(a); }
+          }).join(' '));
+          window._origConsole.error.apply(console, arguments);
+        };
 
         // Log unhandled errors
         window.onerror = function(message, source, lineno, colno, error) {
@@ -80,17 +115,96 @@
           return originalXHRSend.apply(this, arguments);
         };
 
-        // Log script loads
-        var observer = new MutationObserver(function(mutations) {
+        // Log script loads and iframe loads
+        var domObserver = new MutationObserver(function(mutations) {
           mutations.forEach(function(mutation) {
             mutation.addedNodes.forEach(function(node) {
               if (node.tagName === 'SCRIPT' && node.src) {
                 log('SCRIPT_LOAD', node.src);
               }
+              if (node.tagName === 'IFRAME') {
+                log('IFRAME_ADDED', node.id || node.src || '(no id/src)');
+              }
+              // Log when buttons are added (GWT adds Run button)
+              if (node.tagName === 'BUTTON' || (node.className && node.className.indexOf && node.className.indexOf('gwt') >= 0)) {
+                log('DOM_ELEMENT_ADDED', node.tagName, {
+                  id: node.id,
+                  className: node.className,
+                  text: node.textContent ? node.textContent.substring(0, 50) : ''
+                });
+              }
             });
           });
         });
-        observer.observe(document.documentElement, { childList: true, subtree: true });
+
+        // Track global click events
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+          log('CLICK', target.tagName, {
+            id: target.id,
+            className: target.className,
+            text: target.textContent ? target.textContent.substring(0, 30) : ''
+          });
+        }, true);
+
+        // Monitor btn-div and log-div for changes
+        function observeGwtContainers() {
+          var btnDiv = document.getElementById('btn-div');
+          var logDiv = document.getElementById('log-div');
+
+          if (btnDiv) {
+            log('GWT_CONTAINER', 'btn-div found', { childCount: btnDiv.children.length, html: btnDiv.innerHTML.substring(0, 200) });
+            new MutationObserver(function(mutations) {
+              log('BTN_DIV_CHANGED', 'Content updated', { html: btnDiv.innerHTML.substring(0, 200) });
+            }).observe(btnDiv, { childList: true, subtree: true, characterData: true });
+          }
+
+          if (logDiv) {
+            log('GWT_CONTAINER', 'log-div found', { childCount: logDiv.children.length });
+            new MutationObserver(function(mutations) {
+              log('LOG_DIV_CHANGED', 'Content updated', { html: logDiv.innerHTML.substring(0, 500) });
+            }).observe(logDiv, { childList: true, subtree: true, characterData: true });
+          }
+        }
+
+        // Check for GWT globals periodically
+        function checkGwtStatus() {
+          var gwtVars = [];
+          if (window.$wnd) gwtVars.push('$wnd');
+          if (window.__gwt_activeModules) gwtVars.push('__gwt_activeModules');
+          if (window.jib) gwtVars.push('jib');
+          if (window.javac) gwtVars.push('javac');
+          if (window.jibJavac) gwtVars.push('jibJavac');
+          if (window.Javac) gwtVars.push('Javac');
+          if (window.gwtOnLoad) gwtVars.push('gwtOnLoad');
+
+          log('GWT_STATUS', 'Checking GWT globals', {
+            found: gwtVars,
+            activeModules: window.__gwt_activeModules ? Object.keys(window.__gwt_activeModules) : []
+          });
+        }
+
+        // Start observing once DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function() {
+            log('DOM', 'DOMContentLoaded');
+            domObserver.observe(document.documentElement, { childList: true, subtree: true });
+            observeGwtContainers();
+            setTimeout(checkGwtStatus, 1000);
+            setTimeout(checkGwtStatus, 3000);
+            setTimeout(checkGwtStatus, 5000);
+          });
+        } else {
+          domObserver.observe(document.documentElement, { childList: true, subtree: true });
+          observeGwtContainers();
+          setTimeout(checkGwtStatus, 1000);
+        }
+
+        window.addEventListener('load', function() {
+          log('WINDOW', 'load event fired');
+          checkGwtStatus();
+          observeGwtContainers();
+        });
 
         // Export helper
         window._getDebugLogs = function() {
