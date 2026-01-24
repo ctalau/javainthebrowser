@@ -124,13 +124,20 @@ Extracts the class name from Java source code without compiling.
 To rebuild the GWT bundle from source:
 
 ```sh
-# From the repository root
+# From the repository root - compile Java to JavaScript via GWT
 mvn -DskipTests package
 
 # From packages/javac
-npm run bundle-gwt  # Downloads pre-built GWT output from GitHub Pages
-npm run build       # Builds the TypeScript
+npm run bundle-gwt  # Extracts GWT output from local Maven build (target/war/javac/)
+npm run build       # Runs bundle-gwt + TypeScript compilation
 npm test            # Runs tests
+```
+
+Or run both Maven and npm build in one command:
+
+```sh
+# From packages/javac
+npm run build:gwt && npm run build
 ```
 
 ## License

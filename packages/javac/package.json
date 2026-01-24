@@ -18,7 +18,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build:gwt": "mvn -DskipTests package",
+    "build:gwt": "cd ../.. && mvn -DskipTests package",
     "bundle-gwt": "node scripts/bundle-gwt.mjs",
     "build": "npm run bundle-gwt && tsc && cp src/gwt-bundle.js src/gwt-bundle.d.ts dist/",
     "test": "vitest run",
