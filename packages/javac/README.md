@@ -1,7 +1,13 @@
 # @javainthebrowser/javac
 
-`@javainthebrowser/javac` exposes the JavaInTheBrowser `javac` port as an ES module API.
-It loads the GWT-compiled compiler and returns a Java-centric compiler interface (no globals).
+A self-contained Java compiler (javac) compiled to JavaScript via GWT. Compiles Java source code to bytecode entirely in the browser or Node.js.
+
+## Features
+
+- **Self-contained**: No external dependencies or runtime file loading required
+- **Works in browsers and Node.js**: Uses jsdom for Node.js environments
+- **TypeScript support**: Full type definitions included
+- **Simple API**: Just `compile()` and `getClassName()`
 
 ## Installation
 
@@ -9,56 +15,124 @@ It loads the GWT-compiled compiler and returns a Java-centric compiler interface
 npm install @javainthebrowser/javac
 ```
 
-> **Note**: The package expects the GWT-compiled `javac` output to be available at
-> `javac/javac.nocache.js` (configurable via `scriptUrl`). Build it from this repository and
-> serve the generated `target/war/javac/` directory alongside your app.
+For Node.js usage, also install jsdom as a peer dependency:
+
+```sh
+npm install jsdom
+```
 
 ## Usage
 
-### 1) Build the GWT module (once per version)
+### Basic Example
 
-```sh
-mvn -DskipTests package
+```typescript
+import { createJavac } from '@javainthebrowser/javac';
+
+// Initialize the compiler (this is async)
+const javac = await createJavac();
+
+// Compile Java source code
+const result = javac.compile(`
+  public class HelloWorld {
+    public static void main(String[] args) {
+      System.out.println("Hello, World!");
+    }
+  }
+`);
+
+if (result.success) {
+  console.log('Compiled class:', result.className);
+  console.log('Bytecode (base64):', result.classFileBase64);
+} else {
+  console.log('Compilation failed');
+}
 ```
 
-The compiled output is placed in `target/war/javac/` (copy it to wherever you serve static
-assets from).
+### Singleton Pattern
 
-### 2) Load the compiler
+Use `getJavac()` to reuse the same compiler instance:
 
-```js
-import { loadJavac } from "@javainthebrowser/javac";
+```typescript
+import { getJavac } from '@javainthebrowser/javac';
 
-const javac = await loadJavac({ scriptUrl: "/assets/javac/javac.nocache.js" });
-const result = javac.compile("public class Hello {}", { fileName: "Hello.java" });
-console.log(result.className, result.classFileBase64);
+// First call initializes the compiler
+const javac = await getJavac();
+
+// Subsequent calls return the same instance
+const javac2 = await getJavac();
+console.log(javac === javac2); // true
+```
+
+### Extract Class Name
+
+```typescript
+const className = javac.getClassName('public class MyClass { }');
+console.log(className); // "MyClass"
 ```
 
 ## API
 
-### `loadJavac({ scriptUrl, timeoutMs }) -> Promise<JavacCompiler>`
+### `createJavac(options?): Promise<JavacCompiler>`
 
-Loads the GWT module script and resolves with a `JavacCompiler` once it initializes.
+Creates a new Java compiler instance.
+
+**Options:**
+- `window?: Window` - Custom window object (for advanced use)
+- `document?: Document` - Custom document object (for advanced use)
+
+### `getJavac(): Promise<JavacCompiler>`
+
+Returns a shared compiler instance (singleton pattern).
+
+### `resetJavac(): void`
+
+Resets the cached compiler instance. Useful for testing.
 
 ### `JavacCompiler`
 
-- `compile(source, { fileName })` → `{ success, className, classFileBase64 }`
-- `getClassName(source)` → string
+#### `compile(source: string, options?: CompileOptions): CompileResult`
 
-`classFileBase64` is the compiled `.class` output for the primary class in the provided source.
+Compiles Java source code to bytecode.
 
-## High-level architecture
+**Options:**
+- `fileName?: string` - Override the file name (must match the class name for public classes)
 
-1. **GWT-compiled compiler** – The Java sources under `src/javac` are compiled by GWT into a
-   JavaScript module (`javac.nocache.js` + generated artifacts).
-2. **In-memory file system** – The ported `javac` writes source files and class output into a
-   browser-backed file system (`gwtjava.io.fs.FileSystem`).
-3. **Bridge callback** – `JavacEntryPoint` hands a small API object to a loader callback
-   (`__javaInTheBrowserJavacReady`) so consumers can avoid globals.
-4. **ES module wrapper** – This package loads the GWT script, waits for the callback, and
-   presents a compiler-centric API.
+**Returns:**
+- `success: boolean` - Whether compilation succeeded
+- `className: string` - The name of the compiled class
+- `classFileBase64: string | null` - Base64-encoded .class file (null if compilation failed)
+
+#### `getClassName(source: string): string`
+
+Extracts the class name from Java source code without compiling.
+
+## Limitations
+
+- Only supports compiling a single class per call
+- The `getClassName()` function only works with classes (not interfaces or enums)
+- Based on Java 6/7 era javac - modern Java features are not supported
+
+## How It Works
+
+1. The Java compiler (OpenJDK javac) was ported to work with GWT
+2. GWT compiles the Java code to JavaScript
+3. This package bundles the compiled JavaScript with a clean TypeScript API
+4. The compiler uses an in-memory file system for source and output files
 
 ## Development
 
-Build and serve `target/war/` (see the root README) and ensure `javac.nocache.js` is reachable
-from the page that loads the API.
+To rebuild the GWT bundle from source:
+
+```sh
+# From the repository root
+mvn -DskipTests package
+
+# From packages/javac
+npm run bundle-gwt  # Downloads pre-built GWT output from GitHub Pages
+npm run build       # Builds the TypeScript
+npm test            # Runs tests
+```
+
+## License
+
+GPL-2.0-only (same as the original OpenJDK javac)

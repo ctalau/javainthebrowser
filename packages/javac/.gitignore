@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Generated GWT bundle (downloaded/built at build time)
+src/gwt-bundle.js
+.gwt-cache.html
+
+# GWT compilation output
+war/
+target/
