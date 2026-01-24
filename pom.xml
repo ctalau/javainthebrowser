@@ -13,6 +13,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <gwt.version>2.5.1</gwt.version>
+    <gwt.jvm>${env.JAVA_HOME}/bin/java</gwt.jvm>
   </properties>
 
   <dependencies>
@@ -90,7 +91,7 @@
           <warSourceDirectory>${basedir}/war</warSourceDirectory>
           <webappDirectory>${project.build.directory}/war</webappDirectory>
           <extraJvmArgs>-Xmx1024m</extraJvmArgs>
-          <jvm>/usr/lib/jvm/java-8-openjdk-amd64/bin/java</jvm>
+          <jvm>${gwt.jvm}</jvm>
           <localWorkers>1</localWorkers>
           <draftCompile>false</draftCompile>
         </configuration>
@@ -124,4 +125,18 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>use-java8-for-gwt</id>
+      <activation>
+        <property>
+          <name>env.JAVA8_HOME</name>
+        </property>
+      </activation>
+      <properties>
+        <gwt.jvm>${env.JAVA8_HOME}/bin/java</gwt.jvm>
+      </properties>
+    </profile>
+  </profiles>
 </project>
