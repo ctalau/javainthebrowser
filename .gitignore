@@ -8,3 +8,6 @@ tools/extractjre/out/
 tools/extractjre/FileSystemContent.java
 test-classes/
 
+.gwt/
+.deps/
+target/

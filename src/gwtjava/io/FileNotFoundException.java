@@ -4,11 +4,11 @@ package gwtjava.io;
 public class FileNotFoundException extends IOException {
 
     public FileNotFoundException(String string) {
-        // TODO Auto-generated constructor stub
+        super(string);
     }
 
     public FileNotFoundException() {
-        // TODO Auto-generated constructor stub
+        super();
     }
 
 }

@@ -9,7 +9,11 @@
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
   <!-- Other module inherits                                      -->
 
+  <!-- Specify the entry point                                    -->
+  <entry-point class='javac.client.JavacEntryPoint'/>
+
   <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
   <source path='com'/>
   <source path='javax'/>
 </module>
