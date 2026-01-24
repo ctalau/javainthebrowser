@@ -4,7 +4,7 @@ package gwtjava.lang;
 public class ClassNotFoundException extends Exception {
 
     public ClassNotFoundException(String message) {
-        // TODO Auto-generated constructor stub
+        super(message);
     }
 
 }

@@ -47,8 +47,23 @@ public class TestClassLoader extends JClassLoader {
         try {
             JarFile jf = new JarFile(new File(jarPath));
             JarEntry je = jf.getJarEntry(name);
+            if (je == null) {
+                return null;
+            }
             return readInputStream(jf.getInputStream(je), (int) je.getSize());
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static byte[] readClassFromRuntime(String name) {
+        String resource = "/" + name;
+        try (InputStream is = Object.class.getResourceAsStream(resource)) {
+            if (is == null) {
+                return null;
+            }
+            return readInputStream(is);
+        } catch (IOException e) {
             return null;
         }
     }
@@ -72,6 +87,14 @@ public class TestClassLoader extends JClassLoader {
                 return data;
             }
         }
+        data = readClassFromEmbedded(className + ".class");
+        if (data != null) {
+            return data;
+        }
+        data = readClassFromRuntime(className + ".class");
+        if (data != null) {
+            return data;
+        }
         data = readClassFromJar(RT_PATH + RT_JAR, className + ".class");
         return data;
     }
@@ -94,6 +117,42 @@ public class TestClassLoader extends JClassLoader {
                 return null;
             }
             off += n;
+        }
+        return ret;
+    }
+
+    private static byte[] readInputStream(InputStream is) throws IOException {
+        byte[] buffer = new byte[8192];
+        int n;
+        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        while ((n = is.read(buffer)) != -1) {
+            baos.write(buffer, 0, n);
+        }
+        return baos.toByteArray();
+    }
+
+    private static byte[] readClassFromEmbedded(String className) {
+        try {
+            Class<?> cls = Class.forName("gwtjava.io.fs.FileSystemContent");
+            java.lang.reflect.Field field = cls.getDeclaredField("files");
+            field.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, String> files =
+                    (java.util.Map<String, String>) field.get(null);
+            String hex = files.get(className);
+            if (hex == null) {
+                return null;
+            }
+            return hexDecode(hex);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static byte[] hexDecode(String s) {
+        byte[] ret = new byte[s.length() / 2];
+        for (int i = 0; i < s.length(); i += 2) {
+            ret[i / 2] = (byte) Integer.parseInt(s.substring(i, i + 2), 16);
         }
         return ret;
     }

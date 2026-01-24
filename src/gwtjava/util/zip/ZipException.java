@@ -6,7 +6,7 @@ import gwtjava.io.IOException;
 public class ZipException extends IOException {
 
     public ZipException(String string) {
-        // TODO Auto-generated constructor stub
+        super(string);
     }
 
 }
