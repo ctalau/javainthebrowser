@@ -1,32 +1,35 @@
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="lib/codemirror.css">
-    <script src="lib/codemirror.js"></script>
-    <link rel="stylesheet" href="lib/docs.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java in the Browser Demo</title>
 
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <link type="text/css" rel="stylesheet" href="Jib.css">
+    <!-- CodeMirror 5.x from CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/eclipse.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/clike/clike.min.js"></script>
 
-    <title>Java in the Browser Demo (alpha)</title>
+    <link rel="stylesheet" href="Jib.css">
 
-    <script type="text/javascript" language="javascript" src="jib/jib.nocache.js"></script>
+    <script src="jib/jib.nocache.js"></script>
   </head>
 
   <body>
-
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
 
-    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
     <noscript>
       <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
         Your web browser must have JavaScript enabled
         in order for this application to display correctly.
       </div>
     </noscript>
+
     <a href="https://github.com/ctalau/javainthebrowser">
       <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
     </a>
+
     <h1>Java in the Browser Demo</h1>
 
     <div>
@@ -48,10 +51,13 @@ public class HelloWorld {
     </div>
 
     <script>
-      editor = CodeMirror.fromTextArea(document.getElementById('source'), {
-        parserfile: ["tokenizejava.js", "parsejava.js"],
-        stylesheet: "lib/javacolors.css",
-        path: "lib/", tabMode : "shift",
+      var editor = CodeMirror.fromTextArea(document.getElementById('source'), {
+        mode: 'text/x-java',
+        theme: 'eclipse',
+        lineNumbers: true,
+        indentUnit: 2,
+        tabSize: 2,
+        indentWithTabs: false
       });
     </script>
 
@@ -66,6 +72,5 @@ public class HelloWorld {
           console.warn("Failed to load javac API", error);
         });
     </script>
-
   </body>
 </html>
