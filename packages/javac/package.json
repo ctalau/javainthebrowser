@@ -1,7 +1,7 @@
 {
   "name": "@javainthebrowser/javac",
-  "version": "0.1.0",
-  "description": "Java compiler (javac) compiled to JavaScript via GWT.",
+  "version": "0.2.0",
+  "description": "Self-contained Java compiler (javac) compiled to JavaScript via GWT. Works in browsers and Node.js.",
   "license": "GPL-2.0-only",
   "type": "module",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/index.js"
     }
   },
   "files": [
@@ -17,6 +17,29 @@
     "README.md",
     "LICENSE"
   ],
+  "scripts": {
+    "build:gwt": "mvn -DskipTests package",
+    "bundle-gwt": "node scripts/bundle-gwt.mjs",
+    "build": "npm run bundle-gwt && tsc && cp src/gwt-bundle.js src/gwt-bundle.d.ts dist/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^22.0.0",
+    "jsdom": "^25.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {
+    "jsdom": ">=20.0.0"
+  },
+  "peerDependenciesMeta": {
+    "jsdom": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
@@ -24,5 +47,13 @@
     "type": "git",
     "url": "https://github.com/ctalau/javainthebrowser.git",
     "directory": "packages/javac"
-  }
+  },
+  "keywords": [
+    "java",
+    "javac",
+    "compiler",
+    "gwt",
+    "bytecode",
+    "jvm"
+  ]
 }
