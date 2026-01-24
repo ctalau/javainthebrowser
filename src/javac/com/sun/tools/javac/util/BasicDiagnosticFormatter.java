@@ -51,6 +51,7 @@ import gwtjava.util.regex.Matcher;
 import javac.javax.tools.JavaFileObject;
 
 import javac.com.sun.tools.javac.api.DiagnosticFormatter.Configuration.DiagnosticPart;
+import javac.com.sun.tools.javac.util.AbstractDiagnosticFormatter.SimpleConfiguration;
 import javac.com.sun.tools.javac.util.BasicDiagnosticFormatter.BasicConfiguration.BasicFormatKind;
 import javac.com.sun.tools.javac.util.BasicDiagnosticFormatter.BasicConfiguration.SourcePosition;
 
