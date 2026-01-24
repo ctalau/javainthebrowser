@@ -5,6 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Java in the Browser Demo</title>
 
+    <!-- Debug logging - must be first to capture all requests -->
+    <script>
+      (function() {
+        window._debugLogs = [];
+
+        function log(type, message, details) {
+          var entry = {
+            time: new Date().toISOString(),
+            type: type,
+            message: message,
+            details: details
+          };
+          window._debugLogs.push(entry);
+          console.log('[' + type + ']', message, details || '');
+        }
+
+        // Log unhandled errors
+        window.onerror = function(message, source, lineno, colno, error) {
+          log('ERROR', message, {
+            source: source,
+            line: lineno,
+            col: colno,
+            stack: error ? error.stack : null
+          });
+          return false;
+        };
+
+        // Log unhandled promise rejections
+        window.onunhandledrejection = function(event) {
+          log('PROMISE_ERROR', event.reason ? (event.reason.message || String(event.reason)) : 'Unknown', {
+            stack: event.reason ? event.reason.stack : null
+          });
+        };
+
+        // Intercept fetch
+        var originalFetch = window.fetch;
+        window.fetch = function(url, options) {
+          var requestUrl = typeof url === 'string' ? url : url.url;
+          log('FETCH', requestUrl, { method: (options && options.method) || 'GET' });
+
+          return originalFetch.apply(this, arguments)
+            .then(function(response) {
+              log('FETCH_RESPONSE', requestUrl, { status: response.status, ok: response.ok });
+              return response;
+            })
+            .catch(function(error) {
+              log('FETCH_ERROR', requestUrl, { error: error.message });
+              throw error;
+            });
+        };
+
+        // Intercept XMLHttpRequest
+        var originalXHROpen = XMLHttpRequest.prototype.open;
+        var originalXHRSend = XMLHttpRequest.prototype.send;
+
+        XMLHttpRequest.prototype.open = function(method, url) {
+          this._debugUrl = url;
+          this._debugMethod = method;
+          return originalXHROpen.apply(this, arguments);
+        };
+
+        XMLHttpRequest.prototype.send = function() {
+          var xhr = this;
+          log('XHR', xhr._debugUrl, { method: xhr._debugMethod });
+
+          xhr.addEventListener('load', function() {
+            log('XHR_RESPONSE', xhr._debugUrl, { status: xhr.status });
+          });
+          xhr.addEventListener('error', function() {
+            log('XHR_ERROR', xhr._debugUrl, { status: xhr.status });
+          });
+
+          return originalXHRSend.apply(this, arguments);
+        };
+
+        // Log script loads
+        var observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+              if (node.tagName === 'SCRIPT' && node.src) {
+                log('SCRIPT_LOAD', node.src);
+              }
+            });
+          });
+        });
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+
+        // Export helper
+        window._getDebugLogs = function() {
+          return window._debugLogs.map(function(entry) {
+            var line = '[' + entry.time + '] [' + entry.type + '] ' + entry.message;
+            if (entry.details) {
+              line += ' ' + JSON.stringify(entry.details);
+            }
+            return line;
+          }).join('\n');
+        };
+
+        log('INFO', 'Debug logging initialized');
+      })();
+    </script>
+
     <!-- CodeMirror 5.x from CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/eclipse.min.css">
@@ -50,6 +152,16 @@ public class HelloWorld {
       </div>
     </div>
 
+    <!-- Debug panel -->
+    <div id="debug-panel" style="margin-top: 2em; display: none;">
+      <textarea id="debug-logs" readonly style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;"></textarea>
+      <button id="copy-logs" style="margin-top: 0.5em;">Copy Logs</button>
+      <button id="refresh-logs" style="margin-top: 0.5em;">Refresh</button>
+    </div>
+    <div style="text-align: center; margin-top: 1em;">
+      <button id="show-logs-btn">Show Logs</button>
+    </div>
+
     <script>
       var editor = CodeMirror.fromTextArea(document.getElementById('source'), {
         mode: 'text/x-java',
@@ -59,6 +171,30 @@ public class HelloWorld {
         tabSize: 2,
         indentWithTabs: false
       });
+
+      // Debug panel controls
+      document.getElementById('show-logs-btn').onclick = function() {
+        var panel = document.getElementById('debug-panel');
+        var visible = panel.style.display !== 'none';
+        panel.style.display = visible ? 'none' : 'block';
+        this.textContent = visible ? 'Show Logs' : 'Hide Logs';
+        if (!visible) {
+          document.getElementById('debug-logs').value = window._getDebugLogs();
+        }
+      };
+
+      document.getElementById('refresh-logs').onclick = function() {
+        document.getElementById('debug-logs').value = window._getDebugLogs();
+      };
+
+      document.getElementById('copy-logs').onclick = function() {
+        var textarea = document.getElementById('debug-logs');
+        textarea.select();
+        document.execCommand('copy');
+        this.textContent = 'Copied!';
+        var btn = this;
+        setTimeout(function() { btn.textContent = 'Copy Logs'; }, 1500);
+      };
     </script>
 
     <script type="module">
