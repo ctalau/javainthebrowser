@@ -1,5 +1,8 @@
 {
   "buildCommand": "mvn -DskipTests package",
   "outputDirectory": "target/war",
-  "framework": null
+  "framework": null,
+  "github": {
+    "silent": true
+  }
 }

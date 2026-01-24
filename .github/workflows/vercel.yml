@@ -2,9 +2,8 @@ name: Deploy to Vercel
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -25,13 +24,56 @@ jobs:
           cache: "maven"
 
       - name: Build with Maven
-        run: mvn -DskipTests package
+        id: build
+        run: mvn -DskipTests package 2>&1 | tee build.log
 
       - name: Install Vercel CLI
         run: npm install -g vercel
 
-      - name: Pull Vercel Environment
+      - name: Pull Vercel Environment (Production)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy to Vercel
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
+      - name: Pull Vercel Environment (Preview)
+        if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: deploy-prod
+        run: |
+          URL=$(vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee deploy.log | grep -o 'https://[^ ]*\.vercel\.app' | tail -1)
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Preview
+        if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
+        id: deploy-preview
+        run: |
+          URL=$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | tee deploy.log | grep -o 'https://[^ ]*\.vercel\.app' | tail -1)
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Find existing comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- vercel-deploy-comment -->'
+
+      - name: Create or update PR comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            <!-- vercel-deploy-comment -->
+            ## Vercel Deployment
+
+            | Name | Link |
+            |------|------|
+            | **Preview** | ${{ steps.deploy-preview.outputs.url }} |
+            | **Build Logs** | [View logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |
+            | **Commit** | ${{ github.sha }} |
