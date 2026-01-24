@@ -1,32 +1,251 @@
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="lib/codemirror.css">
-    <script src="lib/codemirror.js"></script>
-    <link rel="stylesheet" href="lib/docs.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java in the Browser Demo</title>
 
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <link type="text/css" rel="stylesheet" href="Jib.css">
+    <!-- Debug logging - must be first to capture all requests -->
+    <script>
+      (function() {
+        window._debugLogs = [];
 
-    <title>Java in the Browser Demo (alpha)</title>
+        function log(type, message, details) {
+          var entry = {
+            time: new Date().toISOString(),
+            type: type,
+            message: message,
+            details: details
+          };
+          window._debugLogs.push(entry);
+          // Use original console to avoid recursion
+          if (window._origConsole) {
+            window._origConsole.log('[' + type + ']', message, details || '');
+          }
+        }
 
-    <script type="text/javascript" language="javascript" src="jib/jib.nocache.js"></script>
+        // Intercept console methods
+        window._origConsole = {
+          log: console.log.bind(console),
+          warn: console.warn.bind(console),
+          error: console.error.bind(console),
+          info: console.info.bind(console)
+        };
+
+        console.log = function() {
+          log('CONSOLE_LOG', Array.prototype.slice.call(arguments).map(function(a) {
+            try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+            catch(e) { return String(a); }
+          }).join(' '));
+          window._origConsole.log.apply(console, arguments);
+        };
+
+        console.warn = function() {
+          log('CONSOLE_WARN', Array.prototype.slice.call(arguments).map(function(a) {
+            try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+            catch(e) { return String(a); }
+          }).join(' '));
+          window._origConsole.warn.apply(console, arguments);
+        };
+
+        console.error = function() {
+          log('CONSOLE_ERROR', Array.prototype.slice.call(arguments).map(function(a) {
+            try { return typeof a === 'object' ? JSON.stringify(a) : String(a); }
+            catch(e) { return String(a); }
+          }).join(' '));
+          window._origConsole.error.apply(console, arguments);
+        };
+
+        // Log unhandled errors
+        window.onerror = function(message, source, lineno, colno, error) {
+          log('ERROR', message, {
+            source: source,
+            line: lineno,
+            col: colno,
+            stack: error ? error.stack : null
+          });
+          return false;
+        };
+
+        // Log unhandled promise rejections
+        window.onunhandledrejection = function(event) {
+          log('PROMISE_ERROR', event.reason ? (event.reason.message || String(event.reason)) : 'Unknown', {
+            stack: event.reason ? event.reason.stack : null
+          });
+        };
+
+        // Intercept fetch
+        var originalFetch = window.fetch;
+        window.fetch = function(url, options) {
+          var requestUrl = typeof url === 'string' ? url : url.url;
+          log('FETCH', requestUrl, { method: (options && options.method) || 'GET' });
+
+          return originalFetch.apply(this, arguments)
+            .then(function(response) {
+              log('FETCH_RESPONSE', requestUrl, { status: response.status, ok: response.ok });
+              return response;
+            })
+            .catch(function(error) {
+              log('FETCH_ERROR', requestUrl, { error: error.message });
+              throw error;
+            });
+        };
+
+        // Intercept XMLHttpRequest
+        var originalXHROpen = XMLHttpRequest.prototype.open;
+        var originalXHRSend = XMLHttpRequest.prototype.send;
+
+        XMLHttpRequest.prototype.open = function(method, url) {
+          this._debugUrl = url;
+          this._debugMethod = method;
+          return originalXHROpen.apply(this, arguments);
+        };
+
+        XMLHttpRequest.prototype.send = function() {
+          var xhr = this;
+          log('XHR', xhr._debugUrl, { method: xhr._debugMethod });
+
+          xhr.addEventListener('load', function() {
+            log('XHR_RESPONSE', xhr._debugUrl, { status: xhr.status });
+          });
+          xhr.addEventListener('error', function() {
+            log('XHR_ERROR', xhr._debugUrl, { status: xhr.status });
+          });
+
+          return originalXHRSend.apply(this, arguments);
+        };
+
+        // Log script loads and iframe loads
+        var domObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+              if (node.tagName === 'SCRIPT' && node.src) {
+                log('SCRIPT_LOAD', node.src);
+              }
+              if (node.tagName === 'IFRAME') {
+                log('IFRAME_ADDED', node.id || node.src || '(no id/src)');
+              }
+              // Log when buttons are added (GWT adds Run button)
+              if (node.tagName === 'BUTTON' || (node.className && node.className.indexOf && node.className.indexOf('gwt') >= 0)) {
+                log('DOM_ELEMENT_ADDED', node.tagName, {
+                  id: node.id,
+                  className: node.className,
+                  text: node.textContent ? node.textContent.substring(0, 50) : ''
+                });
+              }
+            });
+          });
+        });
+
+        // Track global click events
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+          log('CLICK', target.tagName, {
+            id: target.id,
+            className: target.className,
+            text: target.textContent ? target.textContent.substring(0, 30) : ''
+          });
+        }, true);
+
+        // Monitor btn-div and log-div for changes
+        function observeGwtContainers() {
+          var btnDiv = document.getElementById('btn-div');
+          var logDiv = document.getElementById('log-div');
+
+          if (btnDiv) {
+            log('GWT_CONTAINER', 'btn-div found', { childCount: btnDiv.children.length, html: btnDiv.innerHTML.substring(0, 200) });
+            new MutationObserver(function(mutations) {
+              log('BTN_DIV_CHANGED', 'Content updated', { html: btnDiv.innerHTML.substring(0, 200) });
+            }).observe(btnDiv, { childList: true, subtree: true, characterData: true });
+          }
+
+          if (logDiv) {
+            log('GWT_CONTAINER', 'log-div found', { childCount: logDiv.children.length });
+            new MutationObserver(function(mutations) {
+              log('LOG_DIV_CHANGED', 'Content updated', { html: logDiv.innerHTML.substring(0, 500) });
+            }).observe(logDiv, { childList: true, subtree: true, characterData: true });
+          }
+        }
+
+        // Check for GWT globals periodically
+        function checkGwtStatus() {
+          var gwtVars = [];
+          if (window.$wnd) gwtVars.push('$wnd');
+          if (window.__gwt_activeModules) gwtVars.push('__gwt_activeModules');
+          if (window.jib) gwtVars.push('jib');
+          if (window.javac) gwtVars.push('javac');
+          if (window.jibJavac) gwtVars.push('jibJavac');
+          if (window.Javac) gwtVars.push('Javac');
+          if (window.gwtOnLoad) gwtVars.push('gwtOnLoad');
+
+          log('GWT_STATUS', 'Checking GWT globals', {
+            found: gwtVars,
+            activeModules: window.__gwt_activeModules ? Object.keys(window.__gwt_activeModules) : []
+          });
+        }
+
+        // Start observing once DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function() {
+            log('DOM', 'DOMContentLoaded');
+            domObserver.observe(document.documentElement, { childList: true, subtree: true });
+            observeGwtContainers();
+            setTimeout(checkGwtStatus, 1000);
+            setTimeout(checkGwtStatus, 3000);
+            setTimeout(checkGwtStatus, 5000);
+          });
+        } else {
+          domObserver.observe(document.documentElement, { childList: true, subtree: true });
+          observeGwtContainers();
+          setTimeout(checkGwtStatus, 1000);
+        }
+
+        window.addEventListener('load', function() {
+          log('WINDOW', 'load event fired');
+          checkGwtStatus();
+          observeGwtContainers();
+        });
+
+        // Export helper
+        window._getDebugLogs = function() {
+          return window._debugLogs.map(function(entry) {
+            var line = '[' + entry.time + '] [' + entry.type + '] ' + entry.message;
+            if (entry.details) {
+              line += ' ' + JSON.stringify(entry.details);
+            }
+            return line;
+          }).join('\n');
+        };
+
+        log('INFO', 'Debug logging initialized');
+      })();
+    </script>
+
+    <!-- CodeMirror 5.x from CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/eclipse.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/clike/clike.min.js"></script>
+
+    <link rel="stylesheet" href="Jib.css">
+
+    <script src="jib/jib.nocache.js"></script>
   </head>
 
   <body>
-
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
 
-    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
     <noscript>
       <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
         Your web browser must have JavaScript enabled
         in order for this application to display correctly.
       </div>
     </noscript>
+
     <a href="https://github.com/ctalau/javainthebrowser">
       <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
     </a>
+
     <h1>Java in the Browser Demo</h1>
 
     <div>
@@ -47,12 +266,49 @@ public class HelloWorld {
       </div>
     </div>
 
+    <!-- Debug panel -->
+    <div id="debug-panel" style="margin-top: 2em; display: none;">
+      <textarea id="debug-logs" readonly style="width: 100%; height: 300px; font-family: monospace; font-size: 12px;"></textarea>
+      <button id="copy-logs" style="margin-top: 0.5em;">Copy Logs</button>
+      <button id="refresh-logs" style="margin-top: 0.5em;">Refresh</button>
+    </div>
+    <div style="text-align: center; margin-top: 1em;">
+      <button id="show-logs-btn">Show Logs</button>
+    </div>
+
     <script>
-      editor = CodeMirror.fromTextArea(document.getElementById('source'), {
-        parserfile: ["tokenizejava.js", "parsejava.js"],
-        stylesheet: "lib/javacolors.css",
-        path: "lib/", tabMode : "shift",
+      var editor = CodeMirror.fromTextArea(document.getElementById('source'), {
+        mode: 'text/x-java',
+        theme: 'eclipse',
+        lineNumbers: true,
+        indentUnit: 2,
+        tabSize: 2,
+        indentWithTabs: false
       });
+
+      // Debug panel controls
+      document.getElementById('show-logs-btn').onclick = function() {
+        var panel = document.getElementById('debug-panel');
+        var visible = panel.style.display !== 'none';
+        panel.style.display = visible ? 'none' : 'block';
+        this.textContent = visible ? 'Show Logs' : 'Hide Logs';
+        if (!visible) {
+          document.getElementById('debug-logs').value = window._getDebugLogs();
+        }
+      };
+
+      document.getElementById('refresh-logs').onclick = function() {
+        document.getElementById('debug-logs').value = window._getDebugLogs();
+      };
+
+      document.getElementById('copy-logs').onclick = function() {
+        var textarea = document.getElementById('debug-logs');
+        textarea.select();
+        document.execCommand('copy');
+        this.textContent = 'Copied!';
+        var btn = this;
+        setTimeout(function() { btn.textContent = 'Copy Logs'; }, 1500);
+      };
     </script>
 
     <script type="module">
@@ -66,6 +322,5 @@ public class HelloWorld {
           console.warn("Failed to load javac API", error);
         });
     </script>
-
   </body>
 </html>

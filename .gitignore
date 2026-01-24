@@ -1,7 +1,7 @@
 build
 war/jib/
-war/WEB-INF/classes/
-war/WEB-INF/deploy/
+war/javac/
+war/WEB-INF/
 gwt-unitCache/
 tools/extractjre/bin/
 tools/extractjre/out/
@@ -11,3 +11,6 @@ test-classes/
 .gwt/
 .deps/
 target/
+
+# Node modules
+node_modules/
