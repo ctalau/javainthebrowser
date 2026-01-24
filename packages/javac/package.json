@@ -1,0 +1,28 @@
+{
+  "name": "@javainthebrowser/javac",
+  "version": "0.1.0",
+  "description": "Java compiler (javac) compiled to JavaScript via GWT.",
+  "license": "GPL-2.0-only",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ctalau/javainthebrowser.git",
+    "directory": "packages/javac"
+  }
+}
