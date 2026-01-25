@@ -1,6 +1,6 @@
 {
-  "installCommand": "echo 'skip install'",
-  "buildCommand": "echo 'Using prebuilt Maven output'",
+  "installCommand": "npm install",
+  "buildCommand": "mvn clean package && npm run build",
   "outputDirectory": "target/war",
   "framework": null,
   "github": {
