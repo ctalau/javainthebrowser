@@ -34,11 +34,29 @@ jobs:
           java-version: "8"
           cache: "maven"
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
       - name: Build with Maven
-        run: mvn -DskipTests package
+        run: mvn -B -q -DskipTests package
+
+      - name: Cache Vercel CLI
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm/_npx
+          key: vercel-cli-${{ runner.os }}
 
       - name: Install Vercel CLI
         run: npm install -g vercel
+
+      - name: Cache Vercel project config
+        uses: actions/cache@v4
+        with:
+          path: .vercel
+          key: vercel-config-${{ runner.os }}-${{ hashFiles('vercel.json') }}
 
       - name: Pull Vercel Environment
         run: vercel pull --yes --environment=${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
