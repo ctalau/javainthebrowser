@@ -23,6 +23,8 @@ public class Jib implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
+        debugMilestone("GWT module loaded - Jib.onModuleLoad() called");
+
         final TextArea log = new TextArea();
         RootPanel.get("log-div").add(log);
         log.addStyleName("logBox");
@@ -31,25 +33,61 @@ public class Jib implements EntryPoint {
         System.setOut(new TextAreaPrintStream(log));
         System.setErr(System.out);
 
+        debugSuccess("Output text area initialized and PrintStream redirected");
+
         final Button runButton = new Button("Run!");
         RootPanel.get("btn-div").add(runButton);
         runButton.addStyleName("runButton");
 
+        debugSuccess("Run button created and attached to DOM");
+
         runButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                log.setValue("");
-                String code = getSourceCode();
-                String className = Javac.getClassName(code);
+                debugMilestone("=== RUN BUTTON CLICKED - Starting execution ===");
+                try {
+                    log.setValue("");
+                    debugInfo("Output log cleared");
 
-                boolean ok = Javac.compile(className + ".java", code);
-                if (ok) {
-                    System.out.println("Compiled!");
-                    printMagic(fs.readFile(fs.cwd() + className + ".class"));
-                    System.out.println("Output:");
+                    debugInfo("Retrieving source code from editor");
+                    String code = getSourceCode();
+                    debugSuccess("Source code retrieved - " + code.length() + " characters");
 
-                    JVM.setClassLoader(new JibClassLoader());
-                    JVM.run(className);
+                    debugInfo("Extracting class name from source code");
+                    String className = Javac.getClassName(code);
+                    debugSuccess("Class name extracted: " + className);
+
+                    debugMilestone("Starting Java compilation for: " + className + ".java");
+                    boolean ok = Javac.compile(className + ".java", code);
+
+                    if (ok) {
+                        debugSuccess("Compilation successful!");
+                        System.out.println("Compiled!");
+
+                        debugInfo("Reading compiled .class file from filesystem");
+                        byte[] classFile = fs.readFile(fs.cwd() + className + ".class");
+                        debugSuccess("Class file read - " + classFile.length + " bytes");
+
+                        printMagic(classFile);
+                        System.out.println("Output:");
+
+                        debugMilestone("Setting up JVM class loader");
+                        JVM.setClassLoader(new JibClassLoader());
+                        debugSuccess("JibClassLoader installed");
+
+                        debugMilestone("Starting JVM execution of: " + className);
+                        JVM.run(className);
+                        debugSuccess("JVM execution completed");
+
+                    } else {
+                        debugError("Compilation failed - check output for errors");
+                    }
+                } catch (Exception e) {
+                    debugError("Unhandled Java exception in Run process: " + e.getClass().getName() + " - " + e.getMessage());
+                    String stackTrace = getStackTrace(e);
+                    debugError("Stack trace: " + stackTrace);
+                    System.err.println("Error: " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -62,6 +100,47 @@ public class Jib implements EntryPoint {
         }
         System.out.println();
     }
+
+    private String getStackTrace(Exception e) {
+        StringBuilder sb = new StringBuilder();
+        StackTraceElement[] elements = e.getStackTrace();
+        for (int i = 0; i < Math.min(elements.length, 10); i++) {
+            if (i > 0) sb.append(" | ");
+            sb.append(elements[i].toString());
+        }
+        return sb.toString();
+    }
+
+    // Debug logging methods using JSNI to call JavaScript debug logging
+    private native void debugInfo(String message) /*-{
+        if ($wnd.debugLog) {
+            $wnd.debugLog.info(message);
+        }
+    }-*/;
+
+    private native void debugSuccess(String message) /*-{
+        if ($wnd.debugLog) {
+            $wnd.debugLog.success(message);
+        }
+    }-*/;
+
+    private native void debugError(String message) /*-{
+        if ($wnd.debugLog) {
+            $wnd.debugLog.error(message);
+        }
+    }-*/;
+
+    private native void debugWarning(String message) /*-{
+        if ($wnd.debugLog) {
+            $wnd.debugLog.warning(message);
+        }
+    }-*/;
+
+    private native void debugMilestone(String message) /*-{
+        if ($wnd.debugLog) {
+            $wnd.debugLog.milestone(message);
+        }
+    }-*/;
 
     private native String getSourceCode() /*-{
         return $wnd.editor.getCode();
