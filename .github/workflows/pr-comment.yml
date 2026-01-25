@@ -1,0 +1,60 @@
+name: Add deployment comment to PR
+
+on:
+  pull_request:
+    types: [opened]
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest deployment for branch
+        id: get-deployment
+        run: |
+          # Use Vercel API to get the latest deployment for this branch
+          RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            "https://api.vercel.com/v6/deployments?projectId=${{ secrets.VERCEL_PROJECT_ID }}&teamId=${{ secrets.VERCEL_ORG_ID }}&gitBranch=${{ github.head_ref }}&limit=1")
+
+          DEPLOYMENT_URL=$(echo "$RESPONSE" | jq -r '.deployments[0].url // ""')
+
+          if [ -z "$DEPLOYMENT_URL" ] || [ "$DEPLOYMENT_URL" = "null" ]; then
+            echo "No deployment found for branch ${{ github.head_ref }}"
+            echo "url=" >> $GITHUB_OUTPUT
+          else
+            DEPLOYMENT_URL="https://${DEPLOYMENT_URL}"
+            echo "url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+            echo "Found deployment: $DEPLOYMENT_URL"
+          fi
+
+      - name: Find existing comment
+        if: steps.get-deployment.outputs.url != ''
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- vercel-deploy-comment -->'
+
+      - name: Create or update PR comment
+        if: steps.get-deployment.outputs.url != ''
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            <!-- vercel-deploy-comment -->
+            ## Vercel Deployment
+
+            | Name | Link |
+            |------|------|
+            | **Preview** | ${{ steps.get-deployment.outputs.url }} |
+            | **Branch** | ${{ github.head_ref }} |
+            | **Commit** | ${{ github.event.pull_request.head.sha }} |
