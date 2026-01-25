@@ -1,6 +1,6 @@
 {
   "installCommand": "npm install",
-  "buildCommand": "mvn clean package && npm run build",
+  "buildCommand": "npm run build",
   "outputDirectory": "target/war",
   "framework": null,
   "github": {

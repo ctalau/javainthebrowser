@@ -128,7 +128,7 @@
           <webappDirectory>${project.build.directory}/war</webappDirectory>
           <extraJvmArgs>-Xmx1024m</extraJvmArgs>
           <jvm>${gwt.jvm}</jvm>
-          <localWorkers>1</localWorkers>
+          <localWorkers>2</localWorkers>
           <draftCompile>false</draftCompile>
         </configuration>
         <executions>
