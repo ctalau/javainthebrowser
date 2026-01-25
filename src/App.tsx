@@ -288,13 +288,6 @@ function App() {
                 </>
               )}
             </button>
-
-            <button
-              onClick={() => setShowDebugLogs(!showDebugLogs)}
-              className="debug-toggle"
-            >
-              {showDebugLogs ? '◀ HIDE' : '▶ DEBUG'} LOGS
-            </button>
           </motion.div>
         </div>
 
@@ -355,6 +348,12 @@ function App() {
         transition={{ duration: 0.5, delay: 0.8 }}
       >
         <p>Powered by GWT • CodeMirror 6 • React</p>
+        <button
+          onClick={() => setShowDebugLogs(!showDebugLogs)}
+          className="footer-debug-toggle"
+        >
+          {showDebugLogs ? '◀ HIDE' : '▶'} DEBUG
+        </button>
         <p className="status">
           System Status: <span className={javacReady ? 'status-ready' : 'status-loading'}>
             {javacReady ? '● READY' : '○ LOADING...'}
