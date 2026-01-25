@@ -8,7 +8,7 @@ Java programming language implementation that runs in a browser. It includes:
 
 ## Live demo
 
-https://ctalau.github.io/javainthebrowser/Jib.html
+https://jitb.ctalau.dev
 
 ## Build system
 
