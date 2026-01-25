@@ -1,17 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import CodeMirror from '@uiw/react-codemirror'
 import { java } from '@codemirror/lang-java'
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Play, Github, Loader2 } from 'lucide-react'
 import './App.css'
-
-// Debug log types
-type LogType = 'info' | 'success' | 'error' | 'warning' | 'milestone'
-
-interface DebugLogEntry {
-  timestamp: string
-  type: LogType
-  message: string
-}
 
 // Javac API types
 interface CompilationResult {
@@ -38,26 +31,8 @@ function App() {
   const [code, setCode] = useState(DEFAULT_CODE)
   const [output, setOutput] = useState('')
   const [isRunning, setIsRunning] = useState(false)
-  const [debugLogs, setDebugLogs] = useState<DebugLogEntry[]>([])
-  const [showDebugLogs, setShowDebugLogs] = useState(false)
   const [javacReady, setJavacReady] = useState(false)
-  const debugLogRef = useRef<HTMLDivElement>(null)
   const javacRef = useRef<JavacAPI | null>(null)
-
-  // Debug logging function
-  const addDebugLog = (message: string, type: LogType = 'info') => {
-    const now = new Date()
-    const timestamp = now.toTimeString().split(' ')[0] + '.' + now.getMilliseconds().toString().padStart(3, '0')
-
-    setDebugLogs(prev => [...prev, { timestamp, type, message }])
-
-    // Auto-scroll to bottom
-    setTimeout(() => {
-      if (debugLogRef.current) {
-        debugLogRef.current.scrollTop = debugLogRef.current.scrollHeight
-      }
-    }, 10)
-  }
 
   // Expose editor to window for GWT module
   useEffect(() => {
@@ -71,70 +46,36 @@ function App() {
 
   // Load javac API
   useEffect(() => {
-    addDebugLog('Initializing Java in the Browser...', 'milestone')
-
-    // Load the javac module - EXACT same approach as original Jib.html
     const loadJavacModule = async () => {
       try {
-        addDebugLog('Starting javac module load', 'milestone')
-
-        // Dynamic import of javac-api.js
         // @ts-ignore - Dynamic import of external module
         const module = await import('/javac-api.js')
-
-        // Load javac with the EXACT same scriptUrl as original
         const javac = await module.loadJavac({ scriptUrl: "javac/javac.nocache.js" })
 
         javacRef.current = javac
-        // Also store in window for compatibility
         ;(window as any).jibJavac = javac
-
         setJavacReady(true)
-        addDebugLog('Javac module loaded successfully', 'success')
-        addDebugLog('Ready to compile Java code', 'milestone')
       } catch (error) {
         const errorMsg = String(error)
         console.warn('Failed to load javac API', error)
-        addDebugLog(`Failed to load javac API: ${errorMsg}`, 'error')
 
         if (errorMsg.includes('Failed to load javac script')) {
-          addDebugLog('GWT files not found. Run "mvn clean package" to build them.', 'error')
-          setOutput('⚠️ Java compiler not available\n\nThe GWT-compiled Java compiler files are missing.\n\nTo build them locally, run:\n  mvn clean package\n\nOr check the deployment logs if using Vercel.')
+          setOutput('Java compiler not available.\n\nThe GWT-compiled Java compiler files are missing.\n\nTo build them locally, run:\n  mvn clean package')
         } else if (errorMsg.includes('Timed out')) {
-          addDebugLog('Javac module timed out. GWT files may be corrupted or incomplete.', 'error')
-          setOutput('⚠️ Java compiler initialization timed out\n\nThe compiler took too long to load. Try refreshing the page.')
+          setOutput('Java compiler initialization timed out.\n\nTry refreshing the page.')
         }
       }
     }
 
     loadJavacModule()
-
-    // Global error handlers
-    const handleError = (event: ErrorEvent) => {
-      addDebugLog(`Unhandled error: ${event.message}`, 'error')
-    }
-
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      addDebugLog(`Unhandled promise rejection: ${event.reason}`, 'error')
-    }
-
-    window.addEventListener('error', handleError)
-    window.addEventListener('unhandledrejection', handleUnhandledRejection)
-
-    return () => {
-      window.removeEventListener('error', handleError)
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection)
-    }
   }, [])
 
   // Capture GWT module output
   useEffect(() => {
-    // Set up mutation observer to watch the GWT log div
     const logDiv = document.getElementById('log-div')
     if (!logDiv) return
 
     const observer = new MutationObserver(() => {
-      // Get the textarea that GWT creates
       const textarea = logDiv.querySelector('textarea')
       if (textarea) {
         setOutput((textarea as HTMLTextAreaElement).value)
@@ -143,7 +84,6 @@ function App() {
 
     observer.observe(logDiv, { childList: true, subtree: true, characterData: true })
 
-    // Also watch for value changes
     const checkOutput = setInterval(() => {
       const textarea = logDiv.querySelector('textarea')
       if (textarea) {
@@ -163,203 +103,118 @@ function App() {
     setIsRunning(true)
 
     try {
-      // Find and click the GWT button
       const btnDiv = document.getElementById('btn-div')
       const gwtButton = btnDiv?.querySelector('button')
 
       if (gwtButton) {
-        addDebugLog('Triggering GWT run button', 'info')
         ;(gwtButton as HTMLButtonElement).click()
-
-        // Wait a bit for execution to complete
         setTimeout(() => {
           setIsRunning(false)
         }, 1000)
       } else {
-        addDebugLog('GWT button not found - module may not be loaded yet', 'warning')
         setOutput('Error: GWT module not ready. Please wait and try again.')
         setIsRunning(false)
       }
     } catch (error) {
-      addDebugLog(`Compilation error: ${error}`, 'error')
       setOutput(`Error: ${error}`)
       setIsRunning(false)
     }
   }
 
   return (
-    <div className="app">
-      {/* Hidden divs for GWT module to attach to */}
+    <div className="min-h-screen bg-zinc-50 flex flex-col">
+      {/* Hidden divs for GWT module */}
       <div id="log-div" style={{ display: 'none' }}></div>
       <div id="btn-div" style={{ display: 'none' }}></div>
 
-      {/* Animated scan line effect */}
-      <div className="scan-line" />
-
-      {/* CRT noise overlay */}
-      <div className="crt-overlay" />
-
       {/* Header */}
-      <motion.header
-        className="header"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-      >
-        <div className="header-content">
-          <motion.h1
-            className="title glow"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+      <header className="border-b bg-white px-6 py-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-zinc-900">Java in the Browser</h1>
+            <p className="text-sm text-zinc-500">Compile and run Java code directly in your browser</p>
+          </div>
+          <a
+            href="https://github.com/ctalau/javainthebrowser"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
           >
-            JAVA.BROWSER
-          </motion.h1>
-          <motion.p
-            className="subtitle"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            Compile & Execute Java in Your Browser
-          </motion.p>
+            <Github className="h-5 w-5" />
+            <span className="hidden sm:inline">GitHub</span>
+          </a>
         </div>
-
-        <a
-          href="https://github.com/ctalau/javainthebrowser"
-          className="github-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          <span>Fork on GitHub</span>
-        </a>
-      </motion.header>
+      </header>
 
       {/* Main content */}
-      <main className="main-content">
-        <div className="editor-section">
-          <motion.div
-            className="panel editor-panel"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="panel-header">
-              <span className="panel-title">SOURCE CODE</span>
-              <span className="panel-indicator"></span>
-            </div>
-            <div className="editor-wrapper">
-              <CodeMirror
-                value={code}
-                height="100%"
-                theme="dark"
-                extensions={[java()]}
-                onChange={(value) => setCode(value)}
-                className="code-editor"
-              />
-            </div>
-          </motion.div>
+      <main className="flex-1 p-4 md:p-6">
+        <div className="max-w-7xl mx-auto grid gap-4 md:gap-6 lg:grid-cols-2">
+          {/* Editor */}
+          <div className="flex flex-col gap-4">
+            <Card className="flex-1 flex flex-col overflow-hidden">
+              <CardHeader className="py-3 px-4 border-b bg-zinc-50">
+                <CardTitle className="text-sm font-medium text-zinc-700">Source Code</CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 p-0 min-h-[400px]">
+                <CodeMirror
+                  value={code}
+                  height="100%"
+                  theme="light"
+                  extensions={[java()]}
+                  onChange={(value) => setCode(value)}
+                  className="h-full text-sm"
+                />
+              </CardContent>
+            </Card>
 
-          <motion.div
-            className="controls"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            <button
+            <Button
               onClick={runCode}
               disabled={isRunning || !javacReady}
-              className="run-button"
+              size="lg"
+              className="w-full"
             >
               {isRunning ? (
                 <>
-                  <span className="spinner"></span>
-                  COMPILING...
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Compiling...
                 </>
               ) : !javacReady ? (
-                'LOADING...'
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Loading...
+                </>
               ) : (
                 <>
-                  <span className="play-icon">▶</span>
-                  RUN CODE
+                  <Play className="h-4 w-4" />
+                  Run Code
                 </>
               )}
-            </button>
-          </motion.div>
-        </div>
+            </Button>
+          </div>
 
-        <div className="output-section">
-          <motion.div
-            className="panel output-panel"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="panel-header">
-              <span className="panel-title">OUTPUT CONSOLE</span>
-              <span className="panel-indicator active"></span>
-            </div>
-            <div className="output-content">
-              <pre>{output || '> Ready to compile Java code...'}</pre>
-            </div>
-          </motion.div>
-
-          <AnimatePresence>
-            {showDebugLogs && (
-              <motion.div
-                className="panel debug-panel"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="panel-header">
-                  <span className="panel-title">DEBUG LOGS</span>
-                  <button
-                    onClick={() => setDebugLogs([])}
-                    className="clear-logs"
-                  >
-                    CLEAR
-                  </button>
-                </div>
-                <div className="debug-content" ref={debugLogRef}>
-                  {debugLogs.map((log, index) => (
-                    <div key={index} className={`debug-entry debug-${log.type}`}>
-                      <span className="debug-timestamp">[{log.timestamp}]</span>
-                      <span className="debug-type">[{log.type.toUpperCase()}]</span>
-                      <span className="debug-message">{log.message}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* Output */}
+          <Card className="flex flex-col overflow-hidden">
+            <CardHeader className="py-3 px-4 border-b bg-zinc-50">
+              <CardTitle className="text-sm font-medium text-zinc-700">Output</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 p-4 min-h-[300px] bg-zinc-900">
+              <pre className="text-sm text-green-400 font-mono whitespace-pre-wrap">
+                {output || '> Ready to compile Java code...'}
+              </pre>
+            </CardContent>
+          </Card>
         </div>
       </main>
 
       {/* Footer */}
-      <motion.footer
-        className="footer"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-      >
-        <p>Powered by GWT • CodeMirror 6 • React</p>
-        <button
-          onClick={() => setShowDebugLogs(!showDebugLogs)}
-          className="footer-debug-toggle"
-        >
-          {showDebugLogs ? '◀ HIDE' : '▶'} DEBUG
-        </button>
-        <p className="status">
-          System Status: <span className={javacReady ? 'status-ready' : 'status-loading'}>
-            {javacReady ? '● READY' : '○ LOADING...'}
+      <footer className="border-t bg-white px-6 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-zinc-500">
+          <span>Powered by GWT, CodeMirror, and React</span>
+          <span className={javacReady ? 'text-green-600' : 'text-zinc-400'}>
+            {javacReady ? 'Ready' : 'Loading...'}
           </span>
-        </p>
-      </motion.footer>
+        </div>
+      </footer>
     </div>
   )
 }
