@@ -46,6 +46,7 @@ h1 {
     margin: 0 !important;
     width: 100%;
     overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   h1 {
@@ -55,5 +56,9 @@ h1 {
 
   div {
     box-sizing: border-box;
+  }
+
+  * {
+    max-width: 100%;
   }
 }
