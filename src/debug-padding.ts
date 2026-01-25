@@ -349,13 +349,13 @@ export class PaddingDebugger {
 
 // Auto-initialize and expose globally
 if (typeof window !== 'undefined') {
-  const debugger = new PaddingDebugger();
-  (window as any).paddingDebugger = debugger;
+  const debuggerInstance = new PaddingDebugger();
+  (window as any).paddingDebugger = debuggerInstance;
 
   // Also expose helper functions
-  (window as any).analyzeLayout = () => debugger.analyze();
-  (window as any).checkElement = (selector: string) => debugger.checkElement(selector);
-  (window as any).findWidestElement = () => debugger.findWidestElement();
+  (window as any).analyzeLayout = () => debuggerInstance.analyze();
+  (window as any).checkElement = (selector: string) => debuggerInstance.checkElement(selector);
+  (window as any).findWidestElement = () => debuggerInstance.findWidestElement();
 
   console.log('%c💡 Helper Functions Available:', 'color: #0ff; font-weight: bold;');
   console.log('%c  analyzeLayout() - Run full layout analysis', 'color: #0f0;');
