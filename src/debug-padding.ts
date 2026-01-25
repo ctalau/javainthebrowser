@@ -187,7 +187,6 @@ export class PaddingDebugger {
 
   private checkOverflow(results: ElementInfo[]) {
     const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
 
     results.forEach((info) => {
       if (info.scrollWidth > viewportWidth) {
@@ -331,19 +330,23 @@ export class PaddingDebugger {
 
   public findWidestElement() {
     const allElements = document.querySelectorAll('*');
-    let widest: { element: Element; width: number } | null = null;
+    let widestElement: Element | null = null;
+    let widestWidth = 0;
 
     allElements.forEach((el) => {
       const rect = el.getBoundingClientRect();
-      if (!widest || rect.width > widest.width) {
-        widest = { element: el, width: rect.width };
+      if (rect.width > widestWidth) {
+        widestElement = el;
+        widestWidth = rect.width;
       }
     });
 
-    if (widest) {
-      console.log('Widest element:', this.getElementSelector(widest.element), `${widest.width}px`, widest.element);
-      return widest;
+    if (widestElement) {
+      console.log('Widest element:', this.getElementSelector(widestElement), `${widestWidth}px`, widestElement);
+      return { element: widestElement, width: widestWidth };
     }
+
+    return null;
   }
 }
 
