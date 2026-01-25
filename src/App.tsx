@@ -68,38 +68,30 @@ function App() {
       try {
         addDebugLog('Loading javac module...', 'info')
 
-        // Load javac-api.js as a script
-        await new Promise((resolve, reject) => {
-          const script = document.createElement('script')
-          script.type = 'module'
-          script.src = '/javac-api.js'
-          script.onload = resolve
-          script.onerror = reject
-          document.head.appendChild(script)
-        })
+        // Dynamic import of javac-api.js
+        // @ts-ignore - Dynamic import of external module
+        const module = await import('/javac-api.js')
 
-        // Wait a bit for the module to be available
-        await new Promise(resolve => setTimeout(resolve, 100))
+        addDebugLog('Starting javac loader...', 'info')
+        // Use default scriptUrl (javac/javac.nocache.js)
+        const javac = await module.loadJavac()
 
-        // Access the loadJavac function from the global scope
-        const loadJavac = (window as any).loadJavacFromModule
-        if (!loadJavac) {
-          // Try dynamic import as fallback
-          // @ts-ignore - Dynamic import of external module
-          const module = await import('/javac-api.js')
-          const javac = await module.loadJavac({ scriptUrl: '/jib/jib.nocache.js' })
-          javacRef.current = javac
-        } else {
-          addDebugLog('Starting javac loader...', 'info')
-          const javac = await loadJavac({ scriptUrl: '/jib/jib.nocache.js' })
-          javacRef.current = javac
-        }
-
+        javacRef.current = javac
         setJavacReady(true)
         addDebugLog('Javac module loaded successfully!', 'success')
         addDebugLog('Ready to compile Java code', 'milestone')
       } catch (error) {
-        addDebugLog(`Failed to load javac: ${error}`, 'error')
+        const errorMsg = String(error)
+        addDebugLog(`Failed to load javac: ${errorMsg}`, 'error')
+
+        if (errorMsg.includes('Failed to load javac script')) {
+          addDebugLog('GWT files not found. Run "mvn clean package" to build them.', 'error')
+          setOutput('⚠️ Java compiler not available\n\nThe GWT-compiled Java compiler files are missing.\n\nTo build them locally, run:\n  mvn clean package\n\nOr check the deployment logs if using Vercel.')
+        } else if (errorMsg.includes('Timed out')) {
+          addDebugLog('Javac module timed out. GWT files may be corrupted or incomplete.', 'error')
+          setOutput('⚠️ Java compiler initialization timed out\n\nThe compiler took too long to load. Try refreshing the page.')
+        }
+
         console.error('Failed to load javac:', error)
       }
     }
