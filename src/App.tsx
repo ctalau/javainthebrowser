@@ -59,6 +59,16 @@ function App() {
     }, 10)
   }
 
+  // Expose editor to window for GWT module
+  useEffect(() => {
+    (window as any).editor = {
+      getCode: () => code
+    }
+    return () => {
+      delete (window as any).editor
+    }
+  }, [code])
+
   // Load javac API
   useEffect(() => {
     addDebugLog('Initializing Java in the Browser...', 'milestone')
@@ -117,38 +127,57 @@ function App() {
     }
   }, [])
 
-  // Run Java code
-  const runCode = async () => {
-    if (!javacRef.current) {
-      setOutput('Error: Javac not ready yet. Please wait...')
-      addDebugLog('Attempted to run code before javac was ready', 'warning')
-      return
-    }
+  // Capture GWT module output
+  useEffect(() => {
+    // Set up mutation observer to watch the GWT log div
+    const logDiv = document.getElementById('log-div')
+    if (!logDiv) return
 
+    const observer = new MutationObserver(() => {
+      // Get the textarea that GWT creates
+      const textarea = logDiv.querySelector('textarea')
+      if (textarea) {
+        setOutput((textarea as HTMLTextAreaElement).value)
+      }
+    })
+
+    observer.observe(logDiv, { childList: true, subtree: true, characterData: true })
+
+    // Also watch for value changes
+    const checkOutput = setInterval(() => {
+      const textarea = logDiv.querySelector('textarea')
+      if (textarea) {
+        const value = (textarea as HTMLTextAreaElement).value
+        setOutput(value)
+      }
+    }, 100)
+
+    return () => {
+      observer.disconnect()
+      clearInterval(checkOutput)
+    }
+  }, [])
+
+  // Run Java code by clicking the GWT button
+  const runCode = async () => {
     setIsRunning(true)
-    setOutput('Compiling...')
-    addDebugLog('Starting compilation...', 'info')
 
     try {
-      // Compile the code
-      const result = javacRef.current.compile(code)
+      // Find and click the GWT button
+      const btnDiv = document.getElementById('btn-div')
+      const gwtButton = btnDiv?.querySelector('button')
 
-      if (result.success && result.className) {
-        addDebugLog(`Compilation successful: ${result.className}`, 'success')
-        setOutput(`Compilation successful!\nClass: ${result.className}\n\nRunning...\n`)
+      if (gwtButton) {
+        addDebugLog('Triggering GWT run button', 'info')
+        ;(gwtButton as HTMLButtonElement).click()
 
-        // Note: Actual execution would require the JVM module from the GWT code
-        // For now, we just show compilation success
-        addDebugLog('Execution would happen here (JVM integration needed)', 'info')
-
+        // Wait a bit for execution to complete
         setTimeout(() => {
-          setOutput(prev => prev + '\n[Note: Full execution requires JVM module integration]')
           setIsRunning(false)
-        }, 500)
+        }, 1000)
       } else {
-        addDebugLog('Compilation failed', 'error')
-        const errors = result.errors?.join('\n') || 'Unknown compilation error'
-        setOutput(`Compilation failed:\n${errors}`)
+        addDebugLog('GWT button not found - module may not be loaded yet', 'warning')
+        setOutput('Error: GWT module not ready. Please wait and try again.')
         setIsRunning(false)
       }
     } catch (error) {
@@ -160,6 +189,10 @@ function App() {
 
   return (
     <div className="app">
+      {/* Hidden divs for GWT module to attach to */}
+      <div id="log-div" style={{ display: 'none' }}></div>
+      <div id="btn-div" style={{ display: 'none' }}></div>
+
       {/* Animated scan line effect */}
       <div className="scan-line" />
 
