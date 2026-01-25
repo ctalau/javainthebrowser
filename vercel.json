@@ -1,6 +1,6 @@
 {
   "installCommand": "echo 'skip install'",
-  "buildCommand": "mkdir target && echo 'Waiting for GH Action deployment'",
+  "buildCommand": "mkdir target && echo 'Waiting for GH Action deployment' > target/index.html",
   "outputDirectory": "target",
   "framework": null,
   "github": {
