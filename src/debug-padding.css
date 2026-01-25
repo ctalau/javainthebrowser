@@ -1,0 +1,205 @@
+/* DEBUG CSS - Visual debugging for white padding issue */
+
+/* Add this class to body to enable debug mode */
+body.debug-padding-mode {
+  /* Show all element boundaries with colored outlines */
+}
+
+/* Root level elements */
+body.debug-padding-mode * {
+  outline: 1px solid rgba(255, 0, 0, 0.3) !important;
+}
+
+/* Highlight critical container elements */
+body.debug-padding-mode html {
+  outline: 5px solid red !important;
+  background: repeating-linear-gradient(
+    45deg,
+    #ff0000,
+    #ff0000 10px,
+    #ff6666 10px,
+    #ff6666 20px
+  ) !important;
+}
+
+body.debug-padding-mode body {
+  outline: 5px solid orange !important;
+  background: repeating-linear-gradient(
+    -45deg,
+    #ff6600,
+    #ff6600 10px,
+    #ff9933 10px,
+    #ff9933 20px
+  ) !important;
+}
+
+body.debug-padding-mode #root {
+  outline: 5px solid yellow !important;
+  background: repeating-linear-gradient(
+    90deg,
+    #ffff00,
+    #ffff00 10px,
+    #ffff66 10px,
+    #ffff66 20px
+  ) !important;
+}
+
+body.debug-padding-mode .app {
+  outline: 5px solid lime !important;
+  background: repeating-linear-gradient(
+    0deg,
+    #00ff00,
+    #00ff00 10px,
+    #66ff66 10px,
+    #66ff66 20px
+  ) !important;
+}
+
+body.debug-padding-mode .header {
+  outline: 5px solid cyan !important;
+  background-color: rgba(0, 255, 255, 0.2) !important;
+}
+
+body.debug-padding-mode .main-content {
+  outline: 5px solid magenta !important;
+  background-color: rgba(255, 0, 255, 0.2) !important;
+}
+
+body.debug-padding-mode .footer {
+  outline: 5px solid blue !important;
+  background-color: rgba(0, 0, 255, 0.2) !important;
+}
+
+/* Show padding and margin visually */
+body.debug-padding-mode .header::before,
+body.debug-padding-mode .main-content::before,
+body.debug-padding-mode .footer::before,
+body.debug-padding-mode .app::before,
+body.debug-padding-mode #root::before,
+body.debug-padding-mode body::before {
+  content: attr(class);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-family: monospace;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+body.debug-padding-mode body::before {
+  content: 'BODY';
+}
+
+body.debug-padding-mode #root::before {
+  content: '#root';
+}
+
+/* Dimension overlay */
+body.debug-padding-mode::after {
+  content: 'DEBUG MODE ACTIVE - Check console for details';
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 0, 0, 0.9);
+  color: white;
+  padding: 10px 20px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 999999;
+  border-radius: 0 0 8px 8px;
+  pointer-events: none;
+}
+
+/* Force visibility of overflow issues */
+body.debug-padding-mode {
+  overflow-x: auto !important;
+}
+
+body.debug-padding-mode html {
+  overflow-x: auto !important;
+}
+
+/* Show computed box model in a floating panel */
+.debug-box-model-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.95);
+  color: #0f0;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 15px;
+  border: 2px solid #0f0;
+  border-radius: 8px;
+  z-index: 999999;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.debug-box-model-panel h3 {
+  margin: 0 0 10px 0;
+  color: #0ff;
+  font-size: 13px;
+  border-bottom: 1px solid #0ff;
+  padding-bottom: 5px;
+}
+
+.debug-box-model-panel .element-info {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(0, 50, 0, 0.5);
+  border-left: 3px solid #0f0;
+}
+
+.debug-box-model-panel .element-name {
+  color: #ff0;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.debug-box-model-panel .property {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  margin: 3px 0;
+}
+
+.debug-box-model-panel .property-name {
+  color: #0ff;
+}
+
+.debug-box-model-panel .property-value {
+  color: #fff;
+}
+
+.debug-box-model-panel .warning {
+  color: #f80;
+  background: rgba(255, 136, 0, 0.2);
+  padding: 5px;
+  margin: 5px 0;
+  border-left: 3px solid #f80;
+}
+
+.debug-box-model-panel button {
+  background: #0f0;
+  color: #000;
+  border: none;
+  padding: 8px 15px;
+  margin: 5px 5px 0 0;
+  cursor: pointer;
+  font-family: monospace;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.debug-box-model-panel button:hover {
+  background: #0ff;
+}
