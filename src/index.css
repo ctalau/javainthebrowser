@@ -34,6 +34,9 @@
 html, body {
   height: 100%;
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 body {
@@ -49,6 +52,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Scrollbar styling */
