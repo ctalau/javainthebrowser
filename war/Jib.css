@@ -40,13 +40,20 @@ h1 {
 
 /* Mobile responsive - remove padding on mobile devices */
 @media (max-width: 768px) {
+  html,
   body {
-    padding: 0;
-    margin: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   h1 {
-    margin: 20px 10px 30px;
-    padding: 0 10px;
+    margin: 20px 0 30px;
+    padding: 0;
+  }
+
+  div {
+    box-sizing: border-box;
   }
 }
