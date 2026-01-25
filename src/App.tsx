@@ -41,6 +41,8 @@ function App() {
   const [debugLogs, setDebugLogs] = useState<DebugLogEntry[]>([])
   const [showDebugLogs, setShowDebugLogs] = useState(false)
   const [javacReady, setJavacReady] = useState(false)
+  const [paddingDebugMode, setPaddingDebugMode] = useState(false)
+  const [paddingDebugResults, setPaddingDebugResults] = useState<string>('')
   const debugLogRef = useRef<HTMLDivElement>(null)
   const javacRef = useRef<JavacAPI | null>(null)
 
@@ -185,6 +187,90 @@ function App() {
       setOutput(`Error: ${error}`)
       setIsRunning(false)
     }
+  }
+
+  // Toggle padding debug mode
+  const togglePaddingDebug = () => {
+    const newMode = !paddingDebugMode
+    setPaddingDebugMode(newMode)
+
+    if (newMode) {
+      document.body.classList.add('debug-padding-mode')
+      runPaddingAnalysis()
+    } else {
+      document.body.classList.remove('debug-padding-mode')
+      setPaddingDebugResults('')
+    }
+  }
+
+  // Run padding analysis
+  const runPaddingAnalysis = () => {
+    const elements = [
+      { selector: 'html', element: document.documentElement },
+      { selector: 'body', element: document.body },
+      { selector: '#root', element: document.getElementById('root') },
+      { selector: '.app', element: document.querySelector('.app') },
+      { selector: '.header', element: document.querySelector('.header') },
+      { selector: '.main-content', element: document.querySelector('.main-content') },
+      { selector: '.footer', element: document.querySelector('.footer') },
+    ]
+
+    let results = '=== PADDING DEBUG ANALYSIS ===\n\n'
+    results += `Viewport: ${window.innerWidth}px × ${window.innerHeight}px\n\n`
+
+    elements.forEach(({ selector, element }) => {
+      if (!element) {
+        results += `❌ ${selector}: NOT FOUND\n\n`
+        return
+      }
+
+      const el = element as HTMLElement
+      const computed = window.getComputedStyle(el)
+      const rect = el.getBoundingClientRect()
+
+      results += `📦 ${selector}\n`
+      results += `  Width: ${rect.width.toFixed(1)}px (scroll: ${el.scrollWidth}px)\n`
+      results += `  Height: ${rect.height.toFixed(1)}px (scroll: ${el.scrollHeight}px)\n`
+      results += `  Padding: ${computed.padding}\n`
+      results += `  Margin: ${computed.margin}\n`
+      results += `  Border: ${computed.borderWidth}\n`
+      results += `  Box-sizing: ${computed.boxSizing}\n`
+
+      if (el.scrollWidth > el.clientWidth) {
+        results += `  ⚠️ HORIZONTAL OVERFLOW: ${el.scrollWidth - el.clientWidth}px\n`
+      }
+      if (el.scrollHeight > el.clientHeight) {
+        results += `  ⚠️ VERTICAL OVERFLOW: ${el.scrollHeight - el.clientHeight}px\n`
+      }
+      if (rect.width > window.innerWidth) {
+        results += `  ⚠️ WIDER THAN VIEWPORT: ${(rect.width - window.innerWidth).toFixed(1)}px\n`
+      }
+
+      results += '\n'
+    })
+
+    // Find widest element
+    const allElements = document.querySelectorAll('*')
+    let widest = { selector: '', width: 0, element: null as Element | null }
+
+    allElements.forEach((el) => {
+      const rect = el.getBoundingClientRect()
+      if (rect.width > widest.width) {
+        widest = {
+          selector: el.id ? `#${el.id}` : el.className ? `.${el.className.split(' ')[0]}` : el.tagName.toLowerCase(),
+          width: rect.width,
+          element: el
+        }
+      }
+    })
+
+    results += `🔍 WIDEST ELEMENT:\n`
+    results += `  ${widest.selector}: ${widest.width.toFixed(1)}px\n`
+    if (widest.width > window.innerWidth) {
+      results += `  ⚠️ Exceeds viewport by ${(widest.width - window.innerWidth).toFixed(1)}px\n`
+    }
+
+    setPaddingDebugResults(results)
   }
 
   return (
@@ -337,6 +423,33 @@ function App() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          <AnimatePresence>
+            {paddingDebugMode && (
+              <motion.div
+                className="panel debug-panel"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="panel-header">
+                  <span className="panel-title">PADDING DEBUG</span>
+                  <button
+                    onClick={runPaddingAnalysis}
+                    className="clear-logs"
+                  >
+                    REFRESH
+                  </button>
+                </div>
+                <div className="debug-content">
+                  <pre style={{ color: 'var(--color-neon-green)', fontSize: '0.75rem', whiteSpace: 'pre-wrap' }}>
+                    {paddingDebugResults || 'Running analysis...'}
+                  </pre>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </main>
 
@@ -348,12 +461,24 @@ function App() {
         transition={{ duration: 0.5, delay: 0.8 }}
       >
         <p>Powered by GWT • CodeMirror 6 • React</p>
-        <button
-          onClick={() => setShowDebugLogs(!showDebugLogs)}
-          className="footer-debug-toggle"
-        >
-          {showDebugLogs ? '◀ HIDE' : '▶'} DEBUG
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setShowDebugLogs(!showDebugLogs)}
+            className="footer-debug-toggle"
+          >
+            {showDebugLogs ? '◀ HIDE' : '▶'} DEBUG
+          </button>
+          <button
+            onClick={togglePaddingDebug}
+            className="footer-debug-toggle"
+            style={{
+              borderColor: paddingDebugMode ? 'var(--color-neon-cyan)' : 'var(--color-text-dim)',
+              color: paddingDebugMode ? 'var(--color-neon-cyan)' : 'var(--color-text-dim)'
+            }}
+          >
+            {paddingDebugMode ? '🔍 ON' : '🔍'} PADDING
+          </button>
+        </div>
         <p className="status">
           System Status: <span className={javacReady ? 'status-ready' : 'status-loading'}>
             {javacReady ? '● READY' : '○ LOADING...'}
