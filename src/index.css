@@ -1,0 +1,124 @@
+:root {
+  --color-bg-primary: #0a0e27;
+  --color-bg-secondary: #141933;
+  --color-bg-tertiary: #1a1f3a;
+  --color-neon-cyan: #00ffff;
+  --color-neon-green: #39ff14;
+  --color-neon-pink: #ff10f0;
+  --color-neon-yellow: #ffff00;
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #a0a0a0;
+  --color-text-dim: #606060;
+  --color-glow-cyan: rgba(0, 255, 255, 0.5);
+  --color-glow-green: rgba(57, 255, 20, 0.5);
+  --color-error: #ff3366;
+  --color-success: #00ff88;
+
+  --font-display: 'Orbitron', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --border-radius: 8px;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-mono);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neon-cyan);
+  border-radius: 5px;
+  box-shadow: 0 0 10px var(--color-glow-cyan);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-green);
+  box-shadow: 0 0 15px var(--color-glow-green);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--color-neon-cyan);
+  color: var(--color-bg-primary);
+}
+
+::-moz-selection {
+  background: var(--color-neon-cyan);
+  color: var(--color-bg-primary);
+}
+
+/* Animations */
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor;
+  }
+  50% {
+    text-shadow:
+      0 0 20px currentColor,
+      0 0 30px currentColor,
+      0 0 40px currentColor,
+      0 0 50px currentColor;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+/* Utility classes */
+.glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.flicker {
+  animation: flicker 0.15s infinite;
+}

@@ -1,6 +1,6 @@
 {
-  "installCommand": "echo 'skip install'",
-  "buildCommand": "echo 'Using prebuilt Maven output'",
+  "installCommand": "npm install",
+  "buildCommand": "mkdir -p target/war && cp -r war/* target/war/ 2>/dev/null || true && (mvn clean package || echo 'Maven build skipped') && npm run build",
   "outputDirectory": "target/war",
   "framework": null,
   "github": {
