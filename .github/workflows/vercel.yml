@@ -2,8 +2,6 @@ name: Deploy to Vercel
 
 on:
   push:
-  pull_request:
-    types: [opened, synchronize, reopened]
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -15,6 +13,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Find associated PR
+        id: find-pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR_NUMBER=$(gh pr list --head "${{ github.ref_name }}" --json number --jq '.[0].number // ""')
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          if [ -n "$PR_NUMBER" ]; then
+            echo "Found PR #$PR_NUMBER for branch ${{ github.ref_name }}"
+          else
+            echo "No PR found for branch ${{ github.ref_name }}"
+          fi
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -43,27 +54,27 @@ jobs:
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Deploy Prebuilt to Preview
-        if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
+        if: github.ref != 'refs/heads/main'
         id: deploy-preview
         run: |
           URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Find existing comment
-        if: github.event_name == 'pull_request'
+        if: steps.find-pr.outputs.number != ''
         uses: peter-evans/find-comment@v3
         id: find-comment
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ steps.find-pr.outputs.number }}
           comment-author: 'github-actions[bot]'
           body-includes: '<!-- vercel-deploy-comment -->'
 
       - name: Create or update PR comment
-        if: github.event_name == 'pull_request'
+        if: steps.find-pr.outputs.number != ''
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ steps.find-pr.outputs.number }}
           edit-mode: replace
           body: |
             <!-- vercel-deploy-comment -->
