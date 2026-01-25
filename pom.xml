@@ -126,9 +126,9 @@
           </modules>
           <warSourceDirectory>${basedir}/war</warSourceDirectory>
           <webappDirectory>${project.build.directory}/war</webappDirectory>
-          <extraJvmArgs>-Xmx1024m</extraJvmArgs>
+          <extraJvmArgs>-Xmx2048m</extraJvmArgs>
           <jvm>${gwt.jvm}</jvm>
-          <localWorkers>2</localWorkers>
+          <localWorkers>4</localWorkers>
           <draftCompile>false</draftCompile>
         </configuration>
         <executions>
