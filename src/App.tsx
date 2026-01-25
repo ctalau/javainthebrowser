@@ -63,26 +63,29 @@ function App() {
   useEffect(() => {
     addDebugLog('Initializing Java in the Browser...', 'milestone')
 
-    // Load the javac module
+    // Load the javac module - EXACT same approach as original Jib.html
     const loadJavacModule = async () => {
       try {
-        addDebugLog('Loading javac module...', 'info')
+        addDebugLog('Starting javac module load', 'milestone')
 
         // Dynamic import of javac-api.js
         // @ts-ignore - Dynamic import of external module
         const module = await import('/javac-api.js')
 
-        addDebugLog('Starting javac loader...', 'info')
-        // Use default scriptUrl (javac/javac.nocache.js)
-        const javac = await module.loadJavac()
+        // Load javac with the EXACT same scriptUrl as original
+        const javac = await module.loadJavac({ scriptUrl: "javac/javac.nocache.js" })
 
         javacRef.current = javac
+        // Also store in window for compatibility
+        ;(window as any).jibJavac = javac
+
         setJavacReady(true)
-        addDebugLog('Javac module loaded successfully!', 'success')
+        addDebugLog('Javac module loaded successfully', 'success')
         addDebugLog('Ready to compile Java code', 'milestone')
       } catch (error) {
         const errorMsg = String(error)
-        addDebugLog(`Failed to load javac: ${errorMsg}`, 'error')
+        console.warn('Failed to load javac API', error)
+        addDebugLog(`Failed to load javac API: ${errorMsg}`, 'error')
 
         if (errorMsg.includes('Failed to load javac script')) {
           addDebugLog('GWT files not found. Run "mvn clean package" to build them.', 'error')
@@ -91,8 +94,6 @@ function App() {
           addDebugLog('Javac module timed out. GWT files may be corrupted or incomplete.', 'error')
           setOutput('⚠️ Java compiler initialization timed out\n\nThe compiler took too long to load. Try refreshing the page.')
         }
-
-        console.error('Failed to load javac:', error)
       }
     }
 
