@@ -198,7 +198,9 @@
 .code-editor {
   height: 100% !important;
   width: 100% !important;
+  max-width: 100% !important;
   font-size: 14px !important;
+  overflow-x: auto !important;
 }
 
 .code-editor .cm-editor {
@@ -208,6 +210,11 @@
 
 .code-editor .cm-scroller {
   font-family: var(--font-mono) !important;
+  overflow-x: auto !important;
+}
+
+.code-editor .cm-content {
+  max-width: 100% !important;
 }
 
 /* Controls */
