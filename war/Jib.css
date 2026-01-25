@@ -37,3 +37,16 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+/* Mobile responsive - remove padding on mobile devices */
+@media (max-width: 768px) {
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  h1 {
+    margin: 20px 10px 30px;
+    padding: 0 10px;
+  }
+}
