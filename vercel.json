@@ -1,7 +1,7 @@
 {
   "installCommand": "echo 'skip install'",
-  "buildCommand": "mkdir -p target && echo 'Waiting for GH Action deployment' > target/index.html",
-  "outputDirectory": "target",
+  "buildCommand": "echo 'Using prebuilt Maven output'",
+  "outputDirectory": "target/war",
   "framework": null,
   "github": {
     "silent": true
