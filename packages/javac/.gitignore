@@ -4,9 +4,8 @@ node_modules/
 # Build output
 dist/
 
-# Generated GWT bundle (downloaded/built at build time)
+# Generated GWT bundle (extracted from Maven build output)
 src/gwt-bundle.js
-.gwt-cache.html
 
 # GWT compilation output
 war/

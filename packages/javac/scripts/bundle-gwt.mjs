@@ -1,44 +1,49 @@
 #!/usr/bin/env node
 /**
- * This script downloads the pre-built GWT javac module from GitHub Pages
+ * This script extracts the GWT javac module from the local Maven build output
  * and bundles it as a self-contained JavaScript module.
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageDir = join(__dirname, '..');
+const projectRoot = join(packageDir, '..', '..');
 
-// GWT cache file for webkit/safari (most compatible with jsdom)
-const GWT_CACHE_URL = 'https://ctalau.github.io/javainthebrowser/javac/517F3358019201A43E384D8211401F14.cache.html';
+// Path to the GWT output from Maven build
+const GWT_OUTPUT_DIR = join(projectRoot, 'target', 'war', 'javac');
 
-async function fetchGwtCache() {
-  console.log('Fetching GWT cache file from GitHub Pages...');
-
-  // Try Node.js fetch first
-  try {
-    const response = await fetch(GWT_CACHE_URL);
-    if (response.ok) {
-      return await response.text();
-    }
-  } catch {
-    // Fall through to curl
+function findCacheFile() {
+  if (!existsSync(GWT_OUTPUT_DIR)) {
+    throw new Error(
+      `GWT output directory not found: ${GWT_OUTPUT_DIR}\n` +
+      'Please run "mvn -DskipTests package" from the project root first.'
+    );
   }
 
-  // Try curl as fallback (works better in some environments)
-  const { execSync } = await import('child_process');
-  try {
-    const result = execSync(`curl -s "${GWT_CACHE_URL}"`, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
-    if (result && result.includes('<html>')) {
-      return result;
-    }
-  } catch {
-    // Fall through
+  const files = readdirSync(GWT_OUTPUT_DIR);
+
+  // Find .cache.html files (GWT compiled output)
+  // The strong name is a hash like "517F3358019201A43E384D8211401F14"
+  const cacheFiles = files.filter(f => f.endsWith('.cache.html'));
+
+  if (cacheFiles.length === 0) {
+    throw new Error(
+      `No .cache.html files found in ${GWT_OUTPUT_DIR}\n` +
+      'Please ensure the Maven build completed successfully.'
+    );
   }
 
-  throw new Error('Failed to fetch GWT cache file');
+  // If there are multiple cache files, prefer the webkit/safari one for jsdom compatibility
+  // GWT generates different permutations for different browsers
+  // For now, just use the first one found (there's typically only one in production builds)
+  const cacheFile = cacheFiles[0];
+  const strongName = cacheFile.replace('.cache.html', '');
+
+  console.log(`Found GWT cache file: ${cacheFile}`);
+  return { path: join(GWT_OUTPUT_DIR, cacheFile), strongName };
 }
 
 function extractJavaScript(html) {
@@ -75,7 +80,7 @@ function extractJavaScript(html) {
   return { headScript, bodyScript };
 }
 
-function createBundledModule(headScript, bodyScript) {
+function createBundledModule(headScript, bodyScript, strongName) {
   // Append a call to gwtOnLoad to trigger module initialization
   const gwtCodeWithInit = bodyScript + '\n\n// Trigger GWT module initialization\ngwtOnLoad(null, "javac", "", 0);';
 
@@ -108,7 +113,7 @@ export function initializeJavac(env) {
       const $doc = env.document;
       let $moduleName = 'javac';
       let $moduleBase = '';
-      const $strongName = '517F3358019201A43E384D8211401F14';
+      const $strongName = ${JSON.stringify(strongName)};
       const $stats = null;
       const $sessionId = null;
 
@@ -132,30 +137,17 @@ function createGwtCode() {
 `;
 }
 
-async function main() {
+function main() {
   try {
-    // Check if we can fetch (for offline development, allow using cached version)
-    let html;
-    const cacheFile = join(packageDir, '.gwt-cache.html');
+    const { path: cacheFilePath, strongName } = findCacheFile();
 
-    try {
-      html = await fetchGwtCache();
-      // Save cache for offline development
-      writeFileSync(cacheFile, html);
-      console.log('Downloaded and cached GWT module.');
-    } catch (error) {
-      if (existsSync(cacheFile)) {
-        console.log('Network error, using cached GWT module...');
-        html = readFileSync(cacheFile, 'utf-8');
-      } else {
-        throw error;
-      }
-    }
+    console.log(`Reading GWT cache from: ${cacheFilePath}`);
+    const html = readFileSync(cacheFilePath, 'utf-8');
 
     const { headScript, bodyScript } = extractJavaScript(html);
     console.log(`Extracted ${bodyScript.length} bytes of JavaScript.`);
 
-    const bundledModule = createBundledModule(headScript, bodyScript);
+    const bundledModule = createBundledModule(headScript, bodyScript, strongName);
 
     const outputPath = join(packageDir, 'src', 'gwt-bundle.js');
     writeFileSync(outputPath, bundledModule);
