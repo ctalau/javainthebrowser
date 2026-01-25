@@ -25,5 +25,6 @@
   <source path='client'/>
 
 
-  <set-property name="user.agent" value="gecko1_8"/>
+  <!-- Limit browser permutations: gecko1_8 (Firefox), safari (Chrome/Safari) -->
+  <set-property name="user.agent" value="gecko1_8,safari"/>
 </module>
