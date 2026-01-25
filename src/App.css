@@ -4,6 +4,9 @@
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   background:
     radial-gradient(ellipse at top, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
     radial-gradient(ellipse at bottom, rgba(57, 255, 20, 0.1) 0%, transparent 50%),
@@ -61,6 +64,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--spacing-md);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header-content {
@@ -126,6 +131,7 @@
   flex-direction: column;
   gap: var(--spacing-md);
   min-height: 0;
+  min-width: 0;
 }
 
 /* Panels */
@@ -139,6 +145,7 @@
   box-shadow:
     0 0 20px rgba(0, 255, 255, 0.2),
     inset 0 0 20px rgba(0, 255, 255, 0.05);
+  min-width: 0;
 }
 
 .panel-header {
@@ -176,16 +183,21 @@
 .editor-panel {
   flex: 1;
   min-height: 400px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .editor-wrapper {
   flex: 1;
   overflow: hidden;
   background: #1e1e1e;
+  min-width: 0;
 }
 
 .code-editor {
   height: 100% !important;
+  width: 100% !important;
   font-size: 14px !important;
 }
 
@@ -204,6 +216,10 @@
   gap: var(--spacing-md);
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .run-button {
@@ -285,6 +301,9 @@
 .output-panel {
   flex: 1;
   min-height: 300px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .output-content {
@@ -307,6 +326,7 @@
 /* Debug panel */
 .debug-panel {
   max-height: 350px;
+  min-width: 0;
 }
 
 .debug-content {
@@ -449,6 +469,8 @@
   .run-button {
     width: 100%;
     justify-content: center !important;
+    font-size: 1rem !important;
+    padding: var(--spacing-sm) var(--spacing-md) !important;
   }
 
   .footer {
