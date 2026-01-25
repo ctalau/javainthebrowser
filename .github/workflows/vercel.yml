@@ -34,8 +34,12 @@ jobs:
           java-version: "8"
           cache: "maven"
 
+      - name: Run javac tests
+        working-directory: packages/javac
+        run: mvn test
+
       - name: Build with Maven
-        run: mvn -DskipTests package
+        run: mvn package
 
       - name: Install Vercel CLI
         run: npm install -g vercel
