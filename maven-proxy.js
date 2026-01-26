@@ -4,7 +4,7 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 
-const MAVEN_CENTRAL_URL = 'https://repo.maven.apache.org/maven2';
+const MAVEN_CENTRAL_URL = 'http://repo.maven.apache.org/maven2';
 const LISTEN_PORT = 8080;
 
 /**
@@ -29,7 +29,7 @@ function extractBearerToken() {
 
   if (password.startsWith('jwt_')) {
     const token = password.slice(4); // Remove 'jwt_' prefix
-    console.log('Extracted bearer token from HTTPS_PROXY');
+    console.log(`Extracted bearer token from HTTPS_PROXY (length: ${token.length})`);
     return token;
   }
 
@@ -63,7 +63,9 @@ function forwardThroughProxy(requestUrl, callback) {
   if (!proxyInfo || !bearerToken) {
     // If no proxy configured, connect directly
     console.log(`Making direct request to ${requestUrl}`);
-    return https.get(requestUrl, callback);
+    // For HTTP URLs, use http.get instead of https.get
+    const isHttps = requestUrl.startsWith('https:');
+    return isHttps ? https.get(requestUrl, callback) : http.get(requestUrl, callback);
   }
 
   console.log(`Forwarding request through proxy ${proxyInfo.host}:${proxyInfo.port}`);
@@ -74,14 +76,19 @@ function forwardThroughProxy(requestUrl, callback) {
     host: proxyInfo.host,
     port: proxyInfo.port,
     method: 'GET',
+    path: requestUrl, // Full URL as path for proxy
     headers: {
-      'Host': parsedUrl.hostname,
       'Proxy-Authorization': `Bearer ${bearerToken}`,
-      'User-Agent': 'Maven-Proxy/1.0'
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      'Accept': '*/*',
+      'Accept-Encoding': 'gzip, deflate',
+      'Connection': 'keep-alive',
+      'Cache-Control': 'no-cache'
     }
   };
 
-  return https.request(requestUrl, options, callback);
+  // Use http.request for proxy (not https) since we're connecting to the proxy itself
+  return http.request(options, callback);
 }
 
 /**
