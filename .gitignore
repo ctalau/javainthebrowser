@@ -21,3 +21,7 @@ yarn-error.log*
 
 # Build outputs
 dist/
+
+# Generated files
+packages/javac/java/gwtjava/io/fs/FileSystemContent.java
+packages/stdlib/build/

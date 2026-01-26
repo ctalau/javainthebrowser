@@ -282,44 +282,52 @@ The demo app uses FileSystemContent transparently through the compilation and ex
 
 ## FileSystemContent Generation
 
-FileSystemContent is a **generated Java class** that contains the embedded Java Runtime Environment bytecode. It is created at **build time** and used at **runtime**.
+FileSystemContent is a **generated Java class** that contains the embedded Java Runtime Environment bytecode. It is created at **build time** and used at **runtime**. The file is **not committed to git** - it is generated automatically during the build process.
 
 ### Generation Process
 
-**Tool:** `jre/tool/ExtractJre.java`
+**Location:** `packages/stdlib/`
+
+**Tool:** `packages/stdlib/scripts/generate-filesystem-content.mjs` (Node.js orchestrator)
+
+This script orchestrates the following:
+1. Compiles custom override classes using `javac`
+2. Compiles `packages/stdlib/tools/ExtractJre.java`
+3. Runs `ExtractJre` to generate FileSystemContent.java
 
 **Input:**
-- Manifest file: `jre/jre-contents` (list of 90 JRE classes to include)
+- Manifest file: `packages/stdlib/jre-classes/jre-contents` (list of ~90 JRE classes to include)
 - System JRE: Java 8 standard library from the build machine
+- Custom overrides: `packages/stdlib/jre-classes/` directory
+
+**Custom Override Classes:**
+- `packages/stdlib/jre-classes/java/io/ConsolePrintStream.java` - Browser console output
+- `packages/stdlib/jre-classes/sun/misc/Unsafe.java` - Low-level memory operations stub
 
 **Process:**
 
-1. **Read Manifest:**
-   ```
-   java/lang/Object.class
-   java/lang/String.class
-   java/lang/Class.class
-   ... (90 total classes)
-   ```
+1. **Compile Overrides:**
+   - Compile ConsolePrintStream.java and Unsafe.java to build/override-classes/
 
-2. **Load Bytecode:**
-   - For standard classes: Load from system JRE via `ClassLoader.getSystemClassLoader()`
-   - For custom overrides: Load from `jre/` directory
-     - `jre/java/io/ConsolePrintStream.java` - Browser console output
-     - `jre/sun/misc/Unsafe.java` - Low-level memory operations stub
+2. **Compile ExtractJre:**
+   - Compile packages/stdlib/tools/ExtractJre.java to build/tool-classes/
 
-3. **Hex-Encode:**
-   - Convert each .class file to hex string
-   - Example: `java/lang/String.class` → `"cafebabe0000003200..."`
+3. **Run ExtractJre:**
+   - Read manifest from jre-contents
+   - For each class:
+     - Load from override-classes if it's a custom class
+     - Otherwise load from system JRE via ClassLoader
+   - Hex-encode bytecode
+   - Generate FileSystemContent.java
 
-4. **Generate FileSystemContent.java:**
+4. **Output FileSystemContent.java:**
    ```java
    public class FileSystemContent {
        public static final HashMap<String, String> files = new HashMap<>();
        static {
            files.put("java/lang/Object.class", "cafebabe00000034...");
            files.put("java/lang/String.class", "cafebabe00000034...");
-           // ... 90 classes total
+           // ... ~90 classes total
        }
    }
    ```
@@ -332,9 +340,18 @@ FileSystemContent is a **generated Java class** that contains the embedded Java 
 - Compiled: Embedded in `javac.nocache.js` and `jib.nocache.js`
 
 **When Generated:**
-- Maven build time (`mvn clean package`)
-- Part of the build process before GWT compilation
-- Must be regenerated if `jre/jre-contents` changes
+- Automatically before GWT compilation via `npm run build:gwt` in packages/javac
+- Can also be run manually: `npm run build` in packages/stdlib
+- Must be regenerated if `packages/stdlib/jre-classes/jre-contents` changes
+
+**Build Integration:**
+```bash
+# From packages/javac:
+npm run build:gwt    # Runs generate-stdlib first, then mvn package
+
+# Or manually:
+cd packages/stdlib && npm run build
+```
 
 ---
 
@@ -423,26 +440,31 @@ Class loaded and ready to execute
 ### Build-Time Flow
 
 ```
-1. Maven Build Starts (mvn clean package)
+1. npm run build:gwt (from packages/javac)
    ↓
-2. Extract JRE Phase
-   - jre/tool/ExtractJre.java runs
-   - Reads jre/jre-contents manifest
-   - Loads 90 classes from system JRE + custom overrides
-   - Hex-encodes each bytecode file
-   - Generates packages/javac/java/gwtjava/io/fs/FileSystemContent.java
+2. Generate FileSystemContent (npm run generate-stdlib)
+   - Node.js script: packages/stdlib/scripts/generate-filesystem-content.mjs
+   - Compiles custom override classes (ConsolePrintStream, Unsafe)
+   - Compiles ExtractJre.java tool
+   - Runs ExtractJre:
+     - Reads packages/stdlib/jre-classes/jre-contents manifest
+     - Loads ~90 classes from system JRE + custom overrides
+     - Hex-encodes each bytecode file
+     - Generates packages/javac/java/gwtjava/io/fs/FileSystemContent.java
    ↓
-3. Compile Sources
+3. Maven Build Starts (mvn clean package)
+   ↓
+4. Compile Sources
    - javac compiles all Java source files
    - Including the generated FileSystemContent.java
    ↓
-4. GWT Compilation
+5. GWT Compilation
    - GWT compiles gwtjava module → gwtjava.js
    - GWT compiles javac module → javac.nocache.js
    - GWT compiles jib module → jib.nocache.js
    - FileSystemContent.files embedded in JavaScript
    ↓
-5. Build Artifacts Created
+6. Build Artifacts Created
    - gwtjava.nocache.js (library, not typically deployed)
    - javac.nocache.js (standalone compiler)
    - jib.nocache.js (demo application)
@@ -493,10 +515,30 @@ Class loaded and ready to execute
 
 **FileSystemContent** is the critical bridge between the Java Runtime Environment and the browser:
 
-1. **Generated at Build Time:** Extracts 90 JRE classes from system JRE, hex-encodes them, and generates a Java class
+1. **Generated at Build Time:** The `packages/stdlib` package extracts ~90 JRE classes from system JRE, hex-encodes them, and generates a Java class. This file is NOT committed to git - it is generated automatically during the build.
 2. **Compiled into JavaScript:** Becomes static data in GWT modules
 3. **Decoded at Runtime:** Browser-based JSFileSystem decodes hex strings into byte arrays
 4. **Provides Foundation:** All compilation and execution uses classes from FileSystemContent
 5. **Enables Transparency:** Users can write normal Java code that references `String`, `ArrayList`, `System`, etc. without knowing they're coming from FileSystemContent
 
 The 4 GWT modules (`gwtjava`, `javac`, `jvm`, `Jib`) form a complete Java development environment where FileSystemContent is the invisible foundation making it all work.
+
+## Project Structure
+
+```
+packages/
+├── stdlib/                           # JRE bytecode generator
+│   ├── jre-classes/                  # JRE class manifest and custom overrides
+│   │   ├── jre-contents              # List of classes to include
+│   │   ├── java/io/ConsolePrintStream.java
+│   │   └── sun/misc/Unsafe.java
+│   ├── tools/
+│   │   └── ExtractJre.java           # Java tool to extract and hex-encode classes
+│   ├── scripts/
+│   │   └── generate-filesystem-content.mjs  # Node.js build orchestrator
+│   └── package.json
+├── javac/                            # Java compiler package
+│   └── java/gwtjava/io/fs/
+│       └── FileSystemContent.java    # GENERATED - not in git
+└── ui/                               # React UI package
+```

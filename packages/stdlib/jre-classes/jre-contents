@@ -68,7 +68,6 @@ java/util/Hashtable$Entry
 java/util/Map
 java/util/Map$Entry
 java/util/Properties
-jvm/sample/HelloWorld
 sun/misc/Hashing
 sun/misc/JavaNioAccess
 sun/misc/SharedSecrets

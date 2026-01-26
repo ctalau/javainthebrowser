@@ -30,7 +30,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: "temurin"
+          distribution: "zulu"
           java-version: "8"
           cache: "maven"
 
@@ -39,6 +39,9 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+
+      - name: Generate FileSystemContent
+        run: node packages/stdlib/scripts/generate-filesystem-content.mjs
 
       - name: Build with Maven
         run: mvn -B -q -DskipTests package
