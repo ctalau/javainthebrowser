@@ -16,10 +16,11 @@ import java.util.Set;
 /**
  * Extracts JRE class bytecode and generates FileSystemContent.java.
  *
- * Usage: java tool.ExtractJre <jre-contents-file> <override-classes-dir> <output-file>
+ * Usage: java tool.ExtractJre <jre-contents-file> <override-classes-dir> <bundled-classes-dir> <output-file>
  *
  * - jre-contents-file: Path to the file listing classes to include
  * - override-classes-dir: Path to directory containing custom override .class files
+ * - bundled-classes-dir: Path to directory containing pre-bundled .class files (for sun/* classes)
  * - output-file: Path where FileSystemContent.java will be written
  */
 public class ExtractJre {
@@ -27,6 +28,7 @@ public class ExtractJre {
     private static ClassLoader cl = ClassLoader.getSystemClassLoader();
     private static Set<String> overriden = new HashSet<String>();
     private static String overrideDir;
+    private static String bundledDir;
 
     static {
         // Classes that have custom implementations
@@ -36,14 +38,15 @@ public class ExtractJre {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 3) {
-            System.err.println("Usage: java tool.ExtractJre <jre-contents-file> <override-classes-dir> <output-file>");
+        if (args.length != 4) {
+            System.err.println("Usage: java tool.ExtractJre <jre-contents-file> <override-classes-dir> <bundled-classes-dir> <output-file>");
             System.exit(1);
         }
 
         String contentsFile = args[0];
         overrideDir = args[1];
-        String outputFile = args[2];
+        bundledDir = args[2];
+        String outputFile = args[3];
 
         List<String> contents = getJreContents(contentsFile);
 
@@ -94,7 +97,7 @@ public class ExtractJre {
     private static String emitClass(String className) throws IOException {
         InputStream is = null;
 
-        // Check if this class has a custom override
+        // 1. Check if this class has a custom override (highest priority)
         if (overriden.contains(className)) {
             File overrideFile = new File(overrideDir, className + ".class");
             if (overrideFile.exists()) {
@@ -103,10 +106,16 @@ public class ExtractJre {
                 throw new IOException("Override class not found: " + overrideFile.getAbsolutePath());
             }
         } else {
-            // Load from system classloader (JRE)
-            is = cl.getResourceAsStream(className + ".class");
-            if (is == null) {
-                throw new IOException("Class not found in JRE: " + className);
+            // 2. Check bundled classes directory (for sun/* classes not in all JDKs)
+            File bundledFile = new File(bundledDir, className + ".class");
+            if (bundledFile.exists()) {
+                is = new FileInputStream(bundledFile);
+            } else {
+                // 3. Fall back to system classloader (JRE)
+                is = cl.getResourceAsStream(className + ".class");
+                if (is == null) {
+                    throw new IOException("Class not found in JRE or bundled: " + className);
+                }
             }
         }
 

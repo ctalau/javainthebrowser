@@ -20,6 +20,7 @@ const STDLIB_ROOT = resolve(__dirname, '..');
 const PROJECT_ROOT = resolve(STDLIB_ROOT, '../..');
 const BUILD_DIR = join(STDLIB_ROOT, 'build');
 const JRE_CLASSES_DIR = join(STDLIB_ROOT, 'jre-classes');
+const BUNDLED_CLASSES_DIR = join(STDLIB_ROOT, 'bundled-classes');
 const TOOLS_DIR = join(STDLIB_ROOT, 'tools');
 const OUTPUT_FILE = join(PROJECT_ROOT, 'packages/javac/java/gwtjava/io/fs/FileSystemContent.java');
 
@@ -110,8 +111,9 @@ function main() {
   const overrideClasspath = join(BUILD_DIR, 'override-classes');
 
   // Run ExtractJre with the correct paths
+  // Args: <jre-contents> <override-classes-dir> <bundled-classes-dir> <output-file>
   run(
-    `"${java}" -cp "${classpath}" tool.ExtractJre "${join(JRE_CLASSES_DIR, 'jre-contents')}" "${overrideClasspath}" "${OUTPUT_FILE}"`,
+    `"${java}" -cp "${classpath}" tool.ExtractJre "${join(JRE_CLASSES_DIR, 'jre-contents')}" "${overrideClasspath}" "${BUNDLED_CLASSES_DIR}" "${OUTPUT_FILE}"`,
     { cwd: STDLIB_ROOT }
   );
 
