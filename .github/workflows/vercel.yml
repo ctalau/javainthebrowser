@@ -41,7 +41,60 @@ jobs:
           cache: "npm"
 
       - name: Build with Maven
-        run: mvn -B -q -DskipTests package
+        run: |
+          MAVEN_OPTS=""
+
+          # Parse HTTP_PROXY environment variable (format: http://host:port or http://user:pass@host:port)
+          if [ -n "$HTTP_PROXY" ]; then
+            # Remove protocol prefix
+            PROXY_URL="${HTTP_PROXY#http://}"
+            PROXY_URL="${PROXY_URL#https://}"
+
+            # Extract host and port
+            if [[ "$PROXY_URL" == *"@"* ]]; then
+              # Has authentication: user:pass@host:port
+              PROXY_AUTH="${PROXY_URL%@*}"
+              PROXY_HOST_PORT="${PROXY_URL##*@}"
+              PROXY_USER="${PROXY_AUTH%:*}"
+              PROXY_PASS="${PROXY_AUTH#*:}"
+              MAVEN_OPTS="$MAVEN_OPTS -Dhttp.proxyUser=$PROXY_USER -Dhttp.proxyPassword=$PROXY_PASS"
+            else
+              PROXY_HOST_PORT="$PROXY_URL"
+            fi
+
+            PROXY_HOST="${PROXY_HOST_PORT%:*}"
+            PROXY_PORT="${PROXY_HOST_PORT##*:}"
+            MAVEN_OPTS="$MAVEN_OPTS -Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT"
+          fi
+
+          # Parse HTTPS_PROXY environment variable
+          if [ -n "$HTTPS_PROXY" ]; then
+            PROXY_URL="${HTTPS_PROXY#http://}"
+            PROXY_URL="${PROXY_URL#https://}"
+
+            if [[ "$PROXY_URL" == *"@"* ]]; then
+              PROXY_AUTH="${PROXY_URL%@*}"
+              PROXY_HOST_PORT="${PROXY_URL##*@}"
+              PROXY_USER="${PROXY_AUTH%:*}"
+              PROXY_PASS="${PROXY_AUTH#*:}"
+              MAVEN_OPTS="$MAVEN_OPTS -Dhttps.proxyUser=$PROXY_USER -Dhttps.proxyPassword=$PROXY_PASS"
+            else
+              PROXY_HOST_PORT="$PROXY_URL"
+            fi
+
+            PROXY_HOST="${PROXY_HOST_PORT%:*}"
+            PROXY_PORT="${PROXY_HOST_PORT##*:}"
+            MAVEN_OPTS="$MAVEN_OPTS -Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT"
+          fi
+
+          # Parse NO_PROXY environment variable
+          if [ -n "$NO_PROXY" ]; then
+            # Convert comma-separated list to pipe-separated for Java
+            NON_PROXY_HOSTS=$(echo "$NO_PROXY" | tr ',' '|')
+            MAVEN_OPTS="$MAVEN_OPTS -Dhttp.nonProxyHosts=$NON_PROXY_HOSTS"
+          fi
+
+          mvn -B -q -DskipTests package $MAVEN_OPTS
 
       - name: Cache Vercel CLI
         uses: actions/cache@v4
