@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'target/war',
+    outDir: '../../target/war',
     emptyOutDir: false, // Don't delete existing GWT files
     rollupOptions: {
       external: ['/javac-api.js'],
