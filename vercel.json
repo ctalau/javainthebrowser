@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install",
+  "installCommand": "cd packages/ui && npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "target/war",
   "framework": null,
