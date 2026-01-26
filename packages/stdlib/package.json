@@ -1,0 +1,17 @@
+{
+  "name": "@javainthebrowser/stdlib",
+  "version": "0.1.0",
+  "description": "JRE standard library bytecode generator for Java in the Browser",
+  "license": "GPL-2.0-only",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/generate-filesystem-content.mjs",
+    "clean": "rm -rf build"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ctalau/javainthebrowser.git",
+    "directory": "packages/stdlib"
+  }
+}
