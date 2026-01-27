@@ -13,6 +13,8 @@
 const { spawn } = require('child_process');
 const http = require('http');
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 
 const PROXY_PORT = 8080;
 const PROXY_SCRIPT = path.join(__dirname, 'maven-proxy.js');
@@ -93,6 +95,39 @@ function stopProxy() {
 }
 
 /**
+ * Ensure Maven settings.xml exists with proxy configuration
+ */
+function ensureMavenSettings() {
+  const m2Dir = path.join(os.homedir(), '.m2');
+  const settingsFile = path.join(m2Dir, 'settings.xml');
+
+  // Create .m2 directory if it doesn't exist
+  if (!fs.existsSync(m2Dir)) {
+    fs.mkdirSync(m2Dir, { recursive: true });
+  }
+
+  // Create settings.xml if it doesn't exist
+  if (!fs.existsSync(settingsFile)) {
+    const settingsContent = `<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                              http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <mirrors>
+    <mirror>
+      <id>local-maven-proxy</id>
+      <url>http://localhost:${PROXY_PORT}</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+`;
+    fs.writeFileSync(settingsFile, settingsContent, 'utf8');
+    console.log(`Created Maven settings file: ${settingsFile}`);
+  }
+}
+
+/**
  * Run Maven with the provided arguments
  */
 function runMaven(args) {
@@ -131,6 +166,9 @@ async function main() {
   }
 
   try {
+    // Ensure Maven settings.xml exists
+    ensureMavenSettings();
+
     // Start proxy
     await startProxy();
 
