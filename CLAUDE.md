@@ -1,17 +1,8 @@
 # Maven Proxy Setup for Restricted Environments
 
-## Overview
-
-This project includes a Maven proxy solution for building in restricted environments where:
-- Direct access to Maven Central is blocked
-- All HTTPS traffic must go through an authenticated proxy
-- The proxy requires JWT bearer token authentication
-
-**For detailed architecture documentation**, see [PROXY-ARCHITECTURE.md](PROXY-ARCHITECTURE.md).
-
 ## Running Maven Commands
 
-Instead of running `mvn` directly, use the `run-mvn.js` wrapper script:
+Running Maven in Claude web sandbox requires that instead of running `mvn` directly, use the `run-mvn.js` wrapper script:
 
 ```bash
 # Standard Maven commands
@@ -38,6 +29,8 @@ The proxy server:
 - Forwards them to Maven Central via HTTPS with HTTP/2
 - Authenticates with the upstream proxy using credentials from `HTTPS_PROXY` environment variable
 - Uses HTTP CONNECT tunneling and ALPN protocol negotiation
+
+**For detailed architecture documentation**, see [PROXY-ARCHITECTURE.md](PROXY-ARCHITECTURE.md).
 
 ## Configuration
 
