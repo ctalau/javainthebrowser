@@ -7,6 +7,8 @@ This project includes a Maven proxy solution for building in restricted environm
 - All HTTPS traffic must go through an authenticated proxy
 - The proxy requires JWT bearer token authentication
 
+**For detailed architecture documentation**, see [ARCHITECTURE.md](ARCHITECTURE.md).
+
 ## Running Maven Commands
 
 Instead of running `mvn` directly, use the `run-mvn.js` wrapper script:
