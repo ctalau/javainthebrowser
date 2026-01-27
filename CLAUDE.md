@@ -19,18 +19,19 @@ node run-mvn.js clean package -DskipTests
 ## How It Works
 
 The `run-mvn.js` script:
-1. Starts a local proxy server (`maven-proxy.js`) on port 8080
-2. Waits for the proxy to be ready
-3. Runs your Maven command
-4. Automatically stops the proxy when Maven finishes
+1. Ensures Maven settings.xml exists with proxy configuration
+2. Starts an integrated local proxy server on port 8080
+3. Waits for the proxy to be ready
+4. Runs your Maven command
+5. Automatically stops the proxy when Maven finishes
 
-The proxy server:
+The integrated proxy server:
 - Accepts HTTP requests from Maven on localhost:8080
 - Forwards them to Maven Central via HTTPS with HTTP/2
 - Authenticates with the upstream proxy using credentials from `HTTPS_PROXY` environment variable
 - Uses HTTP CONNECT tunneling and ALPN protocol negotiation
 
-**For detailed architecture documentation**, see [PROXY-ARCHITECTURE.md](PROXY-ARCHITECTURE.md).
+**For detailed architecture documentation**, see the @fileoverview JSDoc comment at the top of `run-mvn.js`.
 
 ## Configuration
 
@@ -44,21 +45,19 @@ Maven is configured via `~/.m2/settings.xml` to use the local proxy:
 </mirror>
 ```
 
-## Manual Proxy Usage
+## Architecture
 
-If you need to run the proxy manually (for debugging or multiple Maven commands):
+The script creates a three-layer proxy chain:
 
-```bash
-# Start the proxy
-node maven-proxy.js &
-
-# Run Maven commands
-mvn clean install
-mvn package
-
-# Stop the proxy
-pkill -f maven-proxy.js
 ```
+Maven -> Local Proxy -> Upstream Sandbox Proxy -> Maven Central
+       (HTTP)        (HTTP CONNECT)         (HTTP/2 over TLS)
+```
+
+Each layer serves a specific purpose:
+- **Layer 1**: Maven → Local Proxy (HTTP) - Maven doesn't support JWT auth
+- **Layer 2**: Local Proxy → Upstream Proxy (HTTP CONNECT) - Creates authenticated tunnel
+- **Layer 3**: Tunnel → Maven Central (HTTP/2 over TLS) - Required by Maven Central
 
 ## Requirements
 
@@ -70,8 +69,8 @@ pkill -f maven-proxy.js
 
 **Proxy won't start - port 8080 in use**
 ```bash
-# Kill any existing proxy processes
-pkill -f maven-proxy.js
+# Kill any processes using port 8080
+lsof -ti:8080 | xargs kill -9
 ```
 
 **Maven can't download dependencies**
