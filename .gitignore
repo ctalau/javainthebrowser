@@ -6,6 +6,8 @@ gwt-unitCache/
 tools/extractjre/bin/
 tools/extractjre/out/
 tools/extractjre/FileSystemContent.java
+packages/javac/java/gwtjava/io/fs/FileSystemContent.java
+jre/**/*.class
 test-classes/
 
 .gwt/
