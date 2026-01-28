@@ -81,6 +81,45 @@
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>compile-extract-jre</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>javac</executable>
+              <arguments>
+                <argument>-d</argument>
+                <argument>${project.build.directory}/extract-jre-classes</argument>
+                <argument>jre/tool/ExtractJre.java</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>run-extract-jre</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>-cp</argument>
+                <argument>${project.build.directory}/extract-jre-classes</argument>
+                <argument>tool.ExtractJre</argument>
+                <argument>jre/jre-contents</argument>
+                <argument>packages/javac/java/gwtjava/io/fs/FileSystemContent.java</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
         <version>3.5.0</version>
         <executions>
