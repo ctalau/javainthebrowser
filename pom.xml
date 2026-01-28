@@ -96,6 +96,26 @@
               </target>
             </configuration>
           </execution>
+          <execution>
+            <id>compile-custom-jre-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <exec executable="javac" failonerror="true">
+                  <arg value="-target"/>
+                  <arg value="1.8"/>
+                  <arg value="-source"/>
+                  <arg value="1.8"/>
+                  <arg value="-d"/>
+                  <arg value="jre"/>
+                  <arg value="jre/java/io/ConsolePrintStream.java"/>
+                </exec>
+              </target>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
