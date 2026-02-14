@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 import javax.tools.JavaCompiler;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
@@ -19,13 +20,28 @@ public final class Javac17JvmSmokeTest {
 
   public static void main(String[] args) throws Exception {
     Path experimentDir = args.length > 0 ? Path.of(args[0]) : Path.of("experiments/j2cl-javac-17");
-    Path upstreamMain =
-        experimentDir.resolve("upstream/openjdk-jdk-17/src/jdk.compiler/share/classes/com/sun/tools/javac/main/Main.java");
-    if (!Files.isRegularFile(upstreamMain)) {
+    Path sourceTreeRoot =
+        args.length > 1
+            ? experimentDir.resolve(args[1])
+            : experimentDir.resolve("upstream/openjdk-jdk-17");
+    Path javacMain =
+        sourceTreeRoot.resolve(
+            "src/jdk.compiler/share/classes/com/sun/tools/javac/main/Main.java");
+    if (!Files.isRegularFile(javacMain)) {
       throw new IllegalStateException(
-          "Missing fetched OpenJDK javac source: "
-              + upstreamMain
-              + "\nRun scripts/fetch_javac17_sources.sh first.");
+          "Missing OpenJDK javac source in selected tree: "
+              + javacMain
+              + "\nUse scripts/fetch_javac17_sources.sh (upstream) or scripts/prepare_reduced_sources.sh (work).");
+    }
+
+    long sourceFileCount;
+    try (Stream<Path> sources =
+        Files.walk(sourceTreeRoot.resolve("src/jdk.compiler/share/classes"))) {
+      sourceFileCount =
+          sources.filter(path -> Files.isRegularFile(path) && path.toString().endsWith(".java")).count();
+    }
+    if (sourceFileCount == 0) {
+      throw new IllegalStateException("Selected source tree contains no .java files: " + sourceTreeRoot);
     }
 
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -88,7 +104,8 @@ public final class Javac17JvmSmokeTest {
     }
 
     System.out.println("JVM smoke test passed.");
-    System.out.println("- Verified fetched javac source exists: " + upstreamMain);
+    System.out.println("- Verified javac source tree: " + sourceTreeRoot);
+    System.out.println("- javac source file count: " + sourceFileCount);
     System.out.println("- Generated class file: " + classFile + " (" + bytecode.length + " bytes)");
 
     deleteRecursively(tempRoot);
