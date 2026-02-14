@@ -67,9 +67,11 @@ Build an experiment that ports OpenJDK 17 `javac` (`jdk.compiler`) to JavaScript
 
 ## Milestone checkpoints
 
-- **M1:** Upstream source fetch reproducible.
-- **M2:** JVM smoke test green with fetched sources.
-- **M3:** Reduced source tree still green on JVM smoke.
-- **M4:** J2CL transpilation succeeds.
-- **M5:** JS smoke test green.
-- **M6:** Initial upstream test subset green with tracked failures/fixes.
+- [x] **M1:** Upstream source fetch reproducible.
+- [x] **M2:** JVM smoke test green with fetched sources.
+  - Implemented with `scripts/run_jvm_smoke_test.sh` and `src/Javac17JvmSmokeTest.java`.
+  - Harness verifies fetched OpenJDK `javac` source presence, compiles `HelloWorld.java` on JVM, and validates emitted `.class` output is non-empty with `CAFEBABE` magic.
+- [ ] **M3:** Reduced source tree still green on JVM smoke.
+- [ ] **M4:** J2CL transpilation succeeds.
+- [ ] **M5:** JS smoke test green.
+- [ ] **M6:** Initial upstream test subset green with tracked failures/fixes.
