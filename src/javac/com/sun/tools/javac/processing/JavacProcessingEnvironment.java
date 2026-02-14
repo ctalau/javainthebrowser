@@ -1088,7 +1088,10 @@ public class JavacProcessingEnvironment implements ProcessingEnvironment, Closea
         }
 
         void showDiagnostics(boolean showAll) {
-            Set<JCDiagnostic.Kind> kinds = EnumSet.allOf(JCDiagnostic.Kind.class);
+            Set<JCDiagnostic.Kind> kinds = EnumSet.noneOf(JCDiagnostic.Kind.class);
+            for (JCDiagnostic.Kind kind : JCDiagnostic.Kind.values()) {
+                kinds.add(kind);
+            }
             if (!showAll) {
                 // suppress errors, which are all presumed to be transient resolve errors
                 kinds.remove(JCDiagnostic.Kind.ERROR);

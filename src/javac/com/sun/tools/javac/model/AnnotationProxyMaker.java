@@ -42,6 +42,7 @@ import gwtjava.lang.reflect.annotation.AnnotationType;
 import gwtjava.lang.reflect.annotation.EnumConstantNotPresentExceptionProxy;
 import gwtjava.lang.reflect.annotation.ExceptionProxy;
 import gwtjava.statics.SArrays;
+import gwtjava.lang.NoSuchMethodException;
 import gwtjava.statics.SClass;
 
 import java.lang.annotation.Annotation;

@@ -375,7 +375,11 @@ public class Log extends AbstractLog {
 
     /** Report all deferred diagnostics, and clear the deferDiagnostics flag. */
     public void reportDeferredDiagnostics() {
-        reportDeferredDiagnostics(EnumSet.allOf(JCDiagnostic.Kind.class));
+        Set<JCDiagnostic.Kind> kinds = EnumSet.noneOf(JCDiagnostic.Kind.class);
+        for (JCDiagnostic.Kind kind : JCDiagnostic.Kind.values()) {
+            kinds.add(kind);
+        }
+        reportDeferredDiagnostics(kinds);
     }
 
     /** Report selected deferred diagnostics, and clear the deferDiagnostics flag. */
