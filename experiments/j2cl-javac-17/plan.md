@@ -71,7 +71,12 @@ Build an experiment that ports OpenJDK 17 `javac` (`jdk.compiler`) to JavaScript
 - [x] **M2:** JVM smoke test green with fetched sources.
   - Implemented with `scripts/run_jvm_smoke_test.sh` and `src/Javac17JvmSmokeTest.java`.
   - Harness verifies fetched OpenJDK `javac` source presence, compiles `HelloWorld.java` on JVM, and validates emitted `.class` output is non-empty with `CAFEBABE` magic.
-- [ ] **M3:** Reduced source tree still green on JVM smoke.
+- [x] **M3:** Reduced source tree still green on JVM smoke.
+  - Implemented with `scripts/prepare_reduced_sources.sh` and enhancements to
+    `scripts/run_jvm_smoke_test.sh` + `src/Javac17JvmSmokeTest.java`.
+  - Reduction keeps `com/sun/tools/javac` and `com/sun/source` in
+    `work/openjdk-jdk-17-reduced`, emits `REDUCTION_NOTES.md`, and reuses the
+    same JVM smoke assertions against both `upstream` and `work` trees.
 - [ ] **M4:** J2CL transpilation succeeds.
 - [ ] **M5:** JS smoke test green.
 - [ ] **M6:** Initial upstream test subset green with tracked failures/fixes.
