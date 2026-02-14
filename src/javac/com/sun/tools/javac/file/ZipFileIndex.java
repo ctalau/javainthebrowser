@@ -149,11 +149,9 @@ public class ZipFileIndex {
         return "ZipFileIndex[" + zipFile + "]";
     }
 
-    // Just in case...
-    @Override
-    protected void finalize() throws Throwable {
+    // Just in case (J2CL-compatible: no Object.finalize override).
+    protected void cleanup() {
         closeFile();
-        super.finalize();
     }
 
     private boolean isUpToDate() {

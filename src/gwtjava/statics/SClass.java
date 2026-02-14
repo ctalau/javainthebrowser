@@ -3,6 +3,7 @@ package gwtjava.statics;
 import gwtjava.lang.ClassLoader;
 import gwtjava.lang.ClassNotFoundException;
 import gwtjava.lang.NoSuchFieldException;
+import gwtjava.lang.NoSuchMethodException;
 import gwtjava.lang.IllegalAccessException;
 import gwtjava.lang.InstantiationException;
 import gwtjava.lang.SecurityException;
