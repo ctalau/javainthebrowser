@@ -355,6 +355,7 @@ import java.io.IOException;
 public class URL {
     public URL(String spec) throws MalformedURLException {}
     public URL(URL context, String spec) throws MalformedURLException {}
+    public URL(String protocol, String host, int port, String file, URLStreamHandler handler) throws MalformedURLException {}
 
     public String getPath() { return ""; }
     public URLConnection openConnection() throws IOException { return new URLConnection(this); }
@@ -385,10 +386,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class URLConnection {
+    protected boolean connected;
     protected URLConnection(URL url) {}
 
     public void connect() throws IOException {}
+    public URL getURL() { return null; }
     public InputStream getInputStream() throws IOException { return null; }
+    public long getContentLengthLong() { return -1L; }
+    public String getContentType() { return null; }
 }
 """,
         "src/shims/java/util/ServiceLoader.java": """package java.util;
@@ -421,11 +426,19 @@ import java.util.Collections;
 import java.util.Enumeration;
 
 public class ClassLoader {
+    protected ClassLoader() {}
+    protected ClassLoader(ClassLoader parent) {}
     public static ClassLoader getSystemClassLoader() { return null; }
     public Object getUnnamedModule() { return null; }
+    public ClassLoader getParent() { return null; }
     public URL getResource(String name) { return null; }
-    public Enumeration<URL> getResources(String name) { return null; }
-    public Class<?> loadClass(String name) { return null; }
+    public Enumeration<URL> getResources(String name) throws java.io.IOException { return null; }
+    protected URL findResource(String name) { return null; }
+    protected Enumeration<URL> findResources(String name) throws java.io.IOException { return null; }
+    public Class<?> loadClass(String name) throws ClassNotFoundException { return null; }
+    protected Class<?> findClass(String name) throws ClassNotFoundException { return null; }
+    protected void resolveClass(Class<?> c) {}
+    protected Class<?> defineClass(String name, byte[] b, int off, int len, java.security.ProtectionDomain protectionDomain) { return null; }
 }
 """,
         "src/shims/java/nio/CharBuffer.java": """package java.nio;
@@ -442,6 +455,7 @@ public class CharBuffer implements CharSequence {
     public CharBuffer flip() { return this; }
     public CharBuffer put(CharBuffer src) { return this; }
     public CharBuffer put(char c) { return this; }
+    public CharBuffer compact() { return this; }
     public CharBuffer position(int newPosition) { return this; }
 
     @Override
@@ -567,6 +581,8 @@ public interface Path {
     boolean isAbsolute();
     int compareTo(Path other);
     Path getParent();
+    int getNameCount();
+    Path getName(int index);
 }
 """,
         "src/shims/java/nio/file/Paths.java": """package java.nio.file;
@@ -630,6 +646,7 @@ public final class FileSystems {
     public static FileSystem getDefault() { return null; }
     public static FileSystem getFileSystem(URI uri) { return null; }
     public static FileSystem newFileSystem(URI uri, Map<String, ?> env) { return null; }
+    public static FileSystem newFileSystem(URI uri, Map<String, ?> env, ClassLoader loader) { return null; }
     public static FileSystem newFileSystem(Path path, ClassLoader loader) { return null; }
 }
 """,
@@ -880,6 +897,7 @@ public final class System {
     public static int identityHashCode(Object x) { return 0; }
     public static long currentTimeMillis() { return 0L; }
     public static String getProperty(String key) { return null; }
+    public static String getProperty(String key, String def) { return def; }
     public static String getenv(String name) { return null; }
 }
 """,
@@ -1014,6 +1032,7 @@ public class NoSuchMethodException extends ReflectiveOperationException {
 public class InputStreamReader extends Reader {
     public InputStreamReader(InputStream in) {}
     public InputStreamReader(InputStream in, String charsetName) {}
+    public InputStreamReader(InputStream in, java.nio.charset.CharsetDecoder decoder) {}
     @Override public int read(char[] cbuf, int off, int len) { return -1; }
     @Override public void close() throws IOException {}
 }
@@ -1036,7 +1055,11 @@ public class URLClassLoader extends ClassLoader {
 """,
         "src/shims/java/net/URLStreamHandler.java": """package java.net;
 
-public abstract class URLStreamHandler {}
+import java.io.IOException;
+
+public abstract class URLStreamHandler {
+    protected abstract URLConnection openConnection(URL u) throws IOException;
+}
 """,
         "src/shims/java/security/CodeSource.java": """package java.security;
 
@@ -1311,9 +1334,17 @@ public final class Files {
     public static boolean isDirectory(Path path) { return false; }
     public static boolean isSymbolicLink(Path path) { return false; }
     public static java.nio.file.DirectoryStream<Path> newDirectoryStream(Path path) throws IOException { return null; }
+    public static java.nio.file.DirectoryStream<Path> newDirectoryStream(Path path, java.nio.file.DirectoryStream.Filter<? super Path> filter) throws IOException { return null; }
     public static java.util.stream.Stream<String> lines(Path path, Charset cs) throws IOException { return java.util.stream.Stream.empty(); }
     public static <A extends java.nio.file.attribute.BasicFileAttributes> A readAttributes(Path path, Class<A> type) throws IOException { return null; }
     public static java.io.InputStream newInputStream(Path path) throws IOException { return null; }
+    public static java.io.OutputStream newOutputStream(Path path) throws IOException { return null; }
+    public static java.io.BufferedReader newBufferedReader(Path path, Charset cs) throws IOException { return null; }
+    public static boolean isSameFile(Path path, Path path2) throws IOException { return false; }
+    public static java.nio.file.attribute.FileTime getLastModifiedTime(Path path) throws IOException { return null; }
+    public static void delete(Path path) throws IOException {}
+    public static Path createDirectories(Path dir) throws IOException { return dir; }
+    public static java.util.List<String> readAllLines(Path path, Charset cs) throws IOException { return java.util.Collections.emptyList(); }
     public static Path readSymbolicLink(Path link) throws IOException { return null; }
     public static java.util.stream.Stream<Path> list(Path dir) throws IOException { return java.util.stream.Stream.empty(); }
     public static Path walkFileTree(Path start, java.util.Set<FileVisitOption> options, int maxDepth, FileVisitor<? super Path> visitor) throws IOException { return start; }
@@ -1323,6 +1354,8 @@ public final class Files {
 
 public class Attributes extends java.util.HashMap<Object, Object> {
     public static class Name {
+        public Name() {}
+        public Name(String name) {}
         public static final Name CLASS_PATH = new Name();
     }
     public String getValue(Name name) { return null; }
@@ -1331,6 +1364,8 @@ public class Attributes extends java.util.HashMap<Object, Object> {
         "src/shims/java/util/jar/Manifest.java": """package java.util.jar;
 
 public class Manifest {
+    public Manifest() {}
+    public Manifest(java.io.InputStream in) {}
     public Attributes getMainAttributes() { return new Attributes(); }
 }
 """,
@@ -1340,6 +1375,7 @@ import java.io.IOException;
 
 public class JarFile implements AutoCloseable {
     public JarFile(String name) throws IOException {}
+    public JarFile(java.io.File file) throws IOException {}
     public Manifest getManifest() throws IOException { return new Manifest(); }
     @Override public void close() throws IOException {}
 }
@@ -1487,6 +1523,7 @@ public class DocLint {
     public static boolean isValidOption(String opt) { return false; }
     public static DocLint newDocLint() { return new DocLint(); }
     public void init(java.util.function.Consumer<String> out, List<String> opts, boolean javacMode) {}
+    public void init(Object out, String... opts) {}
     public void setCheckMissing(boolean b) {}
     public void setDeclScanner(Object scanner) {}
     public void reportStats(java.io.PrintWriter out) {}
@@ -1522,12 +1559,45 @@ public final class Normalizer {
     private Normalizer() {}
     public enum Form { NFD, NFC, NFKD, NFKC }
     public static String normalize(CharSequence src, Form form) { return src == null ? null : src.toString(); }
+    public static boolean isNormalized(CharSequence src, Form form) { return true; }
 }
+""",
+        "src/shims/java/nio/file/attribute/FileTime.java": """package java.nio.file.attribute;
+
+public final class FileTime {}
 """,
         "src/shims/java/nio/file/NoSuchFileException.java": """package java.nio.file;
 
 public class NoSuchFileException extends java.io.IOException {
     public NoSuchFileException(String file) { super(file); }
+}
+""",
+        "src/shims/java/io/ObjectInputStream.java": """package java.io;
+
+public class ObjectInputStream extends InputStream {
+    public ObjectInputStream(InputStream in) {}
+    public void defaultReadObject() throws IOException, ClassNotFoundException {}
+    @Override public int read() throws IOException { return -1; }
+}
+""",
+        "src/shims/java/util/zip/ZipFile.java": """package java.util.zip;
+
+public class ZipFile implements AutoCloseable {
+    @Override public void close() {}
+}
+""",
+        "src/shims/jdk/internal/misc/VM.java": """package jdk.internal.misc;
+
+public final class VM {
+    private VM() {}
+    public static String getSavedProperty(String key) { return null; }
+}
+""",
+        "src/shims/jdk/internal/misc/Version.java": """package jdk.internal.misc;
+
+public final class Version {
+    private Version() {}
+    public static String runtimeVersion() { return ""; }
 }
 """,
         "src/shims/java/security/DigestInputStream.java": """package java.security;
