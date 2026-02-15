@@ -37,6 +37,8 @@ copy_tree "src/java.compiler/share/classes/javax/lang/model"
 copy_tree "src/java.compiler/share/classes/javax/tools"
 copy_tree "src/java.base/share/classes/jdk/internal/javac"
 
+"$SCRIPT_DIR/apply_module_compat_patches.py" "$WORKSPACE_DIR"
+
 cat > "$WORKSPACE_DIR/MODULE.bazel" <<'MODULE'
 module(name = "j2cl_javac17_experiment")
 
