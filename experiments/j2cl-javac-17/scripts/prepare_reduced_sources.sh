@@ -34,6 +34,7 @@ copy_tree "src/jdk.compiler/share/classes" "com/sun/source"
 # Required dependencies for full javac source compilation in isolation.
 copy_tree "src/java.compiler/share/classes" "javax/lang/model"
 copy_tree "src/java.compiler/share/classes" "javax/tools"
+copy_tree "src/java.compiler/share/classes" "javax/annotation/processing"
 copy_tree "src/java.base/share/classes" "jdk/internal/javac"
 
 MANIFEST="$WORK_ROOT/REDUCTION_NOTES.md"
@@ -51,6 +52,7 @@ Included source roots from upstream:
 - \`src/jdk.compiler/share/classes/com/sun/source\`
 - \`src/java.compiler/share/classes/javax/lang/model\`
 - \`src/java.compiler/share/classes/javax/tools\`
+- \`src/java.compiler/share/classes/javax/annotation/processing\`
 - \`src/java.base/share/classes/jdk/internal/javac\`
 
 This keeps the compiler implementation and required API dependencies for full

@@ -9,5 +9,6 @@ This matrix tracks major API families currently blocking full `//:javac_full_j2c
 | `java.nio.file` | path/file APIs not available in J2CL runtime | 3) isolate compiler file-manager interactions behind adapter | Keep JVM behavior untouched; branch at abstraction points. |
 | `java.lang.ref` (`WeakReference`, `SoftReference`) | missing/partial reference semantics | 4) isolate unsupported semantics | Treat as deferred non-critical behavior for JS target where possible. |
 | `java.lang.Module` and module metadata | missing module APIs | ✅ partially closed via reflective bridge in staged sources | Removed direct `Module` type references in `BasicJavacTask`, `ToolProvider`, and `ModuleHelper`; remaining module metadata handling still pending. |
-| `com.sun.tools.javac.resources.*` | missing compiler resource bundles | 1) add source roots/resources first | Added staging of `resources` package in source graph. |
+| `javax.annotation.processing` (e.g. `SupportedSourceVersion`, `Processor`) | imports/types unresolved across `javax.lang.model.util` and `javax.tools` | ✅ closed by source-graph completion | Stage `src/java.compiler/share/classes/javax/annotation/processing/**` and include in `j2cl_library` srcs. |
+| `com.sun.tools.javac.resources.CompilerProperties` (`Errors`/`Warnings`/`Fragments`) | missing generated diagnostic wrapper classes | ✅ partially closed via generated staging shim | `apply_module_compat_patches.py` now synthesizes `CompilerProperties` nested classes/methods from usage sites, removing this unresolved-symbol cascade. |
 
