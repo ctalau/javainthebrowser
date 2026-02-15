@@ -89,7 +89,8 @@ This file tracks blockers while transpiling the full `javac`-rooted source set
    - Added follow-up compatibility for doclint bootstrap entrypoints and broad file/module/runtime surfaces (`java.util.jar`, `java.lang.module`, `Path`/`Files`/`FileSystemProvider`, URL/code-source helpers, and related utility methods).
    - Net reduction in transpile failures: 360 -> 198 (162 fewer problems solved).
 
-10. **Post-96 shim refinement wave addressed (partial close)**
-    - Updated module patching to split staged compatibility sources by module ownership (`java.base` receives `src/shims/java`, `java.compiler` receives `src/shims/javax`) to keep staged `java.*`/`javax.*` symbols wired without reintroducing package-ownership failures.
-    - Expanded staged signatures used by javac paths (`Path.of`/`subpath`, `System.setProperty`, `VM.getRuntimeArguments`, `String(byte[], String)`, `FileTime.toMillis`, URI 3-arg constructor, and related loader/security helpers).
-    - Net reduction in transpile failures: 96 -> 81 (15 fewer problems solved).
+10. **Post-81 compatibility refinements addressed (partial close)**
+    - Kept staging module patching on a combined `java.base` patch path (`src/shims/java:src/shims/javax`) to avoid javac compile-time package ownership regressions while preserving shim coverage.
+    - Added source compatibility rewrites in staging for Java 16+ stream APIs (`Stream.toList()` -> `Collectors.toList()`) across `BasicJavacTask`, `JavacFileManager`, `Locations`, `JavacTypes`, `JavacProcessingEnvironment`, and `PrintingProcessor`.
+    - Expanded `CompilerProperties` synthesis to include static-import-discovered diagnostics helpers (closing unresolved `DiamondInvalidArg*` helper calls).
+    - Net reduction in transpile failures: 81 -> 71 (10 fewer problems solved).

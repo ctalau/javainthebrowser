@@ -121,6 +121,41 @@ replacements = [
 }
 """,
     ),
+    (
+        workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/api/BasicJavacTask.java",
+        ".map(e -> e.getKey() + \"=\" + e.getValue())\n                                .toList();",
+        ".map(e -> e.getKey() + \"=\" + e.getValue())\n                                .collect(java.util.stream.Collectors.toList());",
+    ),
+    (
+        workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/file/JavacFileManager.java",
+        "files = (sortFiles == null ? s : s.sorted(sortFiles)).toList();",
+        "files = (sortFiles == null ? s : s.sorted(sortFiles))\n                        .collect(java.util.stream.Collectors.toList());",
+    ),
+    (
+        workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/file/Locations.java",
+        "return listedModules.toList();",
+        "return listedModules.collect(java.util.stream.Collectors.toList());",
+    ),
+    (
+        workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/model/JavacTypes.java",
+        ".map(Type::stripMetadataIfNeeded)\n                .toList();",
+        ".map(Type::stripMetadataIfNeeded)\n                .collect(java.util.stream.Collectors.toList());",
+    ),
+    (
+        workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/processing/JavacProcessingEnvironment.java",
+        ".map(PluginInfo::getPlugin)\n                                                 .toList();",
+        ".map(PluginInfo::getPlugin)\n                                                 .collect(java.util.stream.Collectors.toList());",
+    ),
+    (
+        workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/processing/PrintingProcessor.java",
+        ".filter(elt -> elementUtils.getOrigin(elt) == Elements.Origin.EXPLICIT )\n                         .toList() ) )",
+        ".filter(elt -> elementUtils.getOrigin(elt) == Elements.Origin.EXPLICIT )\n                         .collect(java.util.stream.Collectors.toList()) ) )",
+    ),
+    (
+        workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/code/Lint.java",
+        "        this.values = other.values.clone();\n        this.suppressedValues = other.suppressedValues.clone();",
+        "        this.values = other.values.clone();\n        this.suppressedValues = other.suppressedValues.clone();\n",
+    ),
 ]
 
 serialization_replacements = [
@@ -180,6 +215,12 @@ for path, old, new in replacements:
         continue
     raise SystemExit(f"Expected patch hunk not found in {path}")
 
+lint_path = workspace / "src/jdk.compiler/share/classes/com/sun/tools/javac/code/Lint.java"
+lint_text = lint_path.read_text(encoding="utf-8")
+lint_text = lint_text.replace("this.values = other.values.clone();", "this.values = (EnumSet<LintCategory>) other.values.clone();")
+lint_text = lint_text.replace("this.suppressedValues = other.suppressedValues.clone();", "this.suppressedValues = (EnumSet<LintCategory>) other.suppressedValues.clone();")
+lint_path.write_text(lint_text, encoding="utf-8")
+
 
 for path, old, new in serialization_replacements:
     text = path.read_text(encoding='utf-8')
@@ -192,11 +233,13 @@ def collect_resource_methods(kind: str) -> list[str]:
     method_names: set[str] = set()
     qualified = re.compile(rf"\bCompilerProperties\.{kind}\.([A-Za-z_][A-Za-z0-9_]*)\(")
     direct = re.compile(rf"\b{kind}\.([A-Za-z_][A-Za-z0-9_]*)\(")
+    static_import = re.compile(rf"import\s+static\s+com\.sun\.tools\.javac\.resources\.CompilerProperties\.{kind}\.([A-Za-z_][A-Za-z0-9_]*);")
 
     for src in javac_root.rglob("*.java"):
         text = src.read_text(encoding="utf-8", errors="ignore")
         method_names.update(qualified.findall(text))
         method_names.update(direct.findall(text))
+        method_names.update(static_import.findall(text))
 
     return sorted(method_names)
 
