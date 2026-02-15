@@ -81,8 +81,7 @@ j2cl_library(
         "17",
         "-target",
         "17",
-        "--patch-module=java.base=src/shims/java",
-        "--patch-module=java.compiler=src/shims/javax",
+        "--patch-module=java.base=src/shims/java:src/shims/javax",
     ],
 )
 BUILD
