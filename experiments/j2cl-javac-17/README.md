@@ -76,6 +76,8 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
 
 - Added targeted follow-up staging rewrites/shims (DocLint bootstrap shim, broader filesystem/module/jar/path utilities, and additional String/charset/path/URL compatibility methods), reducing transpile failures from 360 to 198.
 
+- Added another compatibility shim wave for module/file/runtime utility gaps (including `Configuration.resolveAndBind`, `ModuleLayer.defineModulesWithOneLoader`, URI scheme helpers, filesystem path/file operations, `Normalizer`, and digest/no-such-file stubs), reducing transpile failures from 198 to 138.
+
 ## Initial J2CL issue tracking
 
 See `J2CL_ISSUES.md` for active blockers currently preventing full-target transpilation success.

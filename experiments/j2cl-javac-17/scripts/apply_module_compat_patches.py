@@ -507,11 +507,15 @@ public class WeakReference<T> {
 import java.net.URI;
 
 public class File {
+    public static final char separatorChar = '/';
+    public static final String pathSeparator = ":";
     public File(String pathname) {}
     public File(File parent, String child) {}
     public File(URI uri) {}
 
     public String getPath() { return ""; }
+    public URI toURI() { return null; }
+    public boolean isAbsolute() { return false; }
     public java.nio.file.Path toPath() { return null; }
 }
 """,
@@ -548,8 +552,11 @@ import java.net.URI;
 
 public interface Path {
     Path resolve(String other);
+    Path resolve(Path other);
     Path resolveSibling(String other);
     Path toAbsolutePath();
+    Path toRealPath(LinkOption... options) throws java.io.IOException;
+    Path normalize();
     Path getFileName();
     URI toUri();
     java.io.File toFile();
@@ -557,6 +564,8 @@ public interface Path {
     Path relativize(Path other);
     boolean startsWith(Path other);
     boolean endsWith(String other);
+    boolean isAbsolute();
+    int compareTo(Path other);
     Path getParent();
 }
 """,
@@ -594,6 +603,9 @@ public final class Files {
     public static java.util.stream.Stream<Path> list(Path dir) throws IOException { return java.util.stream.Stream.empty(); }
     public static Path walkFileTree(Path start, java.util.Set<FileVisitOption> options, int maxDepth, FileVisitor<? super Path> visitor) throws IOException { return start; }
     public static DirectoryStream<Path> newDirectoryStream(Path dir) throws IOException { return null; }
+    public static DirectoryStream<Path> newDirectoryStream(Path dir, DirectoryStream.Filter<? super Path> filter) throws IOException { return null; }
+    public static boolean isSameFile(Path path, Path path2) throws IOException { return false; }
+    public static java.io.BufferedReader newBufferedReader(Path path, Charset cs) throws IOException { return null; }
     public static java.util.stream.Stream<Path> list(Path dir) throws IOException { return java.util.stream.Stream.empty(); }
     public static List<String> readAllLines(Path path, Charset cs) throws IOException { return Collections.emptyList(); }
 }
@@ -604,6 +616,7 @@ public abstract class FileSystem implements AutoCloseable {
     public abstract Path getPath(String first, String... more);
     public Iterable<Path> getRootDirectories() { return java.util.Collections.emptyList(); }
     public String getSeparator() { return "/"; }
+    public java.nio.file.spi.FileSystemProvider provider() { return null; }
     public void close() {}
 }
 """,
@@ -676,6 +689,7 @@ public abstract class FileSystemProvider {
     public abstract FileSystem getFileSystem(java.net.URI uri);
     public abstract Path getPath(java.net.URI uri);
     public FileSystem newFileSystem(java.net.URI uri, Map<String, ?> env) { return null; }
+    public FileSystem newFileSystem(Path path, Map<String, ?> env) { return null; }
 }
 """,
         "src/shims/java/util/regex/Pattern.java": """package java.util.regex;
@@ -866,6 +880,7 @@ public final class System {
     public static int identityHashCode(Object x) { return 0; }
     public static long currentTimeMillis() { return 0L; }
     public static String getProperty(String key) { return null; }
+    public static String getenv(String name) { return null; }
 }
 """,
         "src/shims/java/lang/Character.java": """package java.lang;
@@ -948,6 +963,8 @@ public class Throwable {
     public void setStackTrace(StackTraceElement[] trace) {}
     public void printStackTrace(java.io.PrintStream s) {}
     public void printStackTrace(java.io.PrintWriter s) {}
+    public void printStackTrace() {}
+    public final void addSuppressed(Throwable exception) {}
 }
 """,
         "src/shims/java/lang/ClassNotFoundException.java": """package java.lang;
@@ -1133,6 +1150,7 @@ public final class Objects {
     public static <T> T requireNonNull(T obj, String message) { return obj; }
     public static boolean equals(Object a, Object b) { return a == b || (a != null && a.equals(b)); }
     public static int hashCode(Object o) { return o == null ? 0 : o.hashCode(); }
+    public static int hash(Object... values) { return 0; }
 }
 """,
         "src/shims/java/util/StringTokenizer.java": """package java.util;
@@ -1223,6 +1241,9 @@ public final class String implements CharSequence {
     public boolean isEmpty() { return false; }
     public String stripIndent() { return this; }
     public String translateEscapes() { return this; }
+    public boolean equalsIgnoreCase(String anotherString) { return false; }
+    public byte[] getBytes() { return new byte[0]; }
+    public byte[] getBytes(String charsetName) { return new byte[0]; }
 
     public static String valueOf(Object obj) { return ""; }
     public static String valueOf(char c) { return ""; }
@@ -1378,6 +1399,25 @@ public final class ModuleDescriptor {
 
 public class ModuleLayer {
     public static ModuleLayer boot() { return new ModuleLayer(); }
+    public java.lang.module.Configuration configuration() { return null; }
+}
+""",
+        "src/shims/java/lang/module/Configuration.java": """package java.lang.module;
+
+public final class Configuration {
+}
+""",
+        "src/shims/java/util/spi/ToolProvider.java": """package java.util.spi;
+
+public interface ToolProvider {
+    String name();
+    int run(java.io.PrintWriter out, java.io.PrintWriter err, String... args);
+}
+""",
+        "src/shims/java/nio/file/DirectoryIteratorException.java": """package java.nio.file;
+
+public class DirectoryIteratorException extends java.util.ConcurrentModificationException {
+    public DirectoryIteratorException(java.io.IOException cause) { super(); }
 }
 """,
         "src/shims/java/text/Collator.java": """package java.text;
@@ -1458,6 +1498,114 @@ public abstract class Certificate {}
 """,
     })
 
+
+
+    shims.update({
+        "src/shims/java/lang/Object.java": """package java.lang;
+
+public class Object {
+    public final Class<?> getClass() { return null; }
+    public int hashCode() { return 0; }
+    public boolean equals(Object obj) { return this == obj; }
+    public String toString() { return ""; }
+    protected Object clone() throws CloneNotSupportedException { return this; }
+    public final void wait(long timeout) throws InterruptedException {}
+    public final void wait(long timeout, int nanos) throws InterruptedException {}
+    public final void wait() throws InterruptedException {}
+    public final void notify() {}
+    public final void notifyAll() {}
+}
+""",
+        "src/shims/java/text/Normalizer.java": """package java.text;
+
+public final class Normalizer {
+    private Normalizer() {}
+    public enum Form { NFD, NFC, NFKD, NFKC }
+    public static String normalize(CharSequence src, Form form) { return src == null ? null : src.toString(); }
+}
+""",
+        "src/shims/java/nio/file/NoSuchFileException.java": """package java.nio.file;
+
+public class NoSuchFileException extends java.io.IOException {
+    public NoSuchFileException(String file) { super(file); }
+}
+""",
+        "src/shims/java/security/DigestInputStream.java": """package java.security;
+
+public class DigestInputStream extends java.io.FilterInputStream {
+    public DigestInputStream(java.io.InputStream stream, java.security.MessageDigest digest) { super(stream); }
+}
+""",
+        "src/shims/java/util/ServiceLoader.java": """package java.util;
+
+import java.util.Iterator;
+
+public final class ServiceLoader<S> implements Iterable<S> {
+    private ServiceLoader() {}
+
+    public static <S> ServiceLoader<S> load(Class<S> service) {
+        return new ServiceLoader<>();
+    }
+
+    public static <S> ServiceLoader<S> load(Class<S> service, ClassLoader loader) {
+        return new ServiceLoader<>();
+    }
+
+    public static <S> ServiceLoader<S> load(java.lang.ModuleLayer layer, Class<S> service) {
+        return new ServiceLoader<>();
+    }
+
+    public void reload() {}
+
+    @Override
+    public Iterator<S> iterator() {
+        return Collections.emptyIterator();
+    }
+}
+""",
+        "src/shims/java/lang/module/Configuration.java": """package java.lang.module;
+
+import java.util.Set;
+
+public final class Configuration {
+    public Configuration resolveAndBind(ModuleFinder beforeFinder, ModuleFinder afterFinder, Set<String> roots) { return this; }
+}
+""",
+        "src/shims/java/lang/ModuleLayer.java": """package java.lang;
+
+public class ModuleLayer {
+    public static ModuleLayer boot() { return new ModuleLayer(); }
+    public java.lang.module.Configuration configuration() { return null; }
+    public ModuleLayer defineModulesWithOneLoader(java.lang.module.Configuration cf, ClassLoader parentLoader) { return this; }
+}
+""",
+        "src/shims/java/text/Collator.java": """package java.text;
+
+public class Collator {
+    public static final int PRIMARY = 0;
+    public static Collator getInstance() { return new Collator(); }
+    public static Collator getInstance(java.util.Locale locale) { return new Collator(); }
+    public int compare(String source, String target) { return 0; }
+}
+""",
+        "src/shims/java/net/URI.java": """package java.net;
+
+public class URI {
+    public URI(String str) {}
+
+    public static URI create(String str) { return new URI(str); }
+    public boolean isAbsolute() { return true; }
+    public URI normalize() { return this; }
+    public String getPath() { return ""; }
+    public String getScheme() { return ""; }
+    public String getSchemeSpecificPart() { return ""; }
+    public URL toURL() throws MalformedURLException { return new URL(""); }
+
+    @Override
+    public String toString() { return ""; }
+}
+""",
+    })
     for rel_path, content in shims.items():
         out = workspace / rel_path
         out.parent.mkdir(parents=True, exist_ok=True)
