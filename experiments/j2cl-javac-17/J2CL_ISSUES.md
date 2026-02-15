@@ -50,10 +50,21 @@ This file tracks blockers while transpiling the full `javac`-rooted source set
    - This removed one broad unresolved-type class (tool I/O + URI/service-loader
      surfaces) and reduced total transpile errors from 2129 to 1779.
 
-4. **Remaining compiler dependency/resource coverage**
+4. **Additional API shim wave + module patching addressed (partial close)**
+   - `run_j2cl_transpile.sh` now compiles with `--patch-module=java.base=src/shims/java:src/shims/javax`
+     so staged compatibility classes can contribute to `java.*` and `javax.*` namespaces
+     without triggering package ownership/module collisions.
+   - Added shim coverage for security and utility APIs (`AccessController`,
+     `PrivilegedAction`, `ServiceConfigurationError`, `BreakIterator`,
+     `Properties`, `WeakHashMap`) and for I/O classes used by javac internals
+     (`FileNotFoundException`, `FileWriter`, `DataInputStream`, `DataOutputStream`).
+   - Net reduction from the previous baseline: 1779 -> 1248 transpile errors
+     (531 fewer compilation problems).
+
+5. **Remaining compiler dependency/resource coverage**
    - Additional source/resource dependencies may still be required transitively
      beyond currently staged roots.
 
-5. **M4 remains open until `//:javac_full_j2cl` is green**
+6. **M4 remains open until `//:javac_full_j2cl` is green**
    - Script and target are wired for full-source transpilation.
    - Next work is reducing the blocker list above until the full target builds.

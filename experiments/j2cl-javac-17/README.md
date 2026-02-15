@@ -57,6 +57,13 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
 - Staging patches now synthesize `com.sun.tools.javac.resources.CompilerProperties`
   nested diagnostics helpers (`Errors`/`Warnings`/`Fragments`) from observed call-sites
   to close generated-resource wrapper gaps during J2CL transpilation.
+- J2CL compile now uses `--patch-module=java.base=src/shims/java:src/shims/javax`
+  to allow staged compatibility classes under `java.*`/`javax.*` namespaces.
+- Added additional staged API shims for security/util/io families
+  (`AccessController`, `PrivilegedAction`, `ServiceConfigurationError`,
+  `BreakIterator`, `Properties`, `WeakHashMap`, `FileWriter`,
+  `FileNotFoundException`, `DataInputStream`, `DataOutputStream`) which reduced
+  current transpile failures from 1779 to 1248.
 
 ## Initial J2CL issue tracking
 
