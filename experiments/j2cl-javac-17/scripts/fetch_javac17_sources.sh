@@ -21,6 +21,8 @@ git -C "$UPSTREAM_DIR" checkout "$REPO_REF"
 
 git -C "$UPSTREAM_DIR" sparse-checkout set \
   src/jdk.compiler/share/classes \
+  src/java.compiler/share/classes \
+  src/java.base/share/classes/jdk/internal/javac \
   test/langtools/tools/javac
 
 echo "Fetched OpenJDK sources:"

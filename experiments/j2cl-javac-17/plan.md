@@ -78,5 +78,8 @@ Build an experiment that ports OpenJDK 17 `javac` (`jdk.compiler`) to JavaScript
     `work/openjdk-jdk-17-reduced`, emits `REDUCTION_NOTES.md`, and reuses the
     same JVM smoke assertions against both `upstream` and `work` trees.
 - [ ] **M4:** J2CL transpilation succeeds.
+  - Implemented wiring in `scripts/run_j2cl_transpile.sh` for full `javac`-rooted sources (`com/sun/tools/javac/main/Main.java` entrypoint graph) plus required `javax.*` and `jdk.internal.javac` dependencies.
+  - Current `j2cl_library` target `//:javac_full_j2cl` compiles the full staged source set with Java 17 source/target settings.
+  - Remaining blockers are tracked in `J2CL_ISSUES.md` (J2CL JRE emulation/API gaps and additional missing dependencies).
 - [ ] **M5:** JS smoke test green.
 - [ ] **M6:** Initial upstream test subset green with tracked failures/fixes.
