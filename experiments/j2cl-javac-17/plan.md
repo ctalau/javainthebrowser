@@ -81,7 +81,7 @@ Build an experiment that ports OpenJDK 17 `javac` (`jdk.compiler`) to JavaScript
   - Implemented wiring in `scripts/run_j2cl_transpile.sh` for full `javac`-rooted sources (`com/sun/tools/javac/main/Main.java` entrypoint graph) plus required `javax.*` and `jdk.internal.javac` dependencies.
   - Current `j2cl_library` target `//:javac_full_j2cl` compiles the full staged source set with Java 17 source/target settings.
   - Added deterministic diagnostics outputs (`latest.log`, `latest-summary.md`, `history.md`) controlled via `M4_DIAG_OUT` and `M4_VERBOSE`.
-  - Closed one full blocker class by removing `javax.annotation.processing` source staging that caused module/package-conflict failures (`package exists in another module`).
+  - Closed one full blocker class by remapping `javax.annotation.processing` into a shim staging root (`src/shims/**`), eliminating both module/package-conflict failures (`package exists in another module`) and unresolved annotation-processing symbol cascades.
   - Remaining blockers are tracked in `J2CL_ISSUES.md` (J2CL JRE emulation/API gaps and additional missing dependencies).
 - [ ] **M5:** JS smoke test green.
 - [ ] **M6:** Initial upstream test subset green with tracked failures/fixes.

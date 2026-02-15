@@ -40,8 +40,8 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
   - `src/jdk.compiler/share/classes/com/sun/source/**`
   - `src/java.compiler/share/classes/javax/lang/model/**`
   - `src/java.compiler/share/classes/javax/tools/**`
-  - `src/java.compiler/share/classes/javax/annotation/processing/**`
   - `src/java.base/share/classes/jdk/internal/javac/**`
+  - `src/shims/javax/annotation/processing/**` (staged outside OpenJDK module-layout paths)
 - The J2CL toolchain tuple is pinned and reproducible:
   - J2CL: `20250630`
   - Bazel: `8.3.1` (via `USE_BAZEL_VERSION`)

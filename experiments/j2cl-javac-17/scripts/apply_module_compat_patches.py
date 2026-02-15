@@ -241,29 +241,157 @@ public final class CompilerProperties {{
 
 write_compiler_properties_stub()
 
-supported_source_version = workspace / "src/java.compiler/share/classes/javax/annotation/processing/SupportedSourceVersion.java"
-if not supported_source_version.exists():
-    supported_source_version.parent.mkdir(parents=True, exist_ok=True)
-    supported_source_version.write_text(
-        """/*
- * Minimal compatibility shim for J2CL builds.
- */
 
-package javax.annotation.processing;
+def write_basic_jre_shims() -> None:
+    shims = {
+        "src/shims/java/io/PrintWriter.java": """package java.io;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import javax.lang.model.SourceVersion;
+import java.util.Locale;
 
-@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SupportedSourceVersion {
-    SourceVersion value();
+public class PrintWriter {
+    public PrintWriter(Object out) {}
+    public PrintWriter(Object out, boolean autoFlush) {}
+    public PrintWriter(String fileName) {}
+    public PrintWriter(String fileName, String csn) {}
+
+    public void flush() {}
+    public void close() {}
+    public boolean checkError() { return false; }
+
+    public void print(Object obj) {}
+    public void print(String s) {}
+    public void print(boolean b) {}
+    public void print(char c) {}
+    public void print(int i) {}
+    public void print(long l) {}
+    public void print(float f) {}
+    public void print(double d) {}
+    public void println() {}
+    public void println(Object obj) {}
+    public void println(String s) {}
+    public void println(boolean b) {}
+    public void println(char c) {}
+    public void println(int i) {}
+    public void println(long l) {}
+    public void println(float f) {}
+    public void println(double d) {}
+
+    public void write(int c) {}
+    public void write(char[] buf) {}
+    public void write(char[] buf, int off, int len) {}
+    public void write(String s) {}
+    public void write(String s, int off, int len) {}
+
+    public PrintWriter printf(String format, Object... args) { return this; }
+    public PrintWriter printf(Locale l, String format, Object... args) { return this; }
+    public PrintWriter format(String format, Object... args) { return this; }
+    public PrintWriter format(Locale l, String format, Object... args) { return this; }
+    public PrintWriter append(CharSequence csq) { return this; }
+    public PrintWriter append(CharSequence csq, int start, int end) { return this; }
+    public PrintWriter append(char c) { return this; }
 }
 """,
-        encoding='utf-8',
-    )
+        "src/shims/java/net/URI.java": """package java.net;
+
+public class URI {
+    public URI(String str) {}
+
+    public static URI create(String str) { return new URI(str); }
+    public boolean isAbsolute() { return true; }
+    public URI normalize() { return this; }
+    public String getPath() { return ""; }
+
+    @Override
+    public String toString() { return ""; }
+}
+""",
+        "src/shims/java/net/URL.java": """package java.net;
+
+import java.io.IOException;
+
+public class URL {
+    public URL(String spec) {}
+    public URL(URL context, String spec) {}
+
+    public String getPath() { return ""; }
+    public URLConnection openConnection() throws IOException { return new URLConnection(this); }
+
+    @Override
+    public String toString() { return ""; }
+}
+""",
+        "src/shims/java/net/URLConnection.java": """package java.net;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+public class URLConnection {
+    protected URLConnection(URL url) {}
+
+    public void connect() throws IOException {}
+    public InputStream getInputStream() throws IOException { return null; }
+}
+""",
+        "src/shims/java/util/ServiceLoader.java": """package java.util;
+
+import java.util.Iterator;
+
+public final class ServiceLoader<S> implements Iterable<S> {
+    private ServiceLoader() {}
+
+    public static <S> ServiceLoader<S> load(Class<S> service) {
+        return new ServiceLoader<>();
+    }
+
+    public static <S> ServiceLoader<S> load(Class<S> service, ClassLoader loader) {
+        return new ServiceLoader<>();
+    }
+
+    @Override
+    public Iterator<S> iterator() {
+        return Collections.emptyIterator();
+    }
+}
+""",
+        "src/shims/java/lang/ClassLoader.java": """package java.lang;
+
+import java.net.URL;
+import java.util.Collections;
+import java.util.Enumeration;
+
+public class ClassLoader {
+    public static ClassLoader getSystemClassLoader() { return null; }
+    public URL getResource(String name) { return null; }
+    public Enumeration<URL> getResources(String name) { return null; }
+    public Class<?> loadClass(String name) { return null; }
+}
+""",
+        "src/shims/java/nio/CharBuffer.java": """package java.nio;
+
+public class CharBuffer implements CharSequence {
+    public static CharBuffer wrap(CharSequence csq) { return new CharBuffer(); }
+    public boolean hasArray() { return false; }
+    public char[] array() { return new char[0]; }
+
+    @Override
+    public int length() { return 0; }
+
+    @Override
+    public char charAt(int index) { return 0; }
+
+    @Override
+    public CharSequence subSequence(int start, int end) { return ""; }
+
+    @Override
+    public String toString() { return ""; }
+}
+""",
+    }
+
+    for rel_path, content in shims.items():
+        out = workspace / rel_path
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(content, encoding="utf-8")
+
+
+write_basic_jre_shims()

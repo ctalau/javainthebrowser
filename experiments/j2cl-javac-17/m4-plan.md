@@ -77,7 +77,6 @@ add from upstream checkout (without adding whole modules blindly).
 Initial expected candidates:
 
 - `src/jdk.compiler/share/classes/com/sun/tools/javac/resources/**`
-- selected `javax.annotation.processing/**` from `src/java.compiler`
 - any additional `jdk.compiler` sibling packages referenced transitively by
   existing staged sources
 
