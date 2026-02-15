@@ -24,6 +24,9 @@
 
 # Run the M4 J2CL transpilation check for full javac-rooted sources.
 ./scripts/run_j2cl_transpile.sh
+
+# Optional: deterministic diagnostics output location + verbose failures.
+M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
 ```
 
 ## M4 wiring notes
@@ -43,6 +46,14 @@
   - Bazel: `8.3.1` (via `USE_BAZEL_VERSION`)
   - Java language/runtime: `21`
 - Current target: `//:javac_full_j2cl` (full `com/sun/tools/javac` + dependencies).
+
+- The script now emits deterministic M4 diagnostics artifacts (including blocker buckets):
+  - `out/m4-diagnostics/latest.log`
+  - `out/m4-diagnostics/latest-summary.md`
+  - `out/m4-diagnostics/history.md`
+- The staged source graph intentionally excludes `javax.annotation.processing` sources
+  from `java.compiler`; adding them causes a module/package conflict
+  (`package exists in another module`).
 
 ## Initial J2CL issue tracking
 
