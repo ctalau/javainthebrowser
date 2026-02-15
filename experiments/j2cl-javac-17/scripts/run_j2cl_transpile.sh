@@ -35,8 +35,14 @@ copy_tree "src/jdk.compiler/share/classes/com/sun/tools/javac"
 copy_tree "src/jdk.compiler/share/classes/com/sun/source"
 copy_tree "src/java.compiler/share/classes/javax/lang/model"
 copy_tree "src/java.compiler/share/classes/javax/tools"
-copy_tree "src/java.compiler/share/classes/javax/annotation/processing"
 copy_tree "src/java.base/share/classes/jdk/internal/javac"
+
+# Stage javax.annotation.processing away from OpenJDK module-layout paths to
+# avoid package-ownership/module conflicts while preserving API availability.
+if [[ -d "$REDUCED_ROOT/src/java.compiler/share/classes/javax/annotation/processing" ]]; then
+  mkdir -p "$WORKSPACE_DIR/src/shims/javax/annotation"
+  cp -R "$REDUCED_ROOT/src/java.compiler/share/classes/javax/annotation/processing" "$WORKSPACE_DIR/src/shims/javax/annotation/processing"
+fi
 
 "$SCRIPT_DIR/apply_module_compat_patches.py" "$WORKSPACE_DIR"
 
@@ -67,8 +73,8 @@ j2cl_library(
         "src/jdk.compiler/share/classes/com/sun/source/**/*.java",
         "src/java.compiler/share/classes/javax/lang/model/**/*.java",
         "src/java.compiler/share/classes/javax/tools/**/*.java",
-        "src/java.compiler/share/classes/javax/annotation/processing/**/*.java",
         "src/java.base/share/classes/jdk/internal/javac/**/*.java",
+        "src/shims/**/*.java",
     ]),
     javacopts = ["-source", "17", "-target", "17"],
 )
