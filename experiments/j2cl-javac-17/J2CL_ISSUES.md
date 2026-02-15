@@ -88,3 +88,8 @@ This file tracks blockers while transpiling the full `javac`-rooted source set
 9. **Filesystem/module/service shim wave addressed (partial close)**
    - Added follow-up compatibility for doclint bootstrap entrypoints and broad file/module/runtime surfaces (`java.util.jar`, `java.lang.module`, `Path`/`Files`/`FileSystemProvider`, URL/code-source helpers, and related utility methods).
    - Net reduction in transpile failures: 360 -> 198 (162 fewer problems solved).
+
+10. **Post-96 shim refinement wave addressed (partial close)**
+    - Updated module patching to split staged compatibility sources by module ownership (`java.base` receives `src/shims/java`, `java.compiler` receives `src/shims/javax`) to keep staged `java.*`/`javax.*` symbols wired without reintroducing package-ownership failures.
+    - Expanded staged signatures used by javac paths (`Path.of`/`subpath`, `System.setProperty`, `VM.getRuntimeArguments`, `String(byte[], String)`, `FileTime.toMillis`, URI 3-arg constructor, and related loader/security helpers).
+    - Net reduction in transpile failures: 96 -> 81 (15 fewer problems solved).
