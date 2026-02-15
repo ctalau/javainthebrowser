@@ -78,6 +78,8 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
 
 - Added another compatibility shim wave for module/file/runtime utility gaps (including `Configuration.resolveAndBind`, `ModuleLayer.defineModulesWithOneLoader`, URI scheme helpers, filesystem path/file operations, `Normalizer`, and digest/no-such-file stubs), reducing transpile failures from 198 to 138.
 
+- Added follow-up compatibility coverage for classloading/network I/O/path APIs (`ClassLoader` hierarchy hooks, `URL`/`URLConnection` overrides, `Path`/`Files`/`FileSystems` gaps, jar manifest constructors, and normalization/object-input stubs), reducing transpile failures from 138 to 96.
+
 ## Initial J2CL issue tracking
 
 See `J2CL_ISSUES.md` for active blockers currently preventing full-target transpilation success.
