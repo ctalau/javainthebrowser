@@ -78,3 +78,13 @@ This file tracks blockers while transpiling the full `javac`-rooted source set
 7. **M4 remains open until `//:javac_full_j2cl` is green**
    - Script and target are wired for full-source transpilation.
    - Next work is reducing the blocker list above until the full target builds.
+
+8. **Utility/runtime shim expansion addressed (partial close)**
+   - Extended staged shims for frequently hit APIs (`java.lang.String`, `java.util.Objects`,
+     `java.lang.Character`, `java.nio.ByteBuffer`, charset decode helpers, `java.nio.file.Files`,
+     `Thread`, and reflection helpers) and added compatibility overloads used by javac internals.
+   - Net reduction in transpile failures: 496 -> 360 (136 fewer problems solved).
+
+9. **Filesystem/module/service shim wave addressed (partial close)**
+   - Added follow-up compatibility for doclint bootstrap entrypoints and broad file/module/runtime surfaces (`java.util.jar`, `java.lang.module`, `Path`/`Files`/`FileSystemProvider`, URL/code-source helpers, and related utility methods).
+   - Net reduction in transpile failures: 360 -> 198 (162 fewer problems solved).
