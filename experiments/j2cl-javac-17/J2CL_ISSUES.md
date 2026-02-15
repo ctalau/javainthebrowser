@@ -61,10 +61,20 @@ This file tracks blockers while transpiling the full `javac`-rooted source set
    - Net reduction from the previous baseline: 1779 -> 1248 transpile errors
      (531 fewer compilation problems).
 
-5. **Remaining compiler dependency/resource coverage**
+5. **Reflection/runtime + diagnostics shim wave addressed (partial close)**
+   - `apply_module_compat_patches.py` now synthesizes `CompilerProperties.Notes`
+     and static diagnostic fields (`Errors`/`Warnings`/`Fragments`/`Notes`) in
+     addition to method factories.
+   - Added broader staged compatibility stubs for reflection/runtime surfaces
+     (`Class`, `Runtime`, `System`, `Throwable`, `ClassNotFoundException`,
+     `NoSuchMethodException`) and I/O/classloading surfaces (`InputStreamReader`,
+     `BufferedReader`, `URLClassLoader`, `URLStreamHandler`, `ProtectionDomain`).
+   - Net reduction in transpile failures: 1248 -> 496 (752 fewer problems solved).
+
+6. **Remaining compiler dependency/resource coverage**
    - Additional source/resource dependencies may still be required transitively
      beyond currently staged roots.
 
-6. **M4 remains open until `//:javac_full_j2cl` is green**
+7. **M4 remains open until `//:javac_full_j2cl` is green**
    - Script and target are wired for full-source transpilation.
    - Next work is reducing the blocker list above until the full target builds.

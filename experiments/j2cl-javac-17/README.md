@@ -65,6 +65,13 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
   `FileNotFoundException`, `DataInputStream`, `DataOutputStream`) which reduced
   current transpile failures from 1779 to 1248.
 
+- Added a follow-up shim wave for reflection/runtime/file APIs (`Class`, `Runtime`,
+  `System`, `Throwable`, `ClassNotFoundException`, `NoSuchMethodException`,
+  `InputStreamReader`, `BufferedReader`, `URLClassLoader`, `URLStreamHandler`,
+  `ProtectionDomain`) and expanded `CompilerProperties` synthesis to emit
+  static fields and `Notes` entries in addition to factories, reducing
+  transpile failures from 1248 to 496.
+
 ## Initial J2CL issue tracking
 
 See `J2CL_ISSUES.md` for active blockers currently preventing full-target transpilation success.
