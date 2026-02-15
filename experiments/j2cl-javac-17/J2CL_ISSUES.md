@@ -27,9 +27,11 @@ This file tracks blockers while transpiling the full `javac`-rooted source set
 
 1. **J2CL JRE emulation gaps vs. full javac needs**
    - Missing/unsupported APIs during transpilation include module/reflection and
-     JDK APIs such as `java.lang.Module`, `java.io.ObjectInputStream`,
-     `java.io.PrintWriter`, `java.util.regex`, `java.nio.file`, and
-     `java.lang.ref`.
+     JDK APIs such as `java.io.ObjectInputStream`, `java.io.PrintWriter`,
+     `java.util.regex`, `java.nio.file`, and `java.lang.ref`.
+   - ✅ Closed one compatibility class in M4 staging: direct compile-time
+     `java.lang.Module` type coupling in `javac` bootstrap entrypoints is now
+     rewritten to reflection-backed helpers during workspace staging.
 
 2. **Remaining compiler dependency/resource coverage**
    - Additional source/resource dependencies may still be required transitively
