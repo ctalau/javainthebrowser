@@ -112,6 +112,12 @@ replacements = [
             // Module system API not present; nothing to export.
         }
     }
+
+    public static void addExports(Object from, Object to) {
+        if (from instanceof Class<?> && to instanceof Class<?>) {
+            addExports((Class<?>) from, (Class<?>) to);
+        }
+    }
 }
 """,
     ),
@@ -174,6 +180,7 @@ for path, old, new in replacements:
         continue
     raise SystemExit(f"Expected patch hunk not found in {path}")
 
+
 for path, old, new in serialization_replacements:
     text = path.read_text(encoding='utf-8')
     if old in text:
@@ -203,8 +210,6 @@ def collect_resource_fields(kind: str) -> list[str]:
     for src in javac_root.rglob("*.java"):
         text = src.read_text(encoding="utf-8", errors="ignore")
         for candidate in qualified.findall(text) + direct.findall(text):
-            if f"{candidate}(" in text:
-                continue
             field_names.add(candidate)
 
     return sorted(field_names)
@@ -285,7 +290,7 @@ def write_basic_jre_shims() -> None:
 
 import java.util.Locale;
 
-public class PrintWriter {
+public class PrintWriter extends Writer {
     public PrintWriter(Object out) {}
     public PrintWriter(Object out, boolean autoFlush) {}
     public PrintWriter(String fileName) {}
@@ -354,6 +359,8 @@ public class URL {
     public String getPath() { return ""; }
     public URLConnection openConnection() throws IOException { return new URLConnection(this); }
     public java.io.InputStream openStream() throws IOException { return null; }
+    public java.net.URI toURI() throws java.net.URISyntaxException { return null; }
+    public String getProtocol() { return ""; }
 
     @Override
     public String toString() { return ""; }
@@ -399,6 +406,8 @@ public final class ServiceLoader<S> implements Iterable<S> {
         return new ServiceLoader<>();
     }
 
+    public void reload() {}
+
     @Override
     public Iterator<S> iterator() {
         return Collections.emptyIterator();
@@ -413,6 +422,7 @@ import java.util.Enumeration;
 
 public class ClassLoader {
     public static ClassLoader getSystemClassLoader() { return null; }
+    public Object getUnnamedModule() { return null; }
     public URL getResource(String name) { return null; }
     public Enumeration<URL> getResources(String name) { return null; }
     public Class<?> loadClass(String name) { return null; }
@@ -428,6 +438,11 @@ public class CharBuffer implements CharSequence {
     public char[] array() { return new char[0]; }
     public int capacity() { return 0; }
     public int limit() { return 0; }
+    public CharBuffer limit(int newLimit) { return this; }
+    public CharBuffer flip() { return this; }
+    public CharBuffer put(CharBuffer src) { return this; }
+    public CharBuffer put(char c) { return this; }
+    public CharBuffer position(int newPosition) { return this; }
 
     @Override
     public int length() { return 0; }
@@ -453,7 +468,8 @@ public @interface Deprecated {
         "src/shims/java/lang/reflect/Method.java": """package java.lang.reflect;
 
 public class Method {
-    public Object invoke(Object obj, Object... args) { return null; }
+    public Object invoke(Object obj, Object... args) throws IllegalAccessException, IllegalArgumentException, java.lang.reflect.InvocationTargetException { return null; }
+    public Class<?> getReturnType() { return null; }
 }
 """,
         "src/shims/java/lang/ReflectiveOperationException.java": """package java.lang;
@@ -468,6 +484,8 @@ public class ReflectiveOperationException extends Exception {
 public class InternalError extends Error {
     public InternalError() {}
     public InternalError(String message) { super(message); }
+    public InternalError(Throwable cause) { super(cause); }
+    public InternalError(String message, Throwable cause) { super(message, cause); }
 }
 """,
         "src/shims/java/lang/ref/SoftReference.java": """package java.lang.ref;
@@ -494,6 +512,7 @@ public class File {
     public File(URI uri) {}
 
     public String getPath() { return ""; }
+    public java.nio.file.Path toPath() { return null; }
 }
 """,
         "src/shims/java/io/CharArrayReader.java": """package java.io;
@@ -565,9 +584,15 @@ public final class Files {
     public static Path createDirectories(Path dir) throws IOException { return dir; }
     public static boolean exists(Path path) { return false; }
     public static boolean isDirectory(Path path) { return false; }
+    public static boolean isSymbolicLink(Path path) { return false; }
     public static boolean isRegularFile(Path path) { return false; }
+    public static boolean isDirectory(Path path) { return false; }
+    public static boolean isSymbolicLink(Path path) { return false; }
     public static Path write(Path path, byte[] bytes) throws IOException { return path; }
     public static java.io.InputStream newInputStream(Path path) throws IOException { return null; }
+    public static Path readSymbolicLink(Path link) throws IOException { return null; }
+    public static java.util.stream.Stream<Path> list(Path dir) throws IOException { return java.util.stream.Stream.empty(); }
+    public static Path walkFileTree(Path start, java.util.Set<FileVisitOption> options, int maxDepth, FileVisitor<? super Path> visitor) throws IOException { return start; }
     public static DirectoryStream<Path> newDirectoryStream(Path dir) throws IOException { return null; }
     public static java.util.stream.Stream<Path> list(Path dir) throws IOException { return java.util.stream.Stream.empty(); }
     public static List<String> readAllLines(Path path, Charset cs) throws IOException { return Collections.emptyList(); }
@@ -598,6 +623,7 @@ public final class FileSystems {
         "src/shims/java/nio/file/DirectoryStream.java": """package java.nio.file;
 
 public interface DirectoryStream<T> extends Iterable<T>, AutoCloseable {
+    interface Filter<T> { boolean accept(T entry) throws java.io.IOException; }
     @Override
     void close();
 }
@@ -634,6 +660,8 @@ public enum FileVisitOption {
 
 public interface BasicFileAttributes {
     boolean isDirectory();
+    boolean isRegularFile();
+    boolean isSymbolicLink();
 }
 """,
         "src/shims/java/nio/file/spi/FileSystemProvider.java": """package java.nio.file.spi;
@@ -643,6 +671,7 @@ import java.nio.file.Path;
 import java.util.Map;
 
 public abstract class FileSystemProvider {
+    public static java.util.List<FileSystemProvider> installedProviders() { return java.util.Collections.emptyList(); }
     public abstract String getScheme();
     public abstract FileSystem getFileSystem(java.net.URI uri);
     public abstract Path getPath(java.net.URI uri);
@@ -720,6 +749,12 @@ public abstract class BreakIterator {
     public abstract int next();
 }
 """,
+        "src/shims/java/util/Hashtable.java": """package java.util;
+
+public class Hashtable<K, V> extends HashMap<K, V> {
+    public Hashtable() {}
+}
+""",
         "src/shims/java/util/WeakHashMap.java": """package java.util;
 
 public class WeakHashMap<K, V> extends HashMap<K, V> {
@@ -732,7 +767,8 @@ public class Properties extends Hashtable<Object, Object> {
     public Properties() {}
     public String getProperty(String key) { return null; }
     public Object setProperty(String key, String value) { return put(key, value); }
-    public Object put(String key, String value) { return value; }
+    @Override
+    public Object put(Object key, Object value) { return value; }
 }
 """,
         "src/shims/java/io/StringWriter.java": """package java.io;
@@ -751,6 +787,12 @@ public class StringWriter extends Writer {
 
     @Override
     public String toString() { return ""; }
+}
+""",
+        "src/shims/java/io/IOError.java": """package java.io;
+
+public class IOError extends Error {
+    public IOError(Throwable cause) { super(cause); }
 }
 """,
         "src/shims/java/io/FileNotFoundException.java": """package java.io;
@@ -804,8 +846,10 @@ public class DataOutputStream extends FilterOutputStream {
 
 public class Runtime {
     public static Runtime getRuntime() { return new Runtime(); }
-    public static Runtime version() { return new Runtime(); }
-    public int feature() { return 0; }
+    public static Version version() { return new Version(); }
+    public static final class Version {
+        public int feature() { return 0; }
+    }
 }
 """,
         "src/shims/java/lang/System.java": """package java.lang;
@@ -813,6 +857,7 @@ public class Runtime {
 import java.io.PrintStream;
 
 public final class System {
+    public static final java.io.InputStream in = null;
     public static final PrintStream out = null;
     public static final PrintStream err = null;
     private System() {}
@@ -826,17 +871,31 @@ public final class System {
         "src/shims/java/lang/Character.java": """package java.lang;
 
 public final class Character {
+    public static final int MIN_RADIX = 2;
+    public static final int MAX_RADIX = 36;
+    public static final char MIN_VALUE = 0;
+    public static final char MAX_VALUE = 65535;
     private Character() {}
     public static boolean isDefined(int codePoint) { return false; }
     public static boolean isISOControl(int codePoint) { return false; }
     public static boolean isJavaIdentifierStart(int codePoint) { return false; }
     public static boolean isJavaIdentifierPart(int codePoint) { return false; }
     public static boolean isUnicodeIdentifierPart(char ch) { return false; }
+    public static boolean isUnicodeIdentifierStart(char ch) { return false; }
     public static boolean isSpaceChar(int codePoint) { return false; }
     public static int charCount(int codePoint) { return 1; }
     public static boolean isWhitespace(char ch) { return false; }
     public static int digit(char ch, int radix) { return 0; }
+    public static int digit(int codePoint, int radix) { return 0; }
     public static char forDigit(int digit, int radix) { return '0'; }
+    public static boolean isDigit(char ch) { return false; }
+    public static boolean isIdentifierIgnorable(char ch) { return false; }
+    public static char highSurrogate(int codePoint) { return 0; }
+    public static char lowSurrogate(int codePoint) { return 0; }
+    public static int toLowerCase(char ch) { return ch; }
+    public static boolean isHighSurrogate(char ch) { return false; }
+    public static boolean isLowSurrogate(char ch) { return false; }
+    public static int toCodePoint(char high, char low) { return 0; }
 }
 """,
         "src/shims/java/lang/Class.java": """package java.lang;
@@ -845,9 +904,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 public final class Class<T> {
-    public static Class<?> forName(String name) { return null; }
-    public static Class<?> forName(String name, boolean initialize, ClassLoader loader) { return null; }
-    public Method getMethod(String name, Class<?>... parameterTypes) { return null; }
+    public static Class<?> forName(String name) throws ClassNotFoundException { return null; }
+    public static Class<?> forName(String name, boolean initialize, ClassLoader loader) throws ClassNotFoundException { return null; }
+    public Method getMethod(String name, Class<?>... parameterTypes) throws NoSuchMethodException { return null; }
+    public java.lang.reflect.Constructor<T> getConstructor(Class<?>... parameterTypes) throws NoSuchMethodException { return null; }
     public ClassLoader getClassLoader() { return null; }
     public <U> Class<? extends U> asSubclass(Class<U> clazz) { return null; }
     public T cast(Object obj) { return null; }
@@ -855,7 +915,15 @@ public final class Class<T> {
     public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) { return false; }
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) { return null; }
     public String getName() { return ""; }
+    public boolean isEnum() { return false; }
+    public boolean isInstance(Object obj) { return false; }
     public String getSimpleName() { return ""; }
+    public String getCanonicalName() { return ""; }
+    public Object getModule() { return null; }
+    public Class<?> getComponentType() { return null; }
+    public java.security.ProtectionDomain getProtectionDomain() { return null; }
+    public java.net.URL getResource(String name) { return null; }
+    public java.io.InputStream getResourceAsStream(String name) { return null; }
 }
 """,
         "src/shims/java/lang/reflect/Array.java": """package java.lang.reflect;
@@ -863,25 +931,63 @@ public final class Class<T> {
 public final class Array {
     private Array() {}
     public static Object newInstance(Class<?> componentType, int length) { return null; }
+    public static void set(Object array, int index, Object value) {}
 }
 """,
         "src/shims/java/lang/Throwable.java": """package java.lang;
 
 public class Throwable {
+    public Throwable() {}
+    public Throwable(String message) {}
+    public Throwable(String message, Throwable cause) {}
+    public String getMessage() { return null; }
+    public String getLocalizedMessage() { return getMessage(); }
+    public Throwable getCause() { return null; }
+    public Throwable initCause(Throwable cause) { return this; }
+    public StackTraceElement[] getStackTrace() { return new StackTraceElement[0]; }
+    public void setStackTrace(StackTraceElement[] trace) {}
     public void printStackTrace(java.io.PrintStream s) {}
     public void printStackTrace(java.io.PrintWriter s) {}
 }
 """,
         "src/shims/java/lang/ClassNotFoundException.java": """package java.lang;
 
-public class ClassNotFoundException extends Exception {
+public class ClassNotFoundException extends ReflectiveOperationException {
     public ClassNotFoundException() {}
     public ClassNotFoundException(String msg) { super(msg); }
 }
 """,
+        "src/shims/java/lang/LinkageError.java": """package java.lang;
+
+public class LinkageError extends Error {
+    public LinkageError() {}
+    public LinkageError(String msg) { super(msg); }
+}
+""",
+        "src/shims/java/lang/ClassFormatError.java": """package java.lang;
+
+public class ClassFormatError extends LinkageError {
+    public ClassFormatError() {}
+    public ClassFormatError(String msg) { super(msg); }
+}
+""",
+        "src/shims/java/lang/UnsupportedClassVersionError.java": """package java.lang;
+
+public class UnsupportedClassVersionError extends ClassFormatError {
+    public UnsupportedClassVersionError() {}
+    public UnsupportedClassVersionError(String msg) { super(msg); }
+}
+""",
+        "src/shims/java/lang/IllegalAccessException.java": """package java.lang;
+
+public class IllegalAccessException extends ReflectiveOperationException {
+    public IllegalAccessException() {}
+    public IllegalAccessException(String msg) { super(msg); }
+}
+""",
         "src/shims/java/lang/NoSuchMethodException.java": """package java.lang;
 
-public class NoSuchMethodException extends Exception {
+public class NoSuchMethodException extends ReflectiveOperationException {
     public NoSuchMethodException() {}
     public NoSuchMethodException(String msg) { super(msg); }
 }
@@ -890,8 +996,9 @@ public class NoSuchMethodException extends Exception {
 
 public class InputStreamReader extends Reader {
     public InputStreamReader(InputStream in) {}
+    public InputStreamReader(InputStream in, String charsetName) {}
     @Override public int read(char[] cbuf, int off, int len) { return -1; }
-    @Override public void close() {}
+    @Override public void close() throws IOException {}
 }
 """,
         "src/shims/java/io/BufferedReader.java": """package java.io;
@@ -900,13 +1007,14 @@ public class BufferedReader extends Reader {
     public BufferedReader(Reader in) {}
     public String readLine() { return null; }
     @Override public int read(char[] cbuf, int off, int len) { return -1; }
-    @Override public void close() {}
+    @Override public void close() throws IOException {}
 }
 """,
         "src/shims/java/net/URLClassLoader.java": """package java.net;
 
 public class URLClassLoader extends ClassLoader {
     public URLClassLoader(URL[] urls) {}
+    public URLClassLoader(URL[] urls, ClassLoader parent) {}
 }
 """,
         "src/shims/java/net/URLStreamHandler.java": """package java.net;
@@ -917,6 +1025,7 @@ public abstract class URLStreamHandler {}
 
 public class CodeSource {
     public CodeSource(java.net.URL location, java.security.cert.Certificate[] certs) {}
+    public java.net.URL getLocation() { return null; }
 }
 """,
         "src/shims/java/security/ProtectionDomain.java": """package java.security;
@@ -925,10 +1034,112 @@ public class ProtectionDomain {
     public CodeSource getCodeSource() { return null; }
 }
 """,
+        "src/shims/java/lang/Thread.java": """package java.lang;
+
+public class Thread {
+    public Thread() {}
+    public Thread(String name) {}
+    public void start() {}
+    public void interrupt() {}
+    public void setDaemon(boolean on) {}
+    public static void sleep(long millis) throws InterruptedException {}
+    public void run() {}
+}
+""",
+        "src/shims/java/lang/reflect/Constructor.java": """package java.lang.reflect;
+
+public class Constructor<T> {
+    public T newInstance(Object... initargs) { return null; }
+}
+""",
+        "src/shims/java/nio/ByteBuffer.java": """package java.nio;
+
+public class ByteBuffer {
+    public static ByteBuffer allocate(int capacity) { return new ByteBuffer(); }
+    public int position() { return 0; }
+    public ByteBuffer position(int newPosition) { return this; }
+    public int limit() { return 0; }
+    public ByteBuffer limit(int newLimit) { return this; }
+    public ByteBuffer flip() { return this; }
+    public byte get() { return 0; }
+    public ByteBuffer put(byte b) { return this; }
+    public ByteBuffer put(ByteBuffer src) { return this; }
+    public int remaining() { return 0; }
+    public int capacity() { return 0; }
+    public ByteBuffer clear() { return this; }
+    public byte[] array() { return new byte[0]; }
+}
+""",
+        "src/shims/java/nio/charset/Charset.java": """package java.nio.charset;
+
+public class Charset {
+    public static Charset defaultCharset() { return new Charset(); }
+    public static Charset forName(String charsetName) { return new Charset(); }
+    public CharsetDecoder newDecoder() { return new CharsetDecoder(); }
+    public String name() { return ""; }
+}
+""",
+        "src/shims/java/nio/charset/CharsetDecoder.java": """package java.nio.charset;
+
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+
+public class CharsetDecoder {
+    public CharBuffer decode(ByteBuffer in) { return CharBuffer.allocate(0); }
+    public CoderResult decode(ByteBuffer in, CharBuffer out, boolean endOfInput) { return CoderResult.UNDERFLOW; }
+    public CoderResult flush(CharBuffer out) { return CoderResult.UNDERFLOW; }
+    public CharsetDecoder onMalformedInput(CodingErrorAction newAction) { return this; }
+    public CharsetDecoder onUnmappableCharacter(CodingErrorAction newAction) { return this; }
+    public float averageCharsPerByte() { return 1.0f; }
+    public float maxCharsPerByte() { return 1.0f; }
+}
+""",
+        "src/shims/java/nio/charset/CoderResult.java": """package java.nio.charset;
+
+public class CoderResult {
+    public static final CoderResult UNDERFLOW = new CoderResult();
+    public static final CoderResult OVERFLOW = new CoderResult();
+    public boolean isUnderflow() { return false; }
+    public boolean isOverflow() { return false; }
+    public boolean isMalformed() { return false; }
+    public boolean isUnmappable() { return false; }
+    public int length() { return 0; }
+}
+""",
+        "src/shims/java/nio/charset/CodingErrorAction.java": """package java.nio.charset;
+
+public class CodingErrorAction {
+    public static final CodingErrorAction IGNORE = new CodingErrorAction();
+    public static final CodingErrorAction REPLACE = new CodingErrorAction();
+    public static final CodingErrorAction REPORT = new CodingErrorAction();
+}
+""",
+        "src/shims/java/io/FilterWriter.java": """package java.io;
+
+public class FilterWriter extends Writer {
+    protected Writer out;
+    protected FilterWriter(Writer out) { this.out = out; }
+    @Override public void write(char[] cbuf, int off, int len) {}
+    @Override public void flush() {}
+    @Override public void close() throws IOException {}
+}
+""",
+        "src/shims/java/util/Objects.java": """package java.util;
+
+public final class Objects {
+    private Objects() {}
+    public static int checkFromIndexSize(int fromIndex, int size, int length) { return fromIndex; }
+    public static <T> T requireNonNull(T obj) { return obj; }
+    public static <T> T requireNonNull(T obj, String message) { return obj; }
+    public static boolean equals(Object a, Object b) { return a == b || (a != null && a.equals(b)); }
+    public static int hashCode(Object o) { return o == null ? 0 : o.hashCode(); }
+}
+""",
         "src/shims/java/util/StringTokenizer.java": """package java.util;
 
 public class StringTokenizer {
     public StringTokenizer(String str, String delim) {}
+    public StringTokenizer(String str) {}
     public boolean hasMoreTokens() { return false; }
     public String nextToken() { return ""; }
 }
@@ -948,9 +1159,302 @@ public class EnumSet<E extends Enum<E>> extends HashSet<E> {
     public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2) { return new EnumSet<>(); }
     public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2, E e3) { return new EnumSet<>(); }
     public static <E extends Enum<E>> EnumSet<E> of(E e1, E e2, E e3, E e4, E e5) { return new EnumSet<>(); }
+    @SafeVarargs
+    public static <E extends Enum<E>> EnumSet<E> of(E first, E... rest) { return new EnumSet<>(); }
     public static <E extends Enum<E>> EnumSet<E> copyOf(java.util.Set<E> s) { return new EnumSet<>(); }
+    public static <E extends Enum<E>> EnumSet<E> copyOf(java.util.Collection<E> c) { return new EnumSet<>(); }
     public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> elementType) { return new EnumSet<>(); }
+    public static <E extends Enum<E>> EnumSet<E> complementOf(EnumSet<E> s) { return new EnumSet<>(); }
 }
+""",
+    })
+
+
+    shims.update({
+
+
+        "src/shims/java/lang/Record.java": """package java.lang;
+
+public abstract class Record {}
+""",
+        "src/shims/java/lang/String.java": """package java.lang;
+
+import java.util.Locale;
+
+public final class String implements CharSequence {
+    public String() {}
+    public String(char[] value) {}
+    public String(char[] value, int offset, int count) {}
+    public String(byte[] bytes) {}
+    public String(String original) {}
+
+    public int length() { return 0; }
+    public char charAt(int index) { return 0; }
+    public CharSequence subSequence(int start, int end) { return this; }
+    public int codePointAt(int index) { return 0; }
+    public String[] split(String regex) { return new String[0]; }
+    public String[] split(String regex, int limit) { return new String[0]; }
+    public boolean startsWith(String prefix) { return false; }
+    public boolean endsWith(String suffix) { return false; }
+    public boolean matches(String regex) { return false; }
+    public String substring(int beginIndex) { return this; }
+    public String substring(int beginIndex, int endIndex) { return this; }
+    public int indexOf(char ch) { return -1; }
+    public int indexOf(char ch, int fromIndex) { return -1; }
+    public int indexOf(String str, int fromIndex) { return -1; }
+    public int indexOf(String str) { return -1; }
+    public int lastIndexOf(char ch) { return -1; }
+    public int lastIndexOf(String str) { return -1; }
+    public String replace(String target, String replacement) { return this; }
+    public String replace(char oldChar, char newChar) { return this; }
+    public String replaceAll(String regex, String replacement) { return this; }
+    public String toLowerCase(Locale locale) { return this; }
+    public String toUpperCase(Locale locale) { return this; }
+    public String stripTrailing() { return this; }
+    public String stripLeading() { return this; }
+    public String trim() { return this; }
+    public boolean contains(CharSequence s) { return false; }
+    public boolean isBlank() { return false; }
+    public boolean contentEquals(CharSequence cs) { return false; }
+    public int compareTo(String another) { return 0; }
+    public String replaceFirst(String regex, String replacement) { return this; }
+    public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin) {}
+    public char[] toCharArray() { return new char[0]; }
+    public boolean isEmpty() { return false; }
+    public String stripIndent() { return this; }
+    public String translateEscapes() { return this; }
+
+    public static String valueOf(Object obj) { return ""; }
+    public static String valueOf(char c) { return ""; }
+    public static String valueOf(int i) { return ""; }
+    public static String valueOf(long l) { return ""; }
+    public static String valueOf(char[] data) { return ""; }
+    public static String toString(char c) { return ""; }
+    public static String format(String format, Object... args) { return ""; }
+    public static String format(Locale l, String format, Object... args) { return ""; }
+
+    @Override
+    public String toString() { return this; }
+}
+""",
+        "src/shims/java/lang/Long.java": """package java.lang;
+
+public final class Long {
+    public static final long MIN_VALUE = -9223372036854775808L;
+    public static final long MAX_VALUE = 9223372036854775807L;
+    public static Long valueOf(long v) { return new Long(); }
+    public static long parseLong(String s, int radix) { return 0L; }
+}
+""",
+        "src/shims/java/io/OutputStreamWriter.java": """package java.io;
+
+import java.nio.charset.Charset;
+
+public class OutputStreamWriter extends Writer {
+    public OutputStreamWriter(OutputStream out) {}
+    public OutputStreamWriter(OutputStream out, Charset cs) {}
+    @Override public void write(char[] cbuf, int off, int len) {}
+    @Override public void flush() {}
+    @Override public void close() throws IOException {}
+}
+""",
+        "src/shims/java/lang/annotation/ElementType.java": """package java.lang.annotation;
+
+public enum ElementType {
+    TYPE,
+    FIELD,
+    METHOD,
+    PARAMETER,
+    CONSTRUCTOR,
+    LOCAL_VARIABLE,
+    ANNOTATION_TYPE,
+    PACKAGE,
+    TYPE_PARAMETER,
+    TYPE_USE,
+    MODULE,
+    RECORD_COMPONENT
+}
+""",
+        "src/shims/java/nio/file/Files.java": """package java.nio.file;
+
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.nio.charset.Charset;
+
+public final class Files {
+    private Files() {}
+    public static BufferedWriter newBufferedWriter(Path path) throws IOException { return null; }
+    public static BufferedWriter newBufferedWriter(Path path, Charset cs) throws IOException { return null; }
+    public static boolean exists(Path path) { return false; }
+    public static boolean isRegularFile(Path path) { return false; }
+    public static boolean isDirectory(Path path) { return false; }
+    public static boolean isSymbolicLink(Path path) { return false; }
+    public static java.nio.file.DirectoryStream<Path> newDirectoryStream(Path path) throws IOException { return null; }
+    public static java.util.stream.Stream<String> lines(Path path, Charset cs) throws IOException { return java.util.stream.Stream.empty(); }
+    public static <A extends java.nio.file.attribute.BasicFileAttributes> A readAttributes(Path path, Class<A> type) throws IOException { return null; }
+    public static java.io.InputStream newInputStream(Path path) throws IOException { return null; }
+    public static Path readSymbolicLink(Path link) throws IOException { return null; }
+    public static java.util.stream.Stream<Path> list(Path dir) throws IOException { return java.util.stream.Stream.empty(); }
+    public static Path walkFileTree(Path start, java.util.Set<FileVisitOption> options, int maxDepth, FileVisitor<? super Path> visitor) throws IOException { return start; }
+}
+""",
+        "src/shims/java/util/jar/Attributes.java": """package java.util.jar;
+
+public class Attributes extends java.util.HashMap<Object, Object> {
+    public static class Name {
+        public static final Name CLASS_PATH = new Name();
+    }
+    public String getValue(Name name) { return null; }
+}
+""",
+        "src/shims/java/util/jar/Manifest.java": """package java.util.jar;
+
+public class Manifest {
+    public Attributes getMainAttributes() { return new Attributes(); }
+}
+""",
+        "src/shims/java/util/jar/JarFile.java": """package java.util.jar;
+
+import java.io.IOException;
+
+public class JarFile implements AutoCloseable {
+    public JarFile(String name) throws IOException {}
+    public Manifest getManifest() throws IOException { return new Manifest(); }
+    @Override public void close() throws IOException {}
+}
+""",
+        "src/shims/java/nio/file/FileSystemNotFoundException.java": """package java.nio.file;
+
+public class FileSystemNotFoundException extends RuntimeException {
+    public FileSystemNotFoundException() {}
+    public FileSystemNotFoundException(String msg) { super(msg); }
+}
+""",
+        "src/shims/java/nio/file/LinkOption.java": """package java.nio.file;
+
+public enum LinkOption {
+    NOFOLLOW_LINKS
+}
+""",
+        "src/shims/java/nio/file/FileVisitor.java": """package java.nio.file;
+
+import java.io.IOException;
+import java.nio.file.attribute.BasicFileAttributes;
+
+public interface FileVisitor<T> {
+    FileVisitResult preVisitDirectory(T dir, BasicFileAttributes attrs) throws IOException;
+    FileVisitResult visitFile(T file, BasicFileAttributes attrs) throws IOException;
+    FileVisitResult visitFileFailed(T file, IOException exc) throws IOException;
+    FileVisitResult postVisitDirectory(T dir, IOException exc) throws IOException;
+}
+""",
+        "src/shims/java/nio/file/SimpleFileVisitor.java": """package java.nio.file;
+
+import java.io.IOException;
+import java.nio.file.attribute.BasicFileAttributes;
+
+public class SimpleFileVisitor<T> implements FileVisitor<T> {
+    public FileVisitResult preVisitDirectory(T dir, BasicFileAttributes attrs) throws IOException { return FileVisitResult.CONTINUE; }
+    public FileVisitResult visitFile(T file, BasicFileAttributes attrs) throws IOException { return FileVisitResult.CONTINUE; }
+    public FileVisitResult visitFileFailed(T file, IOException exc) throws IOException { return FileVisitResult.CONTINUE; }
+    public FileVisitResult postVisitDirectory(T dir, IOException exc) throws IOException { return FileVisitResult.CONTINUE; }
+}
+""",
+        "src/shims/java/lang/module/ModuleFinder.java": """package java.lang.module;
+
+public final class ModuleFinder {
+    private ModuleFinder() {}
+    public static ModuleFinder of() { return new ModuleFinder(); }
+    public static ModuleFinder of(java.nio.file.Path... entries) { return new ModuleFinder(); }
+}
+""",
+        "src/shims/java/lang/module/ModuleDescriptor.java": """package java.lang.module;
+
+public final class ModuleDescriptor {
+    public String toNameAndVersion() { return ""; }
+}
+""",
+        "src/shims/java/lang/ModuleLayer.java": """package java.lang;
+
+public class ModuleLayer {
+    public static ModuleLayer boot() { return new ModuleLayer(); }
+}
+""",
+        "src/shims/java/text/Collator.java": """package java.text;
+
+public class Collator {
+    public static Collator getInstance() { return new Collator(); }
+    public int compare(String source, String target) { return 0; }
+}
+""",
+        "src/shims/java/text/SimpleDateFormat.java": """package java.text;
+
+public class SimpleDateFormat {
+    public SimpleDateFormat(String pattern) {}
+    public String format(java.util.Date date) { return ""; }
+}
+""",
+        "src/shims/java/util/Calendar.java": """package java.util;
+
+public class Calendar {
+    public static Calendar getInstance() { return new Calendar(); }
+    public Date getTime() { return new Date(); }
+}
+""",
+        "src/shims/java/lang/OutOfMemoryError.java": """package java.lang;
+
+public class OutOfMemoryError extends VirtualMachineError {
+    public OutOfMemoryError() {}
+}
+""",
+        "src/shims/java/lang/StackOverflowError.java": """package java.lang;
+
+public class StackOverflowError extends VirtualMachineError {
+    public StackOverflowError() {}
+}
+""",
+        "src/shims/java/lang/IllegalAccessError.java": """package java.lang;
+
+public class IllegalAccessError extends IncompatibleClassChangeError {
+    public IllegalAccessError() {}
+}
+""",
+        "src/shims/java/lang/VirtualMachineError.java": """package java.lang;
+
+public class VirtualMachineError extends Error {
+    public VirtualMachineError() {}
+    public VirtualMachineError(String msg) { super(msg); }
+}
+""",
+        "src/shims/java/lang/IncompatibleClassChangeError.java": """package java.lang;
+
+public class IncompatibleClassChangeError extends LinkageError {
+    public IncompatibleClassChangeError() {}
+    public IncompatibleClassChangeError(String msg) { super(msg); }
+}
+""",
+        "src/shims/com/sun/tools/doclint/DocLint.java": """package com.sun.tools.doclint;
+
+import java.util.List;
+import java.util.Set;
+
+public class DocLint {
+    public static final String XMSGS_OPTION = "-Xmsgs";
+    public static final String XCHECK_PACKAGE = "-XcheckPackage:";
+    public static final String XMSGS_CUSTOM_PREFIX = "-Xmsgs:";
+    public static final String XCUSTOM_TAGS_PREFIX = "-XcustomTags:";
+
+    public static boolean isValidOption(String opt) { return false; }
+    public static DocLint newDocLint() { return new DocLint(); }
+    public void init(java.util.function.Consumer<String> out, List<String> opts, boolean javacMode) {}
+    public void setCheckMissing(boolean b) {}
+    public void setDeclScanner(Object scanner) {}
+    public void reportStats(java.io.PrintWriter out) {}
+}
+""",
+        "src/shims/java/security/cert/Certificate.java": """package java.security.cert;
+
+public abstract class Certificate {}
 """,
     })
 

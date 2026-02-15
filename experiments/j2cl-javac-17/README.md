@@ -72,6 +72,10 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
   static fields and `Notes` entries in addition to factories, reducing
   transpile failures from 1248 to 496.
 
+- Expanded staged compatibility shims across core utility/runtime surfaces (notably `String`, `Objects`, `Character`, `Thread`, `ByteBuffer`, charset APIs, reflection helpers, and `Files` helpers), reducing current transpile failures from 496 to 360.
+
+- Added targeted follow-up staging rewrites/shims (DocLint bootstrap shim, broader filesystem/module/jar/path utilities, and additional String/charset/path/URL compatibility methods), reducing transpile failures from 360 to 198.
+
 ## Initial J2CL issue tracking
 
 See `J2CL_ISSUES.md` for active blockers currently preventing full-target transpilation success.
