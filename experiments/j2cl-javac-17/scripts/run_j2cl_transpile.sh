@@ -76,7 +76,13 @@ j2cl_library(
         "src/java.base/share/classes/jdk/internal/javac/**/*.java",
         "src/shims/**/*.java",
     ]),
-    javacopts = ["-source", "17", "-target", "17"],
+    javacopts = [
+        "-source",
+        "17",
+        "-target",
+        "17",
+        "--patch-module=java.base=src/shims/java:src/shims/javax",
+    ],
 )
 BUILD
 

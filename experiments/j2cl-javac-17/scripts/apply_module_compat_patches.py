@@ -386,6 +386,208 @@ public class CharBuffer implements CharSequence {
     public String toString() { return ""; }
 }
 """,
+
+        "src/shims/java/lang/Deprecated.java": """package java.lang;
+
+public @interface Deprecated {
+    String since() default "";
+    boolean forRemoval() default false;
+}
+""",
+        "src/shims/java/lang/reflect/Method.java": """package java.lang.reflect;
+
+public class Method {
+    public Object invoke(Object obj, Object... args) { return null; }
+}
+""",
+        "src/shims/java/lang/ReflectiveOperationException.java": """package java.lang;
+
+public class ReflectiveOperationException extends Exception {
+    public ReflectiveOperationException() {}
+    public ReflectiveOperationException(String message) { super(message); }
+}
+""",
+        "src/shims/java/lang/InternalError.java": """package java.lang;
+
+public class InternalError extends Error {
+    public InternalError() {}
+    public InternalError(String message) { super(message); }
+}
+""",
+        "src/shims/java/lang/ref/SoftReference.java": """package java.lang.ref;
+
+public class SoftReference<T> {
+    public SoftReference(T referent) {}
+    public T get() { return null; }
+}
+""",
+        "src/shims/java/lang/ref/WeakReference.java": """package java.lang.ref;
+
+public class WeakReference<T> {
+    public WeakReference(T referent) {}
+    public T get() { return null; }
+}
+""",
+        "src/shims/java/io/File.java": """package java.io;
+
+import java.net.URI;
+
+public class File {
+    public File(String pathname) {}
+    public File(File parent, String child) {}
+    public File(URI uri) {}
+
+    public String getPath() { return ""; }
+}
+""",
+        "src/shims/java/io/CharArrayReader.java": """package java.io;
+
+public class CharArrayReader extends Reader {
+    public CharArrayReader(char[] buf) {}
+
+    @Override
+    public int read(char[] cbuf, int off, int len) { return -1; }
+
+    @Override
+    public void close() {}
+}
+""",
+        "src/shims/java/io/OutputStreamWriter.java": """package java.io;
+
+public class OutputStreamWriter extends Writer {
+    public OutputStreamWriter(OutputStream out) {}
+
+    @Override
+    public void write(char[] cbuf, int off, int len) {}
+
+    @Override
+    public void flush() {}
+
+    @Override
+    public void close() {}
+}
+""",
+        "src/shims/java/nio/file/Path.java": """package java.nio.file;
+
+public interface Path {}
+""",
+        "src/shims/java/util/regex/Pattern.java": """package java.util.regex;
+
+public class Pattern {
+    public static Pattern compile(String regex) { return new Pattern(); }
+    public Matcher matcher(CharSequence input) { return new Matcher(); }
+}
+""",
+        "src/shims/java/util/regex/Matcher.java": """package java.util.regex;
+
+public class Matcher {
+    public boolean find() { return false; }
+    public String group(int i) { return ""; }
+    public String replaceAll(String replacement) { return ""; }
+}
+""",
+        "src/shims/java/util/ResourceBundle.java": """package java.util;
+
+public abstract class ResourceBundle {
+    public Object getObject(String key) { return null; }
+    public String getString(String key) { return ""; }
+
+    public static ResourceBundle getBundle(String baseName) { return null; }
+    public static ResourceBundle getBundle(String baseName, Locale locale) { return null; }
+}
+""",
+        "src/shims/java/text/MessageFormat.java": """package java.text;
+
+public class MessageFormat {
+    public static String format(String pattern, Object... arguments) { return ""; }
+}
+""",
+
+        "src/shims/java/security/PrivilegedAction.java": """package java.security;
+
+public interface PrivilegedAction<T> {
+    T run();
+}
+""",
+        "src/shims/java/security/AccessController.java": """package java.security;
+
+public final class AccessController {
+    private AccessController() {}
+
+    public static <T> T doPrivileged(PrivilegedAction<T> action) {
+        return action.run();
+    }
+}
+""",
+        "src/shims/java/util/ServiceConfigurationError.java": """package java.util;
+
+public class ServiceConfigurationError extends Error {
+    public ServiceConfigurationError(String msg) { super(msg); }
+    public ServiceConfigurationError(String msg, Throwable cause) { super(msg, cause); }
+}
+""",
+        "src/shims/java/text/BreakIterator.java": """package java.text;
+
+public abstract class BreakIterator {
+    public static BreakIterator getSentenceInstance() { return null; }
+    public abstract int first();
+    public abstract int next();
+}
+""",
+        "src/shims/java/util/WeakHashMap.java": """package java.util;
+
+public class WeakHashMap<K, V> extends HashMap<K, V> {
+    public WeakHashMap() {}
+}
+""",
+        "src/shims/java/util/Properties.java": """package java.util;
+
+public class Properties extends Hashtable<Object, Object> {
+    public Properties() {}
+    public String getProperty(String key) { return null; }
+    public Object setProperty(String key, String value) { return put(key, value); }
+}
+""",
+        "src/shims/java/io/FileNotFoundException.java": """package java.io;
+
+public class FileNotFoundException extends IOException {
+    public FileNotFoundException() {}
+    public FileNotFoundException(String s) { super(s); }
+}
+""",
+        "src/shims/java/io/FileWriter.java": """package java.io;
+
+public class FileWriter extends Writer {
+    public FileWriter(String fileName) {}
+
+    @Override
+    public void write(char[] cbuf, int off, int len) {}
+
+    @Override
+    public void flush() {}
+
+    @Override
+    public void close() {}
+}
+""",
+        "src/shims/java/io/DataInputStream.java": """package java.io;
+
+public class DataInputStream extends FilterInputStream {
+    public DataInputStream(InputStream in) { super(in); }
+    public int readInt() { return 0; }
+    public char readChar() { return 0; }
+    public long readLong() { return 0L; }
+}
+""",
+        "src/shims/java/io/DataOutputStream.java": """package java.io;
+
+public class DataOutputStream extends FilterOutputStream {
+    public DataOutputStream(OutputStream out) { super(out); }
+    public void writeInt(int v) {}
+    public void writeChar(int v) {}
+    public void writeLong(long v) {}
+}
+""",
     }
 
     for rel_path, content in shims.items():
