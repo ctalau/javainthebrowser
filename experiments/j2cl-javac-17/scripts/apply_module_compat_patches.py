@@ -337,6 +337,7 @@ public class PrintWriter extends Writer {
 
 public class URI {
     public URI(String str) {}
+    public URI(String scheme, String ssp, String fragment) {}
 
     public static URI create(String str) { return new URI(str); }
     public boolean isAbsolute() { return true; }
@@ -565,6 +566,7 @@ public class OutputStreamWriter extends Writer {
 import java.net.URI;
 
 public interface Path {
+    static Path of(java.net.URI uri) { return null; }
     Path resolve(String other);
     Path resolve(Path other);
     Path resolveSibling(String other);
@@ -583,6 +585,7 @@ public interface Path {
     Path getParent();
     int getNameCount();
     Path getName(int index);
+    Path subpath(int beginIndex, int endIndex);
 }
 """,
         "src/shims/java/nio/file/Paths.java": """package java.nio.file;
@@ -898,6 +901,7 @@ public final class System {
     public static long currentTimeMillis() { return 0L; }
     public static String getProperty(String key) { return null; }
     public static String getProperty(String key, String def) { return def; }
+    public static String setProperty(String key, String value) { return value; }
     public static String getenv(String name) { return null; }
 }
 """,
@@ -1048,9 +1052,10 @@ public class BufferedReader extends Reader {
 """,
         "src/shims/java/net/URLClassLoader.java": """package java.net;
 
-public class URLClassLoader extends ClassLoader {
+public class URLClassLoader extends ClassLoader implements java.io.Closeable {
     public URLClassLoader(URL[] urls) {}
     public URLClassLoader(URL[] urls, ClassLoader parent) {}
+    @Override public void close() {}
 }
 """,
         "src/shims/java/net/URLStreamHandler.java": """package java.net;
@@ -1071,6 +1076,8 @@ public class CodeSource {
         "src/shims/java/security/ProtectionDomain.java": """package java.security;
 
 public class ProtectionDomain {
+    public ProtectionDomain() {}
+    public ProtectionDomain(CodeSource cs, Object permissions, ClassLoader loader, Object principals) {}
     public CodeSource getCodeSource() { return null; }
 }
 """,
@@ -1227,6 +1234,7 @@ public final class String implements CharSequence {
     public String(char[] value) {}
     public String(char[] value, int offset, int count) {}
     public String(byte[] bytes) {}
+    public String(byte[] bytes, String charsetName) {}
     public String(String original) {}
 
     public int length() { return 0; }
@@ -1245,6 +1253,7 @@ public final class String implements CharSequence {
     public int indexOf(String str, int fromIndex) { return -1; }
     public int indexOf(String str) { return -1; }
     public int lastIndexOf(char ch) { return -1; }
+    public int lastIndexOf(char ch, int fromIndex) { return -1; }
     public int lastIndexOf(String str) { return -1; }
     public String replace(String target, String replacement) { return this; }
     public String replace(char oldChar, char newChar) { return this; }
@@ -1297,6 +1306,7 @@ import java.nio.charset.Charset;
 public class OutputStreamWriter extends Writer {
     public OutputStreamWriter(OutputStream out) {}
     public OutputStreamWriter(OutputStream out, Charset cs) {}
+    public OutputStreamWriter(OutputStream out, String charsetName) {}
     @Override public void write(char[] cbuf, int off, int len) {}
     @Override public void flush() {}
     @Override public void close() throws IOException {}
@@ -1386,6 +1396,10 @@ public class FileSystemNotFoundException extends RuntimeException {
     public FileSystemNotFoundException() {}
     public FileSystemNotFoundException(String msg) { super(msg); }
 }
+""",
+        "src/shims/java/nio/file/ClosedFileSystemException.java": """package java.nio.file;
+
+public class ClosedFileSystemException extends IllegalStateException {}
 """,
         "src/shims/java/nio/file/LinkOption.java": """package java.nio.file;
 
@@ -1564,7 +1578,9 @@ public final class Normalizer {
 """,
         "src/shims/java/nio/file/attribute/FileTime.java": """package java.nio.file.attribute;
 
-public final class FileTime {}
+public final class FileTime {
+    public long toMillis() { return 0L; }
+}
 """,
         "src/shims/java/nio/file/NoSuchFileException.java": """package java.nio.file;
 
@@ -1583,6 +1599,7 @@ public class ObjectInputStream extends InputStream {
         "src/shims/java/util/zip/ZipFile.java": """package java.util.zip;
 
 public class ZipFile implements AutoCloseable {
+    public Object getEntry(String name) { return null; }
     @Override public void close() {}
 }
 """,
@@ -1591,6 +1608,7 @@ public class ZipFile implements AutoCloseable {
 public final class VM {
     private VM() {}
     public static String getSavedProperty(String key) { return null; }
+    public static String[] getRuntimeArguments() { return new String[0]; }
 }
 """,
         "src/shims/jdk/internal/misc/Version.java": """package jdk.internal.misc;
@@ -1662,6 +1680,7 @@ public class Collator {
 
 public class URI {
     public URI(String str) {}
+    public URI(String scheme, String ssp, String fragment) {}
 
     public static URI create(String str) { return new URI(str); }
     public boolean isAbsolute() { return true; }
