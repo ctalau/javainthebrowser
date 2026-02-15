@@ -40,6 +40,7 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
   - `src/jdk.compiler/share/classes/com/sun/source/**`
   - `src/java.compiler/share/classes/javax/lang/model/**`
   - `src/java.compiler/share/classes/javax/tools/**`
+  - `src/java.compiler/share/classes/javax/annotation/processing/**`
   - `src/java.base/share/classes/jdk/internal/javac/**`
 - The J2CL toolchain tuple is pinned and reproducible:
   - J2CL: `20250630`
@@ -51,9 +52,11 @@ M4_DIAG_OUT=out/m4-diagnostics M4_VERBOSE=1 ./scripts/run_j2cl_transpile.sh
   - `out/m4-diagnostics/latest.log`
   - `out/m4-diagnostics/latest-summary.md`
   - `out/m4-diagnostics/history.md`
-- The staged source graph intentionally excludes `javax.annotation.processing` sources
-  from `java.compiler`; adding them causes a module/package conflict
-  (`package exists in another module`).
+- `run_j2cl_transpile.sh` now uses `--batch` Bazel mode to avoid stale server/zombie
+  process reuse issues in long-running non-interactive sessions.
+- Staging patches now synthesize `com.sun.tools.javac.resources.CompilerProperties`
+  nested diagnostics helpers (`Errors`/`Warnings`/`Fragments`) from observed call-sites
+  to close generated-resource wrapper gaps during J2CL transpilation.
 
 ## Initial J2CL issue tracking
 

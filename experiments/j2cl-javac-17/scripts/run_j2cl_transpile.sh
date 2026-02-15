@@ -35,6 +35,7 @@ copy_tree "src/jdk.compiler/share/classes/com/sun/tools/javac"
 copy_tree "src/jdk.compiler/share/classes/com/sun/source"
 copy_tree "src/java.compiler/share/classes/javax/lang/model"
 copy_tree "src/java.compiler/share/classes/javax/tools"
+copy_tree "src/java.compiler/share/classes/javax/annotation/processing"
 copy_tree "src/java.base/share/classes/jdk/internal/javac"
 
 "$SCRIPT_DIR/apply_module_compat_patches.py" "$WORKSPACE_DIR"
@@ -66,6 +67,7 @@ j2cl_library(
         "src/jdk.compiler/share/classes/com/sun/source/**/*.java",
         "src/java.compiler/share/classes/javax/lang/model/**/*.java",
         "src/java.compiler/share/classes/javax/tools/**/*.java",
+        "src/java.compiler/share/classes/javax/annotation/processing/**/*.java",
         "src/java.base/share/classes/jdk/internal/javac/**/*.java",
     ]),
     javacopts = ["-source", "17", "-target", "17"],
@@ -76,7 +78,7 @@ LOG_PATH="$DIAG_DIR/latest.log"
 SUMMARY_PATH="$DIAG_DIR/latest-summary.md"
 HISTORY_PATH="$DIAG_DIR/history.md"
 
-build_cmd=(USE_BAZEL_VERSION=8.3.1 bazel --output_user_root="$BAZEL_USER_ROOT" build //:javac_full_j2cl --color=no --curses=no)
+build_cmd=(USE_BAZEL_VERSION=8.3.1 bazel --batch --output_user_root="$BAZEL_USER_ROOT" build //:javac_full_j2cl --color=no --curses=no)
 if [[ "$M4_VERBOSE" == "1" ]]; then
   build_cmd+=(--verbose_failures)
 fi
